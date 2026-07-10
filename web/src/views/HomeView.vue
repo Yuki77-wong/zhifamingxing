@@ -1,3 +1,59 @@
+<script setup>
+import { onMounted, ref } from "vue";
+
+import {
+  getDatabaseHealth,
+  getSystemHealth
+} from "../api/system.js";
+
+
+const loading = ref(true);
+
+const systemInformation = ref(null);
+
+const databaseInformation = ref(null);
+
+const errorMessage = ref("");
+
+
+async function loadSystemStatus() {
+  loading.value = true;
+
+  errorMessage.value = "";
+
+  try {
+    const [
+      systemResponse,
+      databaseResponse
+    ] = await Promise.all([
+      getSystemHealth(),
+      getDatabaseHealth()
+    ]);
+
+    systemInformation.value =
+      systemResponse.data;
+
+    databaseInformation.value =
+      databaseResponse.data;
+  } catch (error) {
+    errorMessage.value =
+      error.response?.data?.message
+      ||
+      error.message
+      ||
+      "暂时无法连接后端服务";
+  } finally {
+    loading.value = false;
+  }
+}
+
+
+onMounted(() => {
+  loadSystemStatus();
+});
+</script>
+
+
 <template>
 
   <div class="home-page">
@@ -183,122 +239,234 @@
           </div>
 
 
-          <div class="preview-card">
+          <div class="system-card">
 
-            <div class="preview-header">
+            <div class="system-header">
 
               <div>
 
                 <small>
 
-                  PRODUCT PREVIEW
+                  SYSTEM STATUS
 
                 </small>
 
 
                 <h2>
 
-                  岗位风险检测
+                  系统运行状态
 
                 </h2>
 
               </div>
 
 
-              <span class="preview-status">
+              <span
+                class="status-badge"
+                :class="{
+                  error: errorMessage
+                }"
+              >
 
-                演示界面
+                {{
+                  errorMessage
+                    ? "连接异常"
+                    : "实时连接"
+                }}
 
               </span>
 
             </div>
 
 
-            <div class="job-name">
+            <div
+              v-if="loading"
+              class="system-message"
+            >
 
-              数据分析实习生
+              正在读取真实系统状态……
 
             </div>
 
 
-            <div class="risk-score">
-
-              <span>
-
-                综合风险评分
-
-              </span>
-
+            <div
+              v-else-if="errorMessage"
+              class="system-message error-message"
+            >
 
               <strong>
 
-                待检测
+                后端连接失败
 
               </strong>
 
-            </div>
+
+              <p>
+
+                {{ errorMessage }}
+
+              </p>
 
 
-            <div class="preview-item">
+              <button
+                type="button"
+                @click="loadSystemStatus"
+              >
 
-              <span>
+                重新连接
 
-                薪资说明
-
-              </span>
-
-
-              <b>
-
-                等待分析
-
-              </b>
-
-            </div>
-
-
-            <div class="preview-item">
-
-              <span>
-
-                工作时间
-
-              </span>
-
-
-              <b>
-
-                等待分析
-
-              </b>
+              </button>
 
             </div>
 
 
-            <div class="preview-item">
+            <div
+              v-else
+              class="system-list"
+            >
 
-              <span>
+              <div class="system-item">
 
-                收费风险
+                <div>
 
-              </span>
+                  <span>
+
+                    Express API
+
+                  </span>
 
 
-              <b>
+                  <strong>
 
-                等待分析
+                    {{
+                      systemInformation
+                        ?.message
+                    }}
 
-              </b>
+                  </strong>
+
+                </div>
+
+
+                <b>
+
+                  正常
+
+                </b>
+
+              </div>
+
+
+              <div class="system-item">
+
+                <div>
+
+                  <span>
+
+                    MySQL 数据库
+
+                  </span>
+
+
+                  <strong>
+
+                    {{
+                      databaseInformation
+                        ?.data
+                        ?.databaseName
+                    }}
+
+                  </strong>
+
+                </div>
+
+
+                <b>
+
+                  已连接
+
+                </b>
+
+              </div>
+
+
+              <div class="system-item">
+
+                <div>
+
+                  <span>
+
+                    数据库账号
+
+                  </span>
+
+
+                  <strong>
+
+                    {{
+                      databaseInformation
+                        ?.data
+                        ?.currentUser
+                    }}
+
+                  </strong>
+
+                </div>
+
+
+                <b class="blue">
+
+                  实时读取
+
+                </b>
+
+              </div>
+
+
+              <div class="system-item">
+
+                <div>
+
+                  <span>
+
+                    MySQL 版本
+
+                  </span>
+
+
+                  <strong>
+
+                    {{
+                      databaseInformation
+                        ?.data
+                        ?.mysqlVersion
+                    }}
+
+                  </strong>
+
+                </div>
+
+
+                <b class="blue">
+
+                  API
+
+                </b>
+
+              </div>
 
             </div>
 
 
-            <p class="preview-note">
+            <p class="system-note">
 
-              当前仅展示产品视觉结构。
+              本卡片数据由 Vue
+              实时请求 Express，
 
-              后续检测结果将由后端规则引擎
-              和文本分析模块真实生成。
+              再由 Express 连接 MySQL
+              后返回，
+
+              不是写死的演示数据。
 
             </p>
 
@@ -368,6 +536,13 @@
 
               </p>
 
+
+              <span>
+
+                开始检测 →
+
+              </span>
+
             </article>
 
 
@@ -394,6 +569,13 @@
                 单方免责等风险条款。
 
               </p>
+
+
+              <span>
+
+                进入审核 →
+
+              </span>
 
             </article>
 
@@ -422,6 +604,13 @@
 
               </p>
 
+
+              <span>
+
+                查看知识 →
+
+              </span>
+
             </article>
 
 
@@ -449,6 +638,13 @@
 
               </p>
 
+
+              <span>
+
+                查看流程 →
+
+              </span>
+
             </article>
 
           </div>
@@ -458,6 +654,43 @@
       </section>
 
     </main>
+
+
+    <footer class="footer">
+
+      <div class="container footer-content">
+
+        <div>
+
+          <strong>
+
+            智法明行
+
+          </strong>
+
+
+          <p>
+
+            识别实习风险，
+            守护每一次职场出发。
+
+          </p>
+
+        </div>
+
+
+        <p class="disclaimer">
+
+          本平台提供岗位风险辅助识别、
+          权益知识和信息指引，
+
+          不替代律师提供的正式法律意见。
+
+        </p>
+
+      </div>
+
+    </footer>
 
   </div>
 
@@ -553,6 +786,22 @@
 
   font-weight: 900;
 
+  box-shadow:
+
+    0 10px 24px
+
+    rgba(
+
+      36,
+
+      87,
+
+      230,
+
+      0.22
+
+    );
+
 }
 
 
@@ -598,6 +847,9 @@
 
   font-size: 14px;
 
+  transition:
+    color 0.2s;
+
 }
 
 
@@ -623,6 +875,23 @@
   font-size: 14px;
 
   font-weight: 700;
+
+  transition:
+
+    transform 0.2s,
+
+    background 0.2s;
+
+}
+
+
+.header-button:hover {
+
+  transform:
+
+    translateY(-1px);
+
+  background: #1944bd;
 
 }
 
@@ -808,6 +1077,8 @@ h1 span {
 
   align-items: center;
 
+  justify-content: center;
+
   padding:
 
     0 24px;
@@ -815,6 +1086,12 @@ h1 span {
   border-radius: 13px;
 
   font-weight: 800;
+
+  transition:
+
+    transform 0.2s,
+
+    box-shadow 0.2s;
 
 }
 
@@ -869,6 +1146,17 @@ h1 span {
 }
 
 
+.primary-button:hover,
+
+.secondary-button:hover {
+
+  transform:
+
+    translateY(-2px);
+
+}
+
+
 .principles {
 
   display: flex;
@@ -888,7 +1176,7 @@ h1 span {
 }
 
 
-.preview-card {
+.system-card {
 
   padding: 29px;
 
@@ -943,16 +1231,14 @@ h1 span {
 }
 
 
-.preview-header {
+.system-header {
 
   display: flex;
 
   align-items:
-
     flex-start;
 
   justify-content:
-
     space-between;
 
   gap: 20px;
@@ -960,7 +1246,7 @@ h1 span {
 }
 
 
-.preview-header small {
+.system-header small {
 
   color: #8a94a7;
 
@@ -973,7 +1259,7 @@ h1 span {
 }
 
 
-.preview-header h2 {
+.system-header h2 {
 
   margin:
 
@@ -984,7 +1270,7 @@ h1 span {
 }
 
 
-.preview-status {
+.status-badge {
 
   padding:
 
@@ -992,9 +1278,9 @@ h1 span {
 
   border-radius: 99px;
 
-  background: #edf3ff;
+  background: #e9f9f1;
 
-  color: #2457e6;
+  color: #168554;
 
   font-size: 11px;
 
@@ -1003,50 +1289,42 @@ h1 span {
 }
 
 
-.job-name {
+.status-badge.error {
 
-  margin-top: 26px;
+  background: #fff0f0;
 
-  padding: 16px;
-
-  border-radius: 14px;
-
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #f3f7ff,
-
-      #f8f6ff
-
-    );
-
-  font-size: 17px;
-
-  font-weight: 800;
+  color: #d43c3c;
 
 }
 
 
-.risk-score {
+.system-list {
+
+  display: grid;
+
+  gap: 11px;
+
+  margin-top: 26px;
+
+}
+
+
+.system-item {
 
   display: flex;
+
+  min-height: 68px;
 
   align-items: center;
 
   justify-content:
-
     space-between;
 
-  margin:
-
-    15px 0;
+  gap: 20px;
 
   padding:
 
-    17px 16px;
+    13px 15px;
 
   border:
 
@@ -1056,69 +1334,127 @@ h1 span {
 
   border-radius: 14px;
 
-}
-
-
-.risk-score span {
-
-  color: #7b869a;
-
-  font-size: 13px;
+  background: #fbfcff;
 
 }
 
 
-.risk-score strong {
-
-  color: #2457e6;
-
-  font-size: 18px;
-
-}
-
-
-.preview-item {
+.system-item div {
 
   display: flex;
 
-  align-items: center;
+  min-width: 0;
 
-  justify-content:
+  flex-direction: column;
 
-    space-between;
-
-  padding:
-
-    14px 15px;
-
-  border-bottom:
-
-    1px solid
-
-    #edf0f6;
+  gap: 4px;
 
 }
 
 
-.preview-item span {
+.system-item span {
+
+  color: #8a94a7;
+
+  font-size: 11px;
+
+}
+
+
+.system-item strong {
+
+  overflow: hidden;
+
+  font-size: 13px;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.system-item b {
+
+  flex-shrink: 0;
+
+  padding:
+
+    6px 9px;
+
+  border-radius: 8px;
+
+  background: #e9f9f1;
+
+  color: #168554;
+
+  font-size: 10px;
+
+}
+
+
+.system-item b.blue {
+
+  background: #edf3ff;
+
+  color: #2457e6;
+
+}
+
+
+.system-message {
+
+  margin-top: 26px;
+
+  padding:
+
+    38px 20px;
+
+  border-radius: 15px;
+
+  background: #f8faff;
 
   color: #667085;
+
+  text-align: center;
+
+}
+
+
+.error-message strong {
+
+  color: #ef4444;
+
+}
+
+
+.error-message p {
 
   font-size: 13px;
 
 }
 
 
-.preview-item b {
+.error-message button {
 
-  color: #8b95a8;
+  padding:
 
-  font-size: 12px;
+    9px 14px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background: #2457e6;
+
+  color: white;
 
 }
 
 
-.preview-note {
+.system-note {
 
   margin:
 
@@ -1221,7 +1557,7 @@ h1 span {
 
 .feature-card {
 
-  min-height: 285px;
+  min-height: 300px;
 
   padding: 28px;
 
@@ -1239,7 +1575,9 @@ h1 span {
 
     transform 0.25s,
 
-    box-shadow 0.25s;
+    box-shadow 0.25s,
+
+    border-color 0.25s;
 
 }
 
@@ -1249,6 +1587,20 @@ h1 span {
   transform:
 
     translateY(-7px);
+
+  border-color:
+
+    rgba(
+
+      36,
+
+      87,
+
+      230,
+
+      0.25
+
+    );
 
   box-shadow:
 
@@ -1315,11 +1667,86 @@ h1 span {
 
 .feature-card p {
 
+  min-height: 94px;
+
   color: #748096;
 
   font-size: 14px;
 
   line-height: 1.8;
+
+}
+
+
+.feature-card > span {
+
+  display: inline-block;
+
+  margin-top: 18px;
+
+  color: #2457e6;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+}
+
+
+.footer {
+
+  padding:
+
+    38px 0;
+
+  background: #111b35;
+
+  color: white;
+
+}
+
+
+.footer-content {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 40px;
+
+}
+
+
+.footer strong {
+
+  font-size: 19px;
+
+}
+
+
+.footer p {
+
+  margin:
+
+    9px 0 0;
+
+  color: #aeb9d1;
+
+  font-size: 13px;
+
+  line-height: 1.8;
+
+}
+
+
+.disclaimer {
+
+  max-width: 520px;
+
+  text-align: right;
 
 }
 
@@ -1390,11 +1817,38 @@ h1 span {
   }
 
 
+  .principles {
+
+    flex-direction:
+
+      column;
+
+  }
+
+
   .feature-grid {
 
     grid-template-columns:
 
       1fr;
+
+  }
+
+
+  .footer-content {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .disclaimer {
+
+    text-align: left;
 
   }
 
