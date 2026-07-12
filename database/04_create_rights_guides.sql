@@ -1,0 +1,1556 @@
+SET NAMES utf8mb4;
+
+
+USE zhifa_mingxing;
+
+
+
+/* =====================================================
+   一、创建维权流程指引表
+
+   说明：
+
+   1. 本表保存平台整理的维权流程；
+   2. 指引不直接替代法律意见；
+   3. 官方渠道保留名称、主管机构和原始网址；
+   4. evidence_items 保存建议收集的证据；
+   5. action_steps 保存建议处理步骤；
+   6. official_channels 保存对应官方渠道；
+   7. 所有正式内容必须经过审核后才能启用。
+===================================================== */
+
+
+CREATE TABLE IF NOT EXISTS rights_guides
+(
+
+    id
+    BIGINT UNSIGNED
+    NOT NULL
+    AUTO_INCREMENT,
+
+
+    guide_code
+    VARCHAR(100)
+    NOT NULL,
+
+
+    title
+    VARCHAR(255)
+    NOT NULL,
+
+
+    problem_type
+    VARCHAR(100)
+    NOT NULL,
+
+
+    risk_level
+    VARCHAR(30)
+    NOT NULL,
+
+
+    summary
+    TEXT
+    NOT NULL,
+
+
+    applicability_note
+    TEXT
+    NOT NULL,
+
+
+    first_action
+    TEXT
+    NOT NULL,
+
+
+    evidence_items
+    JSON
+    NOT NULL,
+
+
+    action_steps
+    JSON
+    NOT NULL,
+
+
+    official_channels
+    JSON
+    NOT NULL,
+
+
+    caution_text
+    TEXT
+    NOT NULL,
+
+
+    source_reviewed_at
+    DATETIME
+    NOT NULL,
+
+
+    review_status
+    VARCHAR(30)
+    NOT NULL
+    DEFAULT
+    'pending',
+
+
+    is_enabled
+    BOOLEAN
+    NOT NULL
+    DEFAULT
+    FALSE,
+
+
+    created_at
+    DATETIME
+    NOT NULL
+    DEFAULT
+    CURRENT_TIMESTAMP,
+
+
+    updated_at
+    DATETIME
+    NOT NULL
+    DEFAULT
+    CURRENT_TIMESTAMP
+    ON UPDATE
+    CURRENT_TIMESTAMP,
+
+
+    PRIMARY KEY
+    (
+        id
+    ),
+
+
+    UNIQUE KEY
+    uk_rights_guides_code
+    (
+        guide_code
+    ),
+
+
+    KEY
+    idx_rights_guides_problem_type
+    (
+        problem_type
+    ),
+
+
+    KEY
+    idx_rights_guides_enabled
+    (
+        is_enabled
+    ),
+
+
+    KEY
+    idx_rights_guides_review_status
+    (
+        review_status
+    )
+
+)
+ENGINE =
+InnoDB
+
+DEFAULT CHARACTER SET =
+utf8mb4
+
+COLLATE =
+utf8mb4_0900_ai_ci;
+
+
+
+/* =====================================================
+   二、第一类：
+
+   招聘收费、付费培训或培训贷款
+
+   适用说明：
+
+   招聘收费与付费培训可能同时涉及
+   招聘风险、合同争议、消费服务争议。
+
+   是否属于劳动争议或消费争议，
+   需要结合合同主体和实际交易关系判断。
+===================================================== */
+
+
+INSERT INTO rights_guides
+(
+
+    guide_code,
+
+    title,
+
+    problem_type,
+
+    risk_level,
+
+    summary,
+
+    applicability_note,
+
+    first_action,
+
+    evidence_items,
+
+    action_steps,
+
+    official_channels,
+
+    caution_text,
+
+    source_reviewed_at,
+
+    review_status,
+
+    is_enabled
+
+)
+
+VALUES
+(
+
+    'RECRUITMENT_FEE_OR_TRAINING_LOAN',
+
+
+    '遇到招聘收费、付费培训或培训贷款怎么办',
+
+
+    '招聘收费与培训贷款',
+
+
+    'critical',
+
+
+    '岗位以入职、保录用、保就业或安排工作为条件，要求缴纳押金、培训费、服务费，或者办理培训贷款时，应先暂停付款和签约，并核实招聘主体、培训主体及贷款主体。',
+
+
+    '该指引用于招聘收费、招转培、培训贷款和付费保录用等风险场景。具体属于劳动争议、培训服务合同争议、消费争议还是其他法律关系，需要根据合同内容、付款对象和实际履行情况判断。',
+
+
+    '不要继续付款、借贷或提交验证码。先保存岗位页面、聊天记录、收费要求、付款页面和合同文件。',
+
+
+    JSON_ARRAY
+    (
+
+        '完整岗位页面截图',
+
+        '招聘账号名称和主页信息',
+
+        '企业名称及统一社会信用代码',
+
+        '招聘聊天记录',
+
+        '收费项目、收费金额和付款要求',
+
+        '收款账户名称',
+
+        '支付订单和转账凭证',
+
+        '培训协议或课程合同',
+
+        '贷款合同、分期协议和授权页面',
+
+        '对方承诺录用、保就业或退款的证据'
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            1,
+
+            'title',
+            '立即暂停新增付款',
+
+            'description',
+            '不要因为限时名额、内部机会或保证录用继续付款，也不要继续办理贷款、分期或自动扣款授权。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            2,
+
+            'title',
+            '确认三个主体',
+
+            'description',
+            '分别确认招聘企业、培训机构和贷款机构的名称，检查合同、收款账户和实际承诺是否来自同一主体。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            3,
+
+            'title',
+            '提出书面核实',
+
+            'description',
+            '要求对方书面说明收费依据、岗位真实性、录用条件、退款规则以及未能入职时的责任。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            4,
+
+            'title',
+            '根据关系选择渠道',
+
+            'description',
+            '涉及就业和劳动关系问题，可先咨询所在地人社部门；涉及付费培训或课程消费争议，可根据实际合同关系考虑全国12315平台；需要判断合同效力、退款责任或贷款责任时，可通过12348咨询。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            5,
+
+            'title',
+            '保存提交记录',
+
+            'description',
+            '提交投诉、咨询或协商后，保存受理编号、提交时间、材料清单和处理反馈。'
+
+        )
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '全国人社政务服务平台',
+
+            'authority',
+            '中华人民共和国人力资源和社会保障部',
+
+            'channelType',
+            'employment_and_labor_service',
+
+            'scope',
+            '查询人社政策、劳动关系服务和所在地人社办事渠道。具体投诉受理范围以所在地人社部门规定为准。',
+
+            'url',
+            'https://www.12333.gov.cn/'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '中国法律服务网',
+
+            'authority',
+            '中华人民共和国司法部',
+
+            'channelType',
+            'public_legal_service',
+
+            'scope',
+            '用于法律咨询、法律援助、调解等公共法律服务查询。',
+
+            'url',
+            'https://www.12348.gov.cn/'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '全国12315平台',
+
+            'authority',
+            '市场监督管理部门',
+
+            'channelType',
+            'consumer_complaint',
+
+            'scope',
+            '在付费培训、课程服务或其他消费合同关系可能成立时，可根据实际情况提交消费投诉或举报。普通劳动争议不应直接机械归入该渠道。',
+
+            'url',
+            'https://www.12315.cn/'
+
+        )
+
+    ),
+
+
+    '不要仅凭平台提示直接认定对方违法，也不要为了退款继续支付所谓解冻费、认证费、手续费或保证金。',
+
+
+    NOW(),
+
+
+    'reviewed',
+
+
+    TRUE
+
+)
+
+ON DUPLICATE KEY UPDATE
+
+    title =
+    VALUES
+    (
+        title
+    ),
+
+
+    problem_type =
+    VALUES
+    (
+        problem_type
+    ),
+
+
+    risk_level =
+    VALUES
+    (
+        risk_level
+    ),
+
+
+    summary =
+    VALUES
+    (
+        summary
+    ),
+
+
+    applicability_note =
+    VALUES
+    (
+        applicability_note
+    ),
+
+
+    first_action =
+    VALUES
+    (
+        first_action
+    ),
+
+
+    evidence_items =
+    VALUES
+    (
+        evidence_items
+    ),
+
+
+    action_steps =
+    VALUES
+    (
+        action_steps
+    ),
+
+
+    official_channels =
+    VALUES
+    (
+        official_channels
+    ),
+
+
+    caution_text =
+    VALUES
+    (
+        caution_text
+    ),
+
+
+    source_reviewed_at =
+    VALUES
+    (
+        source_reviewed_at
+    ),
+
+
+    review_status =
+    VALUES
+    (
+        review_status
+    ),
+
+
+    is_enabled =
+    VALUES
+    (
+        is_enabled
+    );
+
+
+
+/* =====================================================
+   三、第二类：
+
+   实习工资、补贴或报酬拖欠
+
+   注意：
+
+   学生实习是否形成劳动关系，
+   需要结合实际情况判断。
+
+   所以平台不能直接保证
+   所有实习报酬争议都属于劳动监察
+   或劳动仲裁受理范围。
+===================================================== */
+
+
+INSERT INTO rights_guides
+(
+
+    guide_code,
+
+    title,
+
+    problem_type,
+
+    risk_level,
+
+    summary,
+
+    applicability_note,
+
+    first_action,
+
+    evidence_items,
+
+    action_steps,
+
+    official_channels,
+
+    caution_text,
+
+    source_reviewed_at,
+
+    review_status,
+
+    is_enabled
+
+)
+
+VALUES
+(
+
+    'WAGE_OR_ALLOWANCE_ARREARS',
+
+
+    '遇到实习工资、补贴或报酬拖欠怎么办',
+
+
+    '工资与实习报酬',
+
+
+    'high',
+
+
+    '发现工资、实习补贴、项目报酬或其他约定款项未按时支付时，应先确认约定金额、支付时间、实际工作记录和付款主体，再进行书面催告和渠道咨询。',
+
+
+    '学生实习是否形成劳动关系，不能只看协议名称，需要结合实际管理方式、工作内容、报酬支付和用工事实判断。因此，不同案件可能分别适用学校协调、合同协商、人社渠道、调解仲裁或诉讼等方式。',
+
+
+    '先保存报酬约定和实际工作证据，不要只进行口头催促。向企业发送可留痕的书面询问，要求确认金额、支付日期和未支付原因。',
+
+
+    JSON_ARRAY
+    (
+
+        '实习协议或劳动合同',
+
+        '录用通知和岗位说明',
+
+        '工资、补贴或报酬约定',
+
+        '考勤记录',
+
+        '排班记录',
+
+        '工作群消息',
+
+        '任务提交记录',
+
+        '工作成果和文件记录',
+
+        '银行流水',
+
+        '历史工资或补贴支付记录',
+
+        '书面催款记录',
+
+        '企业对欠款金额和支付日期的回复'
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            1,
+
+            'title',
+            '整理金额和时间',
+
+            'description',
+            '列明约定报酬、应支付日期、已经支付金额和仍欠金额，并注明每项金额对应的工作期间。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            2,
+
+            'title',
+            '发送书面催告',
+
+            'description',
+            '通过邮件、企业沟通软件或其他可留痕方式，要求对方确认欠款金额、支付时间和处理负责人。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            3,
+
+            'title',
+            '联系学校或实习组织方',
+
+            'description',
+            '学校统一组织或备案的实习，可同步向学校实习管理部门、指导教师或就业部门反映情况。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            4,
+
+            'title',
+            '咨询所在地人社渠道',
+
+            'description',
+            '涉及劳动关系、工资支付或劳动保障问题时，可通过12333平台查询所在地人社服务和劳动关系办理渠道。是否受理以实际法律关系和当地规定为准。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            5,
+
+            'title',
+            '需要时获得法律帮助',
+
+            'description',
+            '对劳动关系认定、协议效力、仲裁或诉讼路径不明确时，可通过12348公共法律服务渠道进行咨询。'
+
+        )
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '全国人社政务服务平台',
+
+            'authority',
+            '中华人民共和国人力资源和社会保障部',
+
+            'channelType',
+            'employment_and_labor_service',
+
+            'scope',
+            '查询劳动关系、人社服务、调解仲裁及所在地办事渠道。具体案件是否属于劳动监察或劳动仲裁范围，需要结合实际关系判断。',
+
+            'url',
+            'https://www.12333.gov.cn/'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '中国法律服务网',
+
+            'authority',
+            '中华人民共和国司法部',
+
+            'channelType',
+            'public_legal_service',
+
+            'scope',
+            '用于咨询劳动关系认定、协议责任、法律援助、调解或其他法律处理路径。',
+
+            'url',
+            'https://www.12348.gov.cn/'
+
+        )
+
+    ),
+
+
+    '不要删除工作群、考勤和任务记录。实习协议写着“非劳动关系”也不等于所有案件都能直接排除劳动关系，仍需结合实际事实判断。',
+
+
+    NOW(),
+
+
+    'reviewed',
+
+
+    TRUE
+
+)
+
+ON DUPLICATE KEY UPDATE
+
+    title =
+    VALUES
+    (
+        title
+    ),
+
+
+    problem_type =
+    VALUES
+    (
+        problem_type
+    ),
+
+
+    risk_level =
+    VALUES
+    (
+        risk_level
+    ),
+
+
+    summary =
+    VALUES
+    (
+        summary
+    ),
+
+
+    applicability_note =
+    VALUES
+    (
+        applicability_note
+    ),
+
+
+    first_action =
+    VALUES
+    (
+        first_action
+    ),
+
+
+    evidence_items =
+    VALUES
+    (
+        evidence_items
+    ),
+
+
+    action_steps =
+    VALUES
+    (
+        action_steps
+    ),
+
+
+    official_channels =
+    VALUES
+    (
+        official_channels
+    ),
+
+
+    caution_text =
+    VALUES
+    (
+        caution_text
+    ),
+
+
+    source_reviewed_at =
+    VALUES
+    (
+        source_reviewed_at
+    ),
+
+
+    review_status =
+    VALUES
+    (
+        review_status
+    ),
+
+
+    is_enabled =
+    VALUES
+    (
+        is_enabled
+    );
+
+
+
+/* =====================================================
+   四、第三类：
+
+   身份证、毕业证等证件
+   或押金被扣留
+===================================================== */
+
+
+INSERT INTO rights_guides
+(
+
+    guide_code,
+
+    title,
+
+    problem_type,
+
+    risk_level,
+
+    summary,
+
+    applicability_note,
+
+    first_action,
+
+    evidence_items,
+
+    action_steps,
+
+    official_channels,
+
+    caution_text,
+
+    source_reviewed_at,
+
+    review_status,
+
+    is_enabled
+
+)
+
+VALUES
+(
+
+    'DOCUMENT_OR_DEPOSIT_WITHHELD',
+
+
+    '证件原件或押金被扣留怎么办',
+
+
+    '证件与押金',
+
+
+    'critical',
+
+
+    '企业、中介或培训机构要求长期保管身份证、毕业证、学生证等证件原件，或者拒绝返还押金时，应立即保存交付证据，并通过书面方式要求说明依据和返还时间。',
+
+
+    '劳动合同法相关规定适用于用人单位招用劳动者的场景。学生实习是否形成劳动关系需要结合实际情况判断，但长期扣留重要证件或拒不返还财物本身属于需要高度警惕的风险信号。',
+
+
+    '不要继续提交更多证件、银行卡、验证码或账户权限。立即记录证件交付时间、接收人、保管地点以及对方拒绝返还的内容。',
+
+
+    JSON_ARRAY
+    (
+
+        '证件交付时的聊天记录',
+
+        '证件收据或登记表',
+
+        '企业要求上交原件的通知',
+
+        '证件照片和证件名称',
+
+        '接收人员姓名和联系方式',
+
+        '要求返还证件的书面记录',
+
+        '对方拒绝返还或拖延返还的回复',
+
+        '押金收据',
+
+        '转账记录',
+
+        '押金用途和退款规则',
+
+        '实习协议或劳动合同'
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            1,
+
+            'title',
+            '提出明确返还要求',
+
+            'description',
+            '书面说明需要返还的证件或押金名称，要求对方确认返还日期、地点和经办人员。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            2,
+
+            'title',
+            '区分核验和长期扣留',
+
+            'description',
+            '现场查看后立即归还，与长期统一保管、拒绝返还并不是同一种情况。记录对方实际保管方式和期限。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            3,
+
+            'title',
+            '保存交付和拒还证据',
+
+            'description',
+            '保存交付证件、支付押金、提出返还以及对方拒绝或拖延的完整记录。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            4,
+
+            'title',
+            '咨询对应主管渠道',
+
+            'description',
+            '涉及招聘和用工问题时，可查询所在地人社服务渠道；对合同责任、财物返还和具体法律处理方式不明确时，可通过12348咨询。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            5,
+
+            'title',
+            '评估是否存在其他风险',
+
+            'description',
+            '若同时存在冒用身份、强迫转账、威胁人身安全或疑似诈骗等情况，应优先保护人身和账户安全，并及时寻求相应帮助。'
+
+        )
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '全国人社政务服务平台',
+
+            'authority',
+            '中华人民共和国人力资源和社会保障部',
+
+            'channelType',
+            'employment_and_labor_service',
+
+            'scope',
+            '用于查询招聘、用工、劳动关系和所在地人社服务渠道。',
+
+            'url',
+            'https://www.12333.gov.cn/'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '中国法律服务网',
+
+            'authority',
+            '中华人民共和国司法部',
+
+            'channelType',
+            'public_legal_service',
+
+            'scope',
+            '用于咨询证件返还、押金返还、合同责任、法律援助和其他法律处理路径。',
+
+            'url',
+            'https://www.12348.gov.cn/'
+
+        )
+
+    ),
+
+
+    '不要为了取回证件或押金再次支付解冻费、违约金或手续费。涉及账号、银行卡和身份信息时，应同时检查是否存在信息冒用风险。',
+
+
+    NOW(),
+
+
+    'reviewed',
+
+
+    TRUE
+
+)
+
+ON DUPLICATE KEY UPDATE
+
+    title =
+    VALUES
+    (
+        title
+    ),
+
+
+    problem_type =
+    VALUES
+    (
+        problem_type
+    ),
+
+
+    risk_level =
+    VALUES
+    (
+        risk_level
+    ),
+
+
+    summary =
+    VALUES
+    (
+        summary
+    ),
+
+
+    applicability_note =
+    VALUES
+    (
+        applicability_note
+    ),
+
+
+    first_action =
+    VALUES
+    (
+        first_action
+    ),
+
+
+    evidence_items =
+    VALUES
+    (
+        evidence_items
+    ),
+
+
+    action_steps =
+    VALUES
+    (
+        action_steps
+    ),
+
+
+    official_channels =
+    VALUES
+    (
+        official_channels
+    ),
+
+
+    caution_text =
+    VALUES
+    (
+        caution_text
+    ),
+
+
+    source_reviewed_at =
+    VALUES
+    (
+        source_reviewed_at
+    ),
+
+
+    review_status =
+    VALUES
+    (
+        review_status
+    ),
+
+
+    is_enabled =
+    VALUES
+    (
+        is_enabled
+    );
+
+
+
+/* =====================================================
+   五、第四类：
+
+   不确定适用哪一种维权方式
+
+   用于提供通用证据整理和法律咨询流程。
+===================================================== */
+
+
+INSERT INTO rights_guides
+(
+
+    guide_code,
+
+    title,
+
+    problem_type,
+
+    risk_level,
+
+    summary,
+
+    applicability_note,
+
+    first_action,
+
+    evidence_items,
+
+    action_steps,
+
+    official_channels,
+
+    caution_text,
+
+    source_reviewed_at,
+
+    review_status,
+
+    is_enabled
+
+)
+
+VALUES
+(
+
+    'GENERAL_INTERNSHIP_DISPUTE_HELP',
+
+
+    '不确定该通过什么方式维权怎么办',
+
+
+    '综合实习争议',
+
+
+    'medium',
+
+
+    '当问题同时涉及学校、企业、中介、培训机构、贷款机构或平台，且无法判断属于劳动争议、合同争议还是消费争议时，应先整理主体、时间、合同和损失，再进行针对性咨询。',
+
+
+    '不同实习形式可能涉及不同法律关系。学校统一组织实习、自主求职实习、兼职、劳务、劳动用工和付费培训的处理路径可能不同，不能只根据“实习”两个字选择渠道。',
+
+
+    '先制作一页事件时间线，列明谁在什么时间作出了什么承诺、签署了什么文件、支付了什么费用以及目前希望解决什么问题。',
+
+
+    JSON_ARRAY
+    (
+
+        '事件时间线',
+
+        '全部合同和协议',
+
+        '岗位页面',
+
+        '企业、中介和培训机构名称',
+
+        '聊天记录',
+
+        '邮件记录',
+
+        '付款记录',
+
+        '考勤和工作记录',
+
+        '已经采取的协商措施',
+
+        '当前希望实现的处理结果'
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            1,
+
+            'title',
+            '列出全部相关主体',
+
+            'description',
+            '分别写明学校、招聘企业、中介、培训机构、贷款机构、收款方和实际工作单位，避免把不同主体混为一体。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            2,
+
+            'title',
+            '制作事件时间线',
+
+            'description',
+            '按日期整理招聘、面试、签约、培训、工作、付款和争议发生的过程。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            3,
+
+            'title',
+            '明确希望解决的问题',
+
+            'description',
+            '例如返还费用、支付报酬、解除合同、停止扣款、返还证件或确认责任。不同目标可能对应不同处理路径。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            4,
+
+            'title',
+            '先进行公共法律咨询',
+
+            'description',
+            '通过12348公共法律服务渠道了解可能涉及的法律关系和后续处理方向。'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'stepNumber',
+            5,
+
+            'title',
+            '再选择对应部门',
+
+            'description',
+            '涉及劳动和人社事项时查询12333平台；涉及培训服务等消费关系时，根据实际情况查询12315平台。'
+
+        )
+
+    ),
+
+
+    JSON_ARRAY
+    (
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '中国法律服务网',
+
+            'authority',
+            '中华人民共和国司法部',
+
+            'channelType',
+            'public_legal_service',
+
+            'scope',
+            '用于法律咨询、法律援助、调解以及了解可能的处理路径。',
+
+            'url',
+            'https://www.12348.gov.cn/'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '全国人社政务服务平台',
+
+            'authority',
+            '中华人民共和国人力资源和社会保障部',
+
+            'channelType',
+            'employment_and_labor_service',
+
+            'scope',
+            '用于查询劳动关系、人社政策和所在地服务渠道。',
+
+            'url',
+            'https://www.12333.gov.cn/'
+
+        ),
+
+
+        JSON_OBJECT
+        (
+
+            'channelName',
+            '全国12315平台',
+
+            'authority',
+            '市场监督管理部门',
+
+            'channelType',
+            'consumer_complaint',
+
+            'scope',
+            '仅在实际问题涉及培训、课程或其他消费服务关系时，根据具体情况查询投诉举报渠道。',
+
+            'url',
+            'https://www.12315.cn/'
+
+        )
+
+    ),
+
+
+    '平台无法仅根据少量描述确定案件性质。不要隐瞒合同、付款或实际工作情况，也不要为了获得确定答案而只截取对自己有利的部分。',
+
+
+    NOW(),
+
+
+    'reviewed',
+
+
+    TRUE
+
+)
+
+ON DUPLICATE KEY UPDATE
+
+    title =
+    VALUES
+    (
+        title
+    ),
+
+
+    problem_type =
+    VALUES
+    (
+        problem_type
+    ),
+
+
+    risk_level =
+    VALUES
+    (
+        risk_level
+    ),
+
+
+    summary =
+    VALUES
+    (
+        summary
+    ),
+
+
+    applicability_note =
+    VALUES
+    (
+        applicability_note
+    ),
+
+
+    first_action =
+    VALUES
+    (
+        first_action
+    ),
+
+
+    evidence_items =
+    VALUES
+    (
+        evidence_items
+    ),
+
+
+    action_steps =
+    VALUES
+    (
+        action_steps
+    ),
+
+
+    official_channels =
+    VALUES
+    (
+        official_channels
+    ),
+
+
+    caution_text =
+    VALUES
+    (
+        caution_text
+    ),
+
+
+    source_reviewed_at =
+    VALUES
+    (
+        source_reviewed_at
+    ),
+
+
+    review_status =
+    VALUES
+    (
+        review_status
+    ),
+
+
+    is_enabled =
+    VALUES
+    (
+        is_enabled
+    );
+
+
+
+/* =====================================================
+   六、执行结果检查
+===================================================== */
+
+
+SELECT
+
+    id,
+
+    guide_code,
+
+    title,
+
+    problem_type,
+
+    risk_level,
+
+    review_status,
+
+    is_enabled
+
+FROM rights_guides
+
+ORDER BY
+
+    id;
