@@ -18,6 +18,10 @@ import jdReviewRoutes
 from "./routes/jdReviewRoutes.js";
 
 
+import legalSourceRoutes
+from "./routes/legalSourceRoutes.js";
+
+
 dotenv.config({
   quiet: true
 });
@@ -29,8 +33,7 @@ const app =
 
 const port =
   Number(
-    process.env
-      .SERVER_PORT
+    process.env.SERVER_PORT
     ||
     3000
   );
@@ -43,16 +46,14 @@ app.use(
 
 app.use(
   cors({
-    origin:
-      true
+    origin: true
   })
 );
 
 
 app.use(
   express.json({
-    limit:
-      "1mb"
+    limit: "1mb"
   })
 );
 
@@ -74,8 +75,7 @@ app.get(
     response
       .status(200)
       .json({
-        success:
-          true,
+        success: true,
 
         message:
           "智法明行后端服务运行正常",
@@ -103,8 +103,7 @@ app.get(
       response
         .status(200)
         .json({
-          success:
-            true,
+          success: true,
 
           message:
             "MySQL 数据库连接正常",
@@ -116,8 +115,7 @@ app.get(
       response
         .status(500)
         .json({
-          success:
-            false,
+          success: false,
 
           message:
             "MySQL 数据库连接失败",
@@ -138,6 +136,13 @@ app.use(
 
 
 app.use(
+  "/api/legal-sources",
+
+  legalSourceRoutes
+);
+
+
+app.use(
   (
     request,
     response
@@ -145,8 +150,7 @@ app.use(
     response
       .status(404)
       .json({
-        success:
-          false,
+        success: false,
 
         message:
           "请求的接口不存在。"
@@ -167,12 +171,14 @@ async function startServer() {
       "MySQL 数据库连接成功"
     );
 
+
     console.log(
       `当前数据库：${
         databaseInformation
           .databaseName
       }`
     );
+
 
     console.log(
       `数据库账号：${
@@ -181,12 +187,14 @@ async function startServer() {
       }`
     );
 
+
     console.log(
       `MySQL 版本：${
         databaseInformation
           .mysqlVersion
       }`
     );
+
 
     console.log("");
 
@@ -198,25 +206,34 @@ async function startServer() {
         console.log(
           "智法明行后端已启动："
           +
-          `http://localhost:${
-            port
-          }`
+          `http://localhost:${port}`
         );
+
 
         console.log(
           "健康检查："
           +
-          `http://localhost:${
-            port
-          }/api/health`
+          `http://localhost:${port}`
+          +
+          "/api/health"
         );
+
 
         console.log(
           "JD 审查接口："
           +
-          `POST http://localhost:${
-            port
-          }/api/jd-reviews`
+          `POST http://localhost:${port}`
+          +
+          "/api/jd-reviews"
+        );
+
+
+        console.log(
+          "官方依据接口："
+          +
+          `GET http://localhost:${port}`
+          +
+          "/api/legal-sources"
         );
       }
     );
@@ -227,11 +244,13 @@ async function startServer() {
       "后端启动失败"
     );
 
+
     console.error(
       `数据库连接错误：${
         error.message
       }`
     );
+
 
     console.error("");
 
