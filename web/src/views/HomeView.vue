@@ -62,7 +62,10 @@ onMounted(() => {
 
       <div class="container header-content">
 
-        <div class="brand">
+        <RouterLink
+          class="brand"
+          to="/"
+        >
 
           <div class="brand-logo">
 
@@ -88,23 +91,23 @@ onMounted(() => {
 
           </div>
 
-        </div>
+        </RouterLink>
 
 
         <nav class="navigation">
 
-          <a href="#home">
+          <RouterLink to="/">
 
             首页
 
-          </a>
+          </RouterLink>
 
 
-          <a href="#features">
+          <RouterLink to="/jd-review">
 
             岗位筛查
 
-          </a>
+          </RouterLink>
 
 
           <a href="#features">
@@ -130,14 +133,14 @@ onMounted(() => {
         </nav>
 
 
-        <a
+        <RouterLink
           class="header-button"
-          href="#features"
+          to="/jd-review"
         >
 
           免费检测
 
-        </a>
+        </RouterLink>
 
       </div>
 
@@ -146,10 +149,7 @@ onMounted(() => {
 
     <main>
 
-      <section
-        id="home"
-        class="hero"
-      >
+      <section class="hero">
 
         <div class="container hero-content">
 
@@ -190,14 +190,14 @@ onMounted(() => {
 
             <div class="hero-buttons">
 
-              <a
+              <RouterLink
                 class="primary-button"
-                href="#features"
+                to="/jd-review"
               >
 
                 开始检测岗位
 
-              </a>
+              </RouterLink>
 
 
               <a
@@ -270,8 +270,10 @@ onMounted(() => {
 
                 {{
                   errorMessage
-                    ? "连接异常"
-                    : "实时连接"
+                    ?
+                    "连接异常"
+                    :
+                    "实时连接"
                 }}
 
               </span>
@@ -460,11 +462,9 @@ onMounted(() => {
 
             <p class="system-note">
 
-              本卡片数据由 Vue
-              实时请求 Express，
+              本卡片数据由 Vue 实时请求 Express，
 
-              再由 Express 连接 MySQL
-              后返回，
+              再由 Express 连接 MySQL 后返回，
 
               不是写死的演示数据。
 
@@ -512,38 +512,45 @@ onMounted(() => {
 
           <div class="feature-grid">
 
-            <article class="feature-card">
+            <RouterLink
+              class="feature-link"
+              to="/jd-review"
+            >
 
-              <div class="feature-icon">
+              <article class="feature-card">
 
-                查
+                <div class="feature-icon">
 
-              </div>
+                  查
 
-
-              <h3>
-
-                岗位 JD 风险审查
-
-              </h3>
+                </div>
 
 
-              <p>
+                <h3>
 
-                对粘贴的岗位 JD
-                进行文本结构化、
-                上下文判断和风险分析。
+                  岗位 JD 风险审查
 
-              </p>
+                </h3>
 
 
-              <span>
+                <p>
 
-                开始检测 →
+                  对粘贴的岗位 JD
+                  进行文本结构化、
+                  上下文判断和风险分析。
 
-              </span>
+                </p>
 
-            </article>
+
+                <span>
+
+                  开始检测 →
+
+                </span>
+
+              </article>
+
+            </RouterLink>
 
 
             <article class="feature-card">
@@ -573,7 +580,7 @@ onMounted(() => {
 
               <span>
 
-                进入审核 →
+                正在建设 →
 
               </span>
 
@@ -607,7 +614,7 @@ onMounted(() => {
 
               <span>
 
-                查看知识 →
+                正在建设 →
 
               </span>
 
@@ -641,7 +648,7 @@ onMounted(() => {
 
               <span>
 
-                查看流程 →
+                正在建设 →
 
               </span>
 
@@ -753,6 +760,8 @@ onMounted(() => {
 
   margin-right: auto;
 
+  color: inherit;
+
 }
 
 
@@ -856,6 +865,15 @@ onMounted(() => {
 .navigation a:hover {
 
   color: #2457e6;
+
+}
+
+
+.navigation a.router-link-active {
+
+  color: #2457e6;
+
+  font-weight: 800;
 
 }
 
@@ -1451,6 +1469,8 @@ h1 span {
 
   color: white;
 
+  cursor: pointer;
+
 }
 
 
@@ -1555,6 +1575,15 @@ h1 span {
 }
 
 
+.feature-link {
+
+  display: block;
+
+  color: inherit;
+
+}
+
+
 .feature-card {
 
   min-height: 300px;
@@ -1578,6 +1607,13 @@ h1 span {
     box-shadow 0.25s,
 
     border-color 0.25s;
+
+}
+
+
+.feature-link .feature-card {
+
+  height: 100%;
 
 }
 
