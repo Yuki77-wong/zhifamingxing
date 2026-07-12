@@ -1,0 +1,810 @@
+{
+  "metadata": {
+    "datasetName": "Contract review artificial baseline cases",
+    "sampleType": "人工构造测试样本",
+    "disclaimer": "这些是人工构造的测试样本，不是公开招聘平台真实岗位，也不是真实合同数据，不能作为网站真实岗位或真实合同数据展示。指标只用于评估当前规则引擎在本测试集上的表现。",
+    "createdFor": "合同审核规则引擎基线评估"
+  },
+  "generatedAt": "2026-07-12T11:47:15.532Z",
+  "sampleCount": 60,
+  "note": "本报告基于人工构造测试样本，指标只反映当前测试集表现，不代表真实互联网数据中的最终准确率；confidence 不等于 accuracy。",
+  "metrics": {
+    "tp": 30,
+    "fp": 0,
+    "tn": 30,
+    "fn": 0,
+    "accuracy": 1,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "falsePositiveCases": [],
+  "falseNegativeCases": [],
+  "ruleMismatchCases": [],
+  "evaluatedCases": [
+    {
+      "id": "CR-001",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "保证金风险"
+    },
+    {
+      "id": "CR-002",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "实习押金"
+    },
+    {
+      "id": "CR-003",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "入职财物"
+    },
+    {
+      "id": "CR-004",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "不收押金"
+    },
+    {
+      "id": "CR-005",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "不收财物"
+    },
+    {
+      "id": "CR-006",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "容易误报的合规说明"
+    },
+    {
+      "id": "CR-007",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "保管身份证原件"
+    },
+    {
+      "id": "CR-008",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "扣押证件"
+    },
+    {
+      "id": "CR-009",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "毕业证保管"
+    },
+    {
+      "id": "CR-010",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "仅核验证件"
+    },
+    {
+      "id": "CR-011",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "查验后归还"
+    },
+    {
+      "id": "CR-012",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "不扣押原件"
+    },
+    {
+      "id": "CR-013",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "付费培训"
+    },
+    {
+      "id": "CR-014",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "培训贷款"
+    },
+    {
+      "id": "CR-015",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "培训分期"
+    },
+    {
+      "id": "CR-016",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "免费培训"
+    },
+    {
+      "id": "CR-017",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "无需贷款"
+    },
+    {
+      "id": "CR-018",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "风险教育内容"
+    },
+    {
+      "id": "CR-019",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "收费保证安排岗位"
+    },
+    {
+      "id": "CR-020",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "收费内推"
+    },
+    {
+      "id": "CR-021",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "付费保录用"
+    },
+    {
+      "id": "CR-022",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "免费内推"
+    },
+    {
+      "id": "CR-023",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "无需支付内推费"
+    },
+    {
+      "id": "CR-024",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "不保录用"
+    },
+    {
+      "id": "CR-025",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD",
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD",
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 2,
+      "overallScore": 99.44,
+      "overallLevel": "critical",
+      "notes": "押金和证件组合"
+    },
+    {
+      "id": "CR-026",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER",
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER",
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 2,
+      "overallScore": 99.4,
+      "overallLevel": "critical",
+      "notes": "培训贷款和保岗位"
+    },
+    {
+      "id": "CR-027",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "多重安全表达"
+    },
+    {
+      "id": "CR-028",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "普通安全条款"
+    },
+    {
+      "id": "CR-029",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "资料押金"
+    },
+    {
+      "id": "CR-030",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "押金否定语境"
+    },
+    {
+      "id": "CR-031",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "留存身份证原件"
+    },
+    {
+      "id": "CR-032",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "查看不留存"
+    },
+    {
+      "id": "CR-033",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "课程费用"
+    },
+    {
+      "id": "CR-034",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "免费课程"
+    },
+    {
+      "id": "CR-035",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "交费内推"
+    },
+    {
+      "id": "CR-036",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "保录用否定"
+    },
+    {
+      "id": "CR-037",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "设备押金"
+    },
+    {
+      "id": "CR-038",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "设备押金否定"
+    },
+    {
+      "id": "CR-039",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "毕业证上交"
+    },
+    {
+      "id": "CR-040",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "毕业证核验"
+    },
+    {
+      "id": "CR-041",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "培训费分期"
+    },
+    {
+      "id": "CR-042",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "培训费公司承担"
+    },
+    {
+      "id": "CR-043",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "就业服务费保岗位"
+    },
+    {
+      "id": "CR-044",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "就业服务安全"
+    },
+    {
+      "id": "CR-045",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "诚信保证金"
+    },
+    {
+      "id": "CR-046",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "多关键词否定"
+    },
+    {
+      "id": "CR-047",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "学生证原件保管"
+    },
+    {
+      "id": "CR-048",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "学生证安全"
+    },
+    {
+      "id": "CR-049",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "购买课程"
+    },
+    {
+      "id": "CR-050",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "购买课程否定"
+    },
+    {
+      "id": "CR-051",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "保证 offer"
+    },
+    {
+      "id": "CR-052",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "offer 否定"
+    },
+    {
+      "id": "CR-053",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 86,
+      "overallLevel": "high",
+      "notes": "模糊收费"
+    },
+    {
+      "id": "CR-054",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "模糊收费否定"
+    },
+    {
+      "id": "CR-055",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "findingCount": 1,
+      "overallScore": 96,
+      "overallLevel": "critical",
+      "notes": "扣留证件原件"
+    },
+    {
+      "id": "CR-056",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "不得扣留"
+    },
+    {
+      "id": "CR-057",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "critical",
+      "notes": "课程服务费"
+    },
+    {
+      "id": "CR-058",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "课程服务费否定"
+    },
+    {
+      "id": "CR-059",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "actualRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "findingCount": 1,
+      "overallScore": 88,
+      "overallLevel": "high",
+      "notes": "内推费安排岗位"
+    },
+    {
+      "id": "CR-060",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "low",
+      "notes": "内推费否定"
+    }
+  ]
+}

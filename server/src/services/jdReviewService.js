@@ -220,6 +220,155 @@ const GENERIC_NEGATIVE_PATTERNS = [
 ];
 
 
+const ADDITIONAL_GENERIC_NEGATIVE_PATTERNS = [
+
+  "(?:不|不会|绝不|不得|禁止|无须|无需|不需要|不必)[^。！？!?；;\\n]{0,16}(?:向应聘者|向学生|向候选人|向实习生)?[^。！？!?；;\\n]{0,12}(?:收取|缴纳|交纳|支付|付款|收费|办理|要求)[^。！？!?；;\\n]{0,24}(?:任何费用|任何财物|押金|保证金|岗位押金|岗位保证金|报名费|资料费|服装费|培训费|培训费用|课程费|贷款|培训贷款|内推费|内推费用)",
+
+  "(?:不|不会|绝不|不得|禁止|无须|无需|不需要|不必)[^。！？!?；;\\n]{0,16}(?:扣押|扣留|留存|保管|上交|提交)[^。！？!?；;\\n]{0,24}(?:身份证|身份证原件|毕业证|毕业证原件|学生证|学生证原件|证件|证件原件|原件)",
+
+  "(?:仅|只)[^。！？!?；;\\n]{0,10}(?:现场)?(?:核验|查验|查看)[^。！？!?；;\\n]{0,20}(?:身份证|身份证原件|学生证|证件|证件原件)",
+
+  "(?:核验|查验|查看)[^。！？!?；;\\n]{0,16}(?:后|完毕后)?(?:立即|当场)?(?:归还|退还)[^。！？!?；;\\n]{0,10}(?:原件|身份证|证件)",
+
+  "(?:岗前培训|培训|课程)[^。！？!?；;\\n]{0,16}(?:免费|完全免费|由公司承担|由用人单位承担)",
+
+  "(?:免费|完全免费)[^。！？!?；;\\n]{0,16}(?:岗前培训|培训|课程)",
+
+  "(?:不|不会|无须|无需|不需要|不必)[^。！？!?；;\\n]{0,16}(?:办理|申请|签署|承担|偿还|支付)?[^。！？!?；;\\n]{0,16}(?:贷款|培训贷款|课程分期|助学分期|培训分期)",
+
+  "(?:不涉及|不包含|不含|没有|无)[^。！？!?；;\\n]{0,12}(?:任何)?(?:贷款|培训贷款|收费|押金|保证金|扣押证件)",
+
+  "(?:押金|保证金|培训贷款|收费|扣押证件)[^。！？!?；;\\n]{0,16}(?:是|属于)?(?:禁止事项|骗局|风险提示|防范提示)",
+
+  "(?:不|不会|绝不|不得|禁止|无需|无须|不需要)[^。！？!?；;\\n]{0,10}(?:收|收取|缴纳|交纳|支付|交付)[^。！？!?；;\\n]{0,24}(?:服装押金|设备押金|工牌押金|资料押金|材料押金|岗位押金|押金|保证金)"
+
+];
+
+
+const ADDITIONAL_FLEXIBLE_RULE_PATTERNS = {
+
+  RECRUITMENT_UPFRONT_FEE: [
+
+    "(?:入职|上岗|入岗|实习|签约|录用|报到)?[^。！？!?；;\\n]{0,14}(?:需|需要|须|要求|应|先)?[^。！？!?；;\\n]{0,10}(?:缴纳|交纳|支付|缴费|交费|付款|先缴|先交)[^。！？!?；;\\n]{0,24}(?:入岗服务费|岗位管理费|录用服务费|就业安置费|名额保留费|岗前保证金|服装押金|设备押金|工牌押金|资料押金|材料押金|岗位服务费|岗位稳定金|报名费|资料费|服装费|工具包)",
+
+    "(?:先缴后返|先交费再上岗|先付款再上岗|先付款后安排岗位|先交费后安排面试|先交资料费|先付款购买工具包)",
+
+    "(?:入岗服务费|岗位管理费|录用服务费|就业安置费|名额保留费|岗位服务费|岗位稳定金|资料押金|材料押金)[^。！？!?；;\\n]{0,18}(?:到账|缴清|支付|缴纳|交纳)"
+
+  ],
+
+  PAID_TRAINING_OR_TRAINING_LOAN: [
+
+    "(?:缴纳|交纳|支付|承担|自费|自行承担)[^。！？!?；;\\n]{0,18}(?:培训费|培训费用|课程费|课程费用|课程服务费|训练营费用|训练营)",
+
+    "(?:培训费|培训费用|课程费|课程费用|课程服务费)[^。！？!?；;\\n]{0,18}(?:从工资中扣除|工资中扣除|分期偿还|分期支付|分期付款|自行承担|自费)",
+
+    "(?:签署|办理|申请)[^。！？!?；;\\n]{0,18}(?:培训借款协议|课程分期|助学分期|培训分期|培训贷款|培训贷)",
+
+    "(?:缴费|交费|付费|支付)[^。！？!?；;\\n]{0,18}(?:参加)?(?:训练营|培训|课程)[^。！？!?；;\\n]{0,24}(?:包就业|保就业|安排工作|安排岗位|入职|上岗)",
+
+    "(?:培训后|课程结束后|训练营结束后)[^。！？!?；;\\n]{0,18}(?:包就业|保就业|安排工作|安排岗位|入职|上岗)",
+
+    "(?:第三方|培训机构|第三方培训机构)[^。！？!?；;\\n]{0,20}(?:可能)?(?:收取|收费|另行收取|支付|缴纳|交纳)[^。！？!?；;\\n]{0,18}(?:课程费|课程费用|培训费|培训费用|费用)",
+
+    "(?:第三方培训机构可能收取课程费|第三方机构可能收取培训费|第三方课程另行收费|第三方课程费用另行收取)",
+
+    "(?:并非|不是)[^。！？!?；;\\n]{0,10}(?:所有|全部)?(?:培训|课程)[^。！？!?；;\\n]{0,8}(?:免费)[^。！？!?；;\\n]{0,30}(?:部分|个别)?[^。！？!?；;\\n]{0,12}(?:课程|培训)?[^。！？!?；;\\n]{0,12}(?:需|需要|须|由)?(?:学员|个人)?(?:自费|自行承担|支付|缴纳)",
+
+    "(?:并非所有培训都免费|并非所有课程都免费|不是所有培训都免费|不是所有课程都免费)",
+
+    "(?:部分课程需学员自费|部分课程需要学员自费|部分培训需个人自费|部分课程需个人自费)",
+
+    "(?:部分|个别)[^。！？!?；;\\n]{0,8}(?:课程|培训)[^。！？!?；;\\n]{0,16}(?:需|需要|须|由)?(?:学员|个人)?(?:自费|自行承担|支付|缴纳)[^。！？!?；;\\n]{0,18}(?:上岗|入职|就业|参加考核|上岗考核)"
+
+  ],
+
+  IDENTITY_DOCUMENT_RETENTION: [
+
+    "(?:身份证|身份证原件|毕业证|毕业证原件|学生证|学生证原件|证件原件)[^。！？!?；;\\n]{0,18}(?:交由公司保管|由公司保管|由公司统一保管|暂存公司|统一代管|离职后归还|实习结束后归还)",
+
+    "(?:公司|单位|人事|行政部)?[^。！？!?；;\\n]{0,10}(?:保管|代管|暂存|留存|扣留|扣押)[^。！？!?；;\\n]{0,18}(?:身份证原件|毕业证原件|学生证原件|证件原件)",
+
+    "(?:离职后|实习结束后|项目结束后)[^。！？!?；;\\n]{0,12}(?:归还|退还)[^。！？!?；;\\n]{0,12}(?:身份证|毕业证|学生证|证件原件)"
+
+  ],
+
+  PAID_INTERNAL_REFERRAL: [
+
+    "(?:缴费|交费|付费|支付)[^。！？!?；;\\n]{0,18}(?:保入职|保录用|保证录用|保证安排岗位|保就业|获得内推资格|获得内部推荐|拿到offer|拿到 offer)",
+
+    "(?:内部名额|内推资格|内部推荐|内推服务|直通面试)[^。！？!?；;\\n]{0,18}(?:需付费|需要付费|收费|付费|服务费|缴费|交费)",
+
+    "(?:收费|付费|缴费|交费|支付)[^。！？!?；;\\n]{0,18}(?:保录用|保入职|保就业|内推|内部推荐|安排岗位|直通面试)"
+
+  ]
+
+};
+
+
+const ADDITIONAL_RULE_RISK_TERMS = {
+
+  RECRUITMENT_UPFRONT_FEE: [
+    "费用",
+    "收费",
+    "押金",
+    "保证金",
+    "报名费",
+    "资料费",
+    "服装费",
+    "服务费",
+    "管理费",
+    "安置费",
+    "稳定金",
+    "财物"
+  ],
+
+  PAID_TRAINING_OR_TRAINING_LOAN: [
+    "培训",
+    "课程",
+    "训练营",
+    "贷款",
+    "培训贷",
+    "分期",
+    "借款",
+    "培训费",
+    "课程费"
+  ],
+
+  IDENTITY_DOCUMENT_RETENTION: [
+    "身份证",
+    "毕业证",
+    "学生证",
+    "证件",
+    "原件",
+    "留存",
+    "保管",
+    "扣押"
+  ],
+
+  PAID_INTERNAL_REFERRAL: [
+    "内推",
+    "内部推荐",
+    "录用",
+    "入职",
+    "offer",
+    "岗位",
+    "就业",
+    "直通面试"
+  ],
+
+  VOCATIONAL_INTERNSHIP_FEE_REFERENCE: [
+    "实习",
+    "费用",
+    "押金",
+    "管理费",
+    "服务费",
+    "培训费"
+  ]
+
+};
+
+
 function parseJsonArray(
   value
 ) {
@@ -839,7 +988,10 @@ function findNegativeCandidates({
 
   for (
     const regexSource
-    of GENERIC_NEGATIVE_PATTERNS
+    of [
+      ...GENERIC_NEGATIVE_PATTERNS,
+      ...ADDITIONAL_GENERIC_NEGATIVE_PATTERNS
+    ]
   ) {
 
     const localMatches =
@@ -904,11 +1056,22 @@ function hasSharedRiskTerm({
 }) {
 
   const riskTerms =
-    RULE_RISK_TERMS[
-      ruleCode
-    ]
-    ||
-    [];
+    [
+      ...(
+        RULE_RISK_TERMS[
+          ruleCode
+        ]
+        ||
+        []
+      ),
+      ...(
+        ADDITIONAL_RULE_RISK_TERMS[
+          ruleCode
+        ]
+        ||
+        []
+      )
+    ];
 
 
   return riskTerms.some(
@@ -993,6 +1156,48 @@ function isGenericFeeNegation({
       "免费"
     )
 
+    ||
+
+    negativeText.includes(
+      "不会收取"
+    )
+
+    ||
+
+    negativeText.includes(
+      "不收取"
+    )
+
+    ||
+
+    negativeText.includes(
+      "绝不收取"
+    )
+
+    ||
+
+    negativeText.includes(
+      "不得收取"
+    )
+
+    ||
+
+    negativeText.includes(
+      "禁止向"
+    )
+
+    ||
+
+    negativeText.includes(
+      "由公司承担"
+    )
+
+    ||
+
+    negativeText.includes(
+      "不需要支付"
+    )
+
   );
 
 }
@@ -1011,6 +1216,21 @@ function isCandidateNegated({
   negativePatterns
 
 }) {
+
+  if (
+    rule.rule_code
+    ===
+    "PAID_TRAINING_OR_TRAINING_LOAN"
+    &&
+    /(?:并非|不是)[^。！？!?；;\n]{0,12}(?:所有|全部)?(?:培训|课程)[^。！？!?；;\n]{0,10}免费|(?:部分|个别)[^。！？!?；;\n]{0,10}(?:培训|课程)[^。！？!?；;\n]{0,18}自费/u.test(
+      candidate.matchedText
+    )
+  ) {
+
+    return false;
+
+  }
+
 
   const negativeCandidates =
     findNegativeCandidates({
@@ -1093,6 +1313,30 @@ function isCandidateNegated({
 
     if (
       !semanticallyRelated
+    ) {
+
+      continue;
+
+    }
+
+
+    const negativeTextBeforeCandidate =
+      inputText.slice(
+        negativeCandidate.start,
+        candidate.start
+      );
+
+
+    if (
+      negativeCandidate.start
+      <
+      candidate.start
+
+      &&
+
+      CONTRAST_EXPRESSION.test(
+        negativeTextBeforeCandidate
+      )
     ) {
 
       continue;
@@ -1702,15 +1946,26 @@ function createRuleCandidates({
 
   const flexiblePatterns =
 
-    FLEXIBLE_RULE_PATTERNS[
+    [
+      ...(
+        FLEXIBLE_RULE_PATTERNS[
 
-      rule.rule_code
+          rule.rule_code
 
-    ]
+        ]
 
-    ||
+        ||
 
-    [];
+        []
+      ),
+      ...(
+        ADDITIONAL_FLEXIBLE_RULE_PATTERNS[
+          rule.rule_code
+        ]
+        ||
+        []
+      )
+    ];
 
 
   for (
@@ -1795,6 +2050,20 @@ function analyzeRule({
   rule
 
 }) {
+
+  if (
+    rule.rule_code
+    ===
+    "VOCATIONAL_INTERNSHIP_FEE_REFERENCE"
+    &&
+    !/(职业学校|中职|高职|技工学校|学校组织|实习管理费|实习材料费|实习服务费|实习报酬提成)/u.test(
+      inputText
+    )
+  ) {
+
+    return [];
+
+  }
 
   const positivePatterns =
 
@@ -2093,6 +2362,107 @@ function analyzeRule({
 
 
   return findings;
+
+}
+
+
+function findingsHaveOverlappingEvidence(
+  firstFinding,
+  secondFinding
+) {
+
+  if (
+    firstFinding.evidenceStart
+    ===
+    undefined
+    ||
+    secondFinding.evidenceStart
+    ===
+    undefined
+  ) {
+
+    return (
+      firstFinding.evidenceText
+      ===
+      secondFinding.evidenceText
+    );
+
+  }
+
+
+  return (
+    firstFinding.evidenceStart
+    <
+    secondFinding.evidenceEnd
+
+    &&
+
+    secondFinding.evidenceStart
+    <
+    firstFinding.evidenceEnd
+  );
+
+}
+
+
+function normalizeReviewFindings(
+  findings
+) {
+
+  return findings.filter(
+
+    (
+      finding,
+      index
+    ) => {
+
+      if (
+        finding.ruleCode
+        !==
+        "VOCATIONAL_INTERNSHIP_FEE_REFERENCE"
+      ) {
+
+        return true;
+
+      }
+
+
+      return !findings.some(
+
+        (
+          otherFinding,
+          otherIndex
+        ) => {
+
+          return (
+            otherIndex
+            !==
+            index
+
+            &&
+
+            [
+              "RECRUITMENT_UPFRONT_FEE",
+              "PAID_TRAINING_OR_TRAINING_LOAN"
+            ].includes(
+              otherFinding.ruleCode
+            )
+
+            &&
+
+            findingsHaveOverlappingEvidence(
+              finding,
+              otherFinding
+            )
+          );
+
+        }
+
+      );
+
+    }
+
+  );
 
 }
 
@@ -2409,7 +2779,9 @@ export async function reviewJobDescription({
 
     const findings =
 
-      rules.flatMap(
+      normalizeReviewFindings(
+
+        rules.flatMap(
 
         (
           rule
@@ -2424,6 +2796,8 @@ export async function reviewJobDescription({
           });
 
         }
+
+        )
 
       );
 
@@ -2566,6 +2940,154 @@ export async function reviewJobDescription({
 
 
     throw error;
+
+  } finally {
+
+    connection.release();
+
+  }
+
+}
+
+
+export async function evaluateJobDescriptionText({
+
+  jdText
+
+}) {
+
+  const startedAt =
+
+    Date.now();
+
+
+  const inputText =
+
+    normalizeInputText(
+
+      jdText
+
+    );
+
+
+  const connection =
+
+    await pool
+
+      .getConnection();
+
+
+  try {
+
+    const rules =
+
+      await loadEnabledRules(
+
+        connection
+
+      );
+
+
+    const findings =
+
+      normalizeReviewFindings(
+
+        rules.flatMap(
+
+        (
+          rule
+        ) => {
+
+          return analyzeRule({
+
+            inputText,
+
+            rule
+
+          });
+
+        }
+
+        )
+
+      );
+
+
+    const overallScore =
+
+      combineRiskScores(
+
+        findings
+
+      );
+
+
+    const overallLevel =
+
+      determineOverallLevel({
+
+        textLength:
+
+          inputText.length,
+
+
+        overallScore,
+
+
+        findings
+
+      });
+
+
+    const overallConfidence =
+
+      calculateOverallConfidence(
+
+        findings
+
+      );
+
+
+    return {
+
+      engineVersion:
+
+        ENGINE_VERSION,
+
+
+      inputLength:
+
+        inputText.length,
+
+
+      overallScore,
+
+
+      overallLevel,
+
+
+      confidence:
+
+        overallConfidence,
+
+
+      findingCount:
+
+        findings.length,
+
+
+      findings,
+
+
+      processingTimeMs:
+
+        Date.now()
+
+        -
+
+        startedAt
+
+    };
 
   } finally {
 

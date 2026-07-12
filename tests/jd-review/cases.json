@@ -1,0 +1,430 @@
+{
+  "metadata": {
+    "datasetName": "JD review artificial baseline cases",
+    "sampleType": "人工构造测试样本",
+    "disclaimer": "这些是人工构造的测试样本，不是公开招聘平台真实岗位，不能作为网站真实岗位数据展示。指标只用于评估当前规则引擎在本测试集上的表现。",
+    "createdFor": "JD 审查规则引擎基线评估"
+  },
+  "cases": [
+    {
+      "id": "JD-001",
+      "text": "数据分析实习生入职前需缴纳500元岗位押金，完成三个月后退还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "岗位押金正样本"
+    },
+    {
+      "id": "JD-002",
+      "text": "新媒体实习生报到时须支付工牌费和资料费共300元。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "入职杂费正样本"
+    },
+    {
+      "id": "JD-003",
+      "text": "公司要求实习生先交设备押金，离职时视设备情况返还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "设备押金正样本"
+    },
+    {
+      "id": "JD-004",
+      "text": "录用前需要支付服装费，统一购买实习工装。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "服装费正样本"
+    },
+    {
+      "id": "JD-005",
+      "text": "报名后需要先付款199元作为岗位稳定金，之后安排面试。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "稳定金复杂表达"
+    },
+    {
+      "id": "JD-006",
+      "text": "实习岗位不收取任何押金或保证金，入职无需缴纳费用。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "不收押金负样本"
+    },
+    {
+      "id": "JD-007",
+      "text": "公司不会向学生收取报名费、资料费或服装费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "收费否定语境"
+    },
+    {
+      "id": "JD-008",
+      "text": "岗位说明中提到押金制度为禁止事项，本岗位不要求缴纳押金。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "容易误报的合规说明"
+    },
+    {
+      "id": "JD-009",
+      "text": "实习期间公司提供电脑，无需缴纳设备押金。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "无需押金负样本"
+    },
+    {
+      "id": "JD-010",
+      "text": "培训期结束后上岗，需要办理培训贷款，月供从工资中扣除。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "培训贷款正样本"
+    },
+    {
+      "id": "JD-011",
+      "text": "入职前参加课程，课程费用可分期，培训后安排就业。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "培训分期正样本"
+    },
+    {
+      "id": "JD-012",
+      "text": "应聘者需购买课程后入职，课程包含项目实训。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "购买课程后入职"
+    },
+    {
+      "id": "JD-013",
+      "text": "先缴纳培训费，完成培训考核后公司推荐实习岗位。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "付费培训后推荐"
+    },
+    {
+      "id": "JD-014",
+      "text": "培训费用由公司承担，岗前培训完全免费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "免费培训负样本"
+    },
+    {
+      "id": "JD-015",
+      "text": "本岗位不办理培训贷款，也不要求支付培训费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "无需贷款负样本"
+    },
+    {
+      "id": "JD-016",
+      "text": "岗位包含免费岗前培训，不收取培训费或课程费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "免费培训否定"
+    },
+    {
+      "id": "JD-017",
+      "text": "职位介绍写明培训贷款是常见骗局，本岗位不涉及任何贷款。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "风险教育内容，容易误报"
+    },
+    {
+      "id": "JD-018",
+      "text": "入职当天需上交身份证原件，由公司统一保管到实习结束。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["IDENTITY_DOCUMENT_RETENTION"],
+      "notes": "扣押身份证正样本"
+    },
+    {
+      "id": "JD-019",
+      "text": "公司统一保管毕业证原件，离职后归还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["IDENTITY_DOCUMENT_RETENTION"],
+      "notes": "扣押毕业证"
+    },
+    {
+      "id": "JD-020",
+      "text": "报到时需提交学生证原件留存，便于办理手续。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["IDENTITY_DOCUMENT_RETENTION"],
+      "notes": "扣押证件复杂表达"
+    },
+    {
+      "id": "JD-021",
+      "text": "仅核验身份证，不扣押任何证件原件。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "不扣押证件负样本"
+    },
+    {
+      "id": "JD-022",
+      "text": "面试时查验身份证，核验后立即归还原件。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "仅核验证件"
+    },
+    {
+      "id": "JD-023",
+      "text": "公司禁止扣押身份证、毕业证或学生证。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "禁止扣押说明"
+    },
+    {
+      "id": "JD-024",
+      "text": "付费内推名额有限，缴费后保证录用。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_INTERNAL_REFERRAL"],
+      "notes": "收费内推和保录用"
+    },
+    {
+      "id": "JD-025",
+      "text": "内部推荐服务费800元，保证拿到offer。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_INTERNAL_REFERRAL"],
+      "notes": "内推服务费"
+    },
+    {
+      "id": "JD-026",
+      "text": "交费后保入职，未入职可转为其他岗位。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_INTERNAL_REFERRAL"],
+      "notes": "付费保录用"
+    },
+    {
+      "id": "JD-027",
+      "text": "员工可免费内推，但公司不保证录用结果。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "免费内推负样本"
+    },
+    {
+      "id": "JD-028",
+      "text": "本岗位通过官网投递，不收取内推费用。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "不收费内推"
+    },
+    {
+      "id": "JD-029",
+      "text": "公司明确不承诺录用，面试结果以正式通知为准。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "不保录用"
+    },
+    {
+      "id": "JD-030",
+      "text": "入职前需缴纳保证金，同时参加付费培训后才能上岗。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE", "PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "多风险组合"
+    },
+    {
+      "id": "JD-031",
+      "text": "公司保管身份证原件，并要求办理培训分期。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["IDENTITY_DOCUMENT_RETENTION", "PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "证件和培训贷款组合"
+    },
+    {
+      "id": "JD-032",
+      "text": "先交资料费后安排面试，缴费后保证安排岗位。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE", "PAID_INTERNAL_REFERRAL"],
+      "notes": "收费和保岗位组合"
+    },
+    {
+      "id": "JD-033",
+      "text": "岗位提供带薪实习、导师辅导和免费培训。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "普通福利描述"
+    },
+    {
+      "id": "JD-034",
+      "text": "薪资按月发放，不收押金，不要求贷款。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "多重否定安全"
+    },
+    {
+      "id": "JD-035",
+      "text": "面试通过后，公司将安排岗前培训，培训不收取费用。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "培训安全表达"
+    },
+    {
+      "id": "JD-036",
+      "text": "需要在签约前交纳一笔诚信保证金，用于锁定实习名额。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "关键词间隔表达"
+    },
+    {
+      "id": "JD-037",
+      "text": "统一培训后可以入职，但学员须自行承担课程费用。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "付费培训复杂表达"
+    },
+    {
+      "id": "JD-038",
+      "text": "身份证原件只用于现场核验，核验后归还。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "身份证安全表达"
+    },
+    {
+      "id": "JD-039",
+      "text": "入职不需要缴纳任何费用，但需要按时参加培训。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "培训词但无付费"
+    },
+    {
+      "id": "JD-040",
+      "text": "岗位要求先支付培训押金，完成课程后再安排工作。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE", "PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "培训押金"
+    },
+    {
+      "id": "JD-041",
+      "text": "学校推荐岗位，不收取就业服务费或内推费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "就业服务费否定"
+    },
+    {
+      "id": "JD-042",
+      "text": "候选人需支付内部推荐费，通过后可直接入职。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_INTERNAL_REFERRAL"],
+      "notes": "收费内部推荐"
+    },
+    {
+      "id": "JD-043",
+      "text": "实习生需要先办理课程分期，完成培训即可上岗。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "课程分期"
+    },
+    {
+      "id": "JD-044",
+      "text": "公司提供电脑和账号，不要求缴纳设备押金。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "设备押金否定"
+    },
+    {
+      "id": "JD-045",
+      "text": "面试须携带身份证和学生证，但不会留存原件。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "携带证件不等于扣押"
+    },
+    {
+      "id": "JD-046",
+      "text": "录用前公司会要求支付报名费，未通过不予退还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "报名费风险"
+    },
+    {
+      "id": "JD-047",
+      "text": "实习岗位要求先付款购买工具包，之后才能参与项目。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "变体收费表达"
+    },
+    {
+      "id": "JD-048",
+      "text": "公司会进行背景核验，不扣押身份证或毕业证。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "证件否定"
+    },
+    {
+      "id": "JD-049",
+      "text": "需要缴费参加训练营，训练营结束后包就业。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "付费训练营包就业"
+    },
+    {
+      "id": "JD-050",
+      "text": "培训内容由公司免费提供，不要求购买课程。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "购买课程否定"
+    },
+    {
+      "id": "JD-051",
+      "text": "内部员工可推荐候选人，全程免费，不保证录用。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "内推安全表达"
+    },
+    {
+      "id": "JD-052",
+      "text": "支付内推服务费后可获得直通面试机会。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_INTERNAL_REFERRAL"],
+      "notes": "付费直通面试"
+    },
+    {
+      "id": "JD-053",
+      "text": "需要交纳500元材料押金，公司称用于办理入职资料。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE"],
+      "notes": "材料押金"
+    },
+    {
+      "id": "JD-054",
+      "text": "不需要贷款，培训由正式员工带教。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "无需贷款"
+    },
+    {
+      "id": "JD-055",
+      "text": "身份证复印件用于入职资料，不收取原件。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "复印件安全表达"
+    },
+    {
+      "id": "JD-056",
+      "text": "公司长期保管学生证原件，作为实习期间出勤担保。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["IDENTITY_DOCUMENT_RETENTION"],
+      "notes": "学生证扣押"
+    },
+    {
+      "id": "JD-057",
+      "text": "入职前无需缴纳保证金，但如果参加外部证书课程需自愿报名。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "复杂安全表达"
+    },
+    {
+      "id": "JD-058",
+      "text": "实习生应支付岗位服务费，服务费到账后保录用。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["RECRUITMENT_UPFRONT_FEE", "PAID_INTERNAL_REFERRAL"],
+      "notes": "岗位服务费和保录用"
+    },
+    {
+      "id": "JD-059",
+      "text": "岗位需要良好沟通能力和学习能力，无收费项目。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "普通安全岗位"
+    },
+    {
+      "id": "JD-060",
+      "text": "先办理培训贷，再由合作企业安排就业。",
+      "expectedRisk": true,
+      "expectedRuleCodes": ["PAID_TRAINING_OR_TRAINING_LOAN"],
+      "notes": "培训贷简称"
+    }
+  ]
+}

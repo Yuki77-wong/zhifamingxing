@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "datasetType": "人工构造回归测试样本",
+    "warning": "这些样本不是公开招聘平台真实岗位，也不能作为网站真实岗位数据展示。指标只反映当前回归样本表现，不代表真实互联网数据中的最终准确率。"
+  },
+  "generatedAt": "2026-07-12T11:47:16.129Z",
+  "note": "本报告基于新增人工构造回归样本，指标只反映当前回归测试集表现，不代表真实互联网数据中的最终准确率；confidence 不等于 accuracy。",
+  "jd": {
+    "sampleCount": 10,
+    "metrics": {
+      "tp": 7,
+      "fp": 0,
+      "tn": 3,
+      "fn": 0,
+      "accuracy": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    "falsePositiveCases": [],
+    "falseNegativeCases": [],
+    "ruleMismatchCases": [],
+    "evaluatedCases": [
+      {
+        "id": "RG-JD-001",
+        "kind": "jd",
+        "text": "公司声明不收取任何费用，但第三方培训机构可能收取课程费，应聘者需自行确认。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "notes": "复杂否定中保留第三方培训收费风险。"
+      },
+      {
+        "id": "RG-JD-002",
+        "kind": "jd",
+        "text": "并非所有培训都免费，部分课程需学员自费完成后才能参加上岗考核。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "notes": "免费词出现在否定语境中，不能整体判安全。"
+      },
+      {
+        "id": "RG-JD-003",
+        "kind": "jd",
+        "text": "入职前需先缴后返资料押金，连续工作三个月后退还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "notes": "先缴后返押金仍属于招聘前置收费风险。"
+      },
+      {
+        "id": "RG-JD-004",
+        "kind": "jd",
+        "text": "培训费用从工资中扣除，未满服务期的剩余费用继续偿还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "notes": "培训费用工资扣除。"
+      },
+      {
+        "id": "RG-JD-005",
+        "kind": "jd",
+        "text": "面试仅现场核验身份证原件，核验后立即归还，不留存任何证件原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "notes": "证件核验与扣押、留存不同。"
+      },
+      {
+        "id": "RG-JD-006",
+        "kind": "jd",
+        "text": "入职需提交身份证复印件和银行卡复印件用于登记，不收取押金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "notes": "复印件登记不等于扣押原件。"
+      },
+      {
+        "id": "RG-JD-007",
+        "kind": "jd",
+        "text": "公司免费提供工装和设备，不收服装押金或设备押金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "notes": "免费福利与押金收费区别。"
+      },
+      {
+        "id": "RG-JD-008",
+        "kind": "jd",
+        "text": "身份证原件交由公司保管，离职后统一归还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "actualRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "notes": "证件原件由公司保管并延迟归还。"
+      },
+      {
+        "id": "RG-JD-009",
+        "kind": "jd",
+        "text": "内部名额需付费，缴费后可获得内推资格。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "notes": "付费获得内推资格。"
+      },
+      {
+        "id": "RG-JD-010",
+        "kind": "jd",
+        "text": "办理助学分期后参加培训，培训后包就业。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "notes": "培训分期和包就业组合。"
+      }
+    ]
+  },
+  "contract": {
+    "sampleCount": 10,
+    "metrics": {
+      "tp": 7,
+      "fp": 0,
+      "tn": 3,
+      "fn": 0,
+      "accuracy": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    "falsePositiveCases": [],
+    "falseNegativeCases": [],
+    "ruleMismatchCases": [],
+    "evaluatedCases": [
+      {
+        "id": "RG-CR-001",
+        "kind": "contract",
+        "text": "甲方不收押金，培训费用由公司承担；若乙方选择第三方课程，费用由第三方另行收取。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "notes": "复杂否定中保留第三方课程收费风险。"
+      },
+      {
+        "id": "RG-CR-002",
+        "kind": "contract",
+        "text": "并非所有课程免费，乙方部分课程需自费完成后方可上岗。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "notes": "免费词出现在否定语境中，仍有自费课程风险。"
+      },
+      {
+        "id": "RG-CR-003",
+        "kind": "contract",
+        "text": "乙方先交岗位管理费，入职满一个月后返还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "notes": "先交费再返还属于前置费用风险。"
+      },
+      {
+        "id": "RG-CR-004",
+        "kind": "contract",
+        "text": "培训费从乙方工资中按月扣除。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "notes": "培训费用工资扣除。"
+      },
+      {
+        "id": "RG-CR-005",
+        "kind": "contract",
+        "text": "甲方仅现场核验身份证原件，核验后立即归还，不留存原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "notes": "现场核验证件原件不是扣押。"
+      },
+      {
+        "id": "RG-CR-006",
+        "kind": "contract",
+        "text": "乙方提交身份证复印件用于备案，甲方不扣押任何证件原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "notes": "提交复印件与扣押原件不同。"
+      },
+      {
+        "id": "RG-CR-007",
+        "kind": "contract",
+        "text": "设备由甲方免费提供，乙方无需缴纳设备押金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "notes": "免费设备福利与设备押金区别。"
+      },
+      {
+        "id": "RG-CR-008",
+        "kind": "contract",
+        "text": "乙方毕业证原件暂存公司，离职后归还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "notes": "证件原件暂存并离职后归还。"
+      },
+      {
+        "id": "RG-CR-009",
+        "kind": "contract",
+        "text": "甲方收取内推服务费并保证安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "notes": "收费内推与保证安排岗位。"
+      },
+      {
+        "id": "RG-CR-010",
+        "kind": "contract",
+        "text": "乙方须办理课程分期，培训合格后进入实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "notes": "课程分期与培训后进入岗位。"
+      }
+    ]
+  },
+  "combined": {
+    "sampleCount": 20,
+    "metrics": {
+      "tp": 14,
+      "fp": 0,
+      "tn": 6,
+      "fn": 0,
+      "accuracy": 1,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    }
+  }
+}

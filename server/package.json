@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.js",
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "test:jd-review": "node scripts/evaluateJdReview.js",
+    "test:contract-review": "node scripts/evaluateContractReview.js",
+    "test:regression": "node scripts/evaluateRegression.js",
+    "test:review-engines": "npm run test:jd-review && npm run test:contract-review && npm run test:regression"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,820 @@
+{
+  "metadata": {
+    "datasetName": "JD review artificial baseline cases",
+    "sampleType": "人工构造测试样本",
+    "disclaimer": "这些是人工构造的测试样本，不是公开招聘平台真实岗位，不能作为网站真实岗位数据展示。指标只用于评估当前规则引擎在本测试集上的表现。",
+    "createdFor": "JD 审查规则引擎基线评估"
+  },
+  "generatedAt": "2026-07-12T11:47:14.906Z",
+  "sampleCount": 60,
+  "note": "本报告基于人工构造测试样本，指标只反映当前测试集表现，不代表真实互联网数据中的最终准确率；confidence 不等于 accuracy。",
+  "metrics": {
+    "tp": 31,
+    "fp": 0,
+    "tn": 29,
+    "fn": 0,
+    "accuracy": 1,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "falsePositiveCases": [],
+  "falseNegativeCases": [],
+  "ruleMismatchCases": [],
+  "evaluatedCases": [
+    {
+      "id": "JD-001",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "high",
+      "notes": "岗位押金正样本"
+    },
+    {
+      "id": "JD-002",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "入职杂费正样本"
+    },
+    {
+      "id": "JD-003",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "设备押金正样本"
+    },
+    {
+      "id": "JD-004",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "服装费正样本"
+    },
+    {
+      "id": "JD-005",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "稳定金复杂表达"
+    },
+    {
+      "id": "JD-006",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "不收押金负样本"
+    },
+    {
+      "id": "JD-007",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "收费否定语境"
+    },
+    {
+      "id": "JD-008",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "容易误报的合规说明"
+    },
+    {
+      "id": "JD-009",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "无需押金负样本"
+    },
+    {
+      "id": "JD-010",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "培训贷款正样本"
+    },
+    {
+      "id": "JD-011",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "培训分期正样本"
+    },
+    {
+      "id": "JD-012",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "购买课程后入职"
+    },
+    {
+      "id": "JD-013",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "付费培训后推荐"
+    },
+    {
+      "id": "JD-014",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "免费培训负样本"
+    },
+    {
+      "id": "JD-015",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "无需贷款负样本"
+    },
+    {
+      "id": "JD-016",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "免费培训否定"
+    },
+    {
+      "id": "JD-017",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "风险教育内容，容易误报"
+    },
+    {
+      "id": "JD-018",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "actualRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "findingCount": 1,
+      "overallScore": 98,
+      "overallLevel": "insufficient_information",
+      "notes": "扣押身份证正样本"
+    },
+    {
+      "id": "JD-019",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "actualRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "findingCount": 1,
+      "overallScore": 98,
+      "overallLevel": "insufficient_information",
+      "notes": "扣押毕业证"
+    },
+    {
+      "id": "JD-020",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "actualRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "findingCount": 1,
+      "overallScore": 98,
+      "overallLevel": "insufficient_information",
+      "notes": "扣押证件复杂表达"
+    },
+    {
+      "id": "JD-021",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "不扣押证件负样本"
+    },
+    {
+      "id": "JD-022",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "仅核验证件"
+    },
+    {
+      "id": "JD-023",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "禁止扣押说明"
+    },
+    {
+      "id": "JD-024",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "findingCount": 1,
+      "overallScore": 84,
+      "overallLevel": "insufficient_information",
+      "notes": "收费内推和保录用"
+    },
+    {
+      "id": "JD-025",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "findingCount": 1,
+      "overallScore": 84,
+      "overallLevel": "insufficient_information",
+      "notes": "内推服务费"
+    },
+    {
+      "id": "JD-026",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "findingCount": 1,
+      "overallScore": 84,
+      "overallLevel": "insufficient_information",
+      "notes": "付费保录用"
+    },
+    {
+      "id": "JD-027",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "免费内推负样本"
+    },
+    {
+      "id": "JD-028",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "不收费内推"
+    },
+    {
+      "id": "JD-029",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "不保录用"
+    },
+    {
+      "id": "JD-030",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 2,
+      "overallScore": 99.1,
+      "overallLevel": "insufficient_information",
+      "notes": "多风险组合"
+    },
+    {
+      "id": "JD-031",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION",
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION",
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 2,
+      "overallScore": 99.9,
+      "overallLevel": "insufficient_information",
+      "notes": "证件和培训贷款组合"
+    },
+    {
+      "id": "JD-032",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 2,
+      "overallScore": 97.12,
+      "overallLevel": "insufficient_information",
+      "notes": "收费和保岗位组合"
+    },
+    {
+      "id": "JD-033",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "普通福利描述"
+    },
+    {
+      "id": "JD-034",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "多重否定安全"
+    },
+    {
+      "id": "JD-035",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "培训安全表达"
+    },
+    {
+      "id": "JD-036",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "关键词间隔表达"
+    },
+    {
+      "id": "JD-037",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "付费培训复杂表达"
+    },
+    {
+      "id": "JD-038",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "身份证安全表达"
+    },
+    {
+      "id": "JD-039",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "培训词但无付费"
+    },
+    {
+      "id": "JD-040",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 2,
+      "overallScore": 99.1,
+      "overallLevel": "insufficient_information",
+      "notes": "培训押金"
+    },
+    {
+      "id": "JD-041",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "就业服务费否定"
+    },
+    {
+      "id": "JD-042",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "findingCount": 1,
+      "overallScore": 84,
+      "overallLevel": "insufficient_information",
+      "notes": "收费内部推荐"
+    },
+    {
+      "id": "JD-043",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "课程分期"
+    },
+    {
+      "id": "JD-044",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "设备押金否定"
+    },
+    {
+      "id": "JD-045",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "携带证件不等于扣押"
+    },
+    {
+      "id": "JD-046",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "报名费风险"
+    },
+    {
+      "id": "JD-047",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "变体收费表达"
+    },
+    {
+      "id": "JD-048",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "证件否定"
+    },
+    {
+      "id": "JD-049",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "付费训练营包就业"
+    },
+    {
+      "id": "JD-050",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "购买课程否定"
+    },
+    {
+      "id": "JD-051",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "内推安全表达"
+    },
+    {
+      "id": "JD-052",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL"
+      ],
+      "findingCount": 1,
+      "overallScore": 84,
+      "overallLevel": "insufficient_information",
+      "notes": "付费直通面试"
+    },
+    {
+      "id": "JD-053",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 1,
+      "overallScore": 82,
+      "overallLevel": "insufficient_information",
+      "notes": "材料押金"
+    },
+    {
+      "id": "JD-054",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "无需贷款"
+    },
+    {
+      "id": "JD-055",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "复印件安全表达"
+    },
+    {
+      "id": "JD-056",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "actualRuleCodes": [
+        "IDENTITY_DOCUMENT_RETENTION"
+      ],
+      "findingCount": 1,
+      "overallScore": 98,
+      "overallLevel": "insufficient_information",
+      "notes": "学生证扣押"
+    },
+    {
+      "id": "JD-057",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "复杂安全表达"
+    },
+    {
+      "id": "JD-058",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_INTERNAL_REFERRAL",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "actualRuleCodes": [
+        "PAID_INTERNAL_REFERRAL",
+        "RECRUITMENT_UPFRONT_FEE"
+      ],
+      "findingCount": 2,
+      "overallScore": 97.12,
+      "overallLevel": "insufficient_information",
+      "notes": "岗位服务费和保录用"
+    },
+    {
+      "id": "JD-059",
+      "expectedRisk": false,
+      "actualRisk": false,
+      "expectedRuleCodes": [],
+      "actualRuleCodes": [],
+      "findingCount": 0,
+      "overallScore": 0,
+      "overallLevel": "insufficient_information",
+      "notes": "普通安全岗位"
+    },
+    {
+      "id": "JD-060",
+      "expectedRisk": true,
+      "actualRisk": true,
+      "expectedRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "actualRuleCodes": [
+        "PAID_TRAINING_OR_TRAINING_LOAN"
+      ],
+      "findingCount": 1,
+      "overallScore": 95,
+      "overallLevel": "insufficient_information",
+      "notes": "培训贷简称"
+    }
+  ]
+}
