@@ -130,6 +130,13 @@ onMounted(() => {
 
           </RouterLink>
 
+
+          <RouterLink to="/rights-guides">
+
+            维权指引
+
+          </RouterLink>
+
         </nav>
 
 
@@ -640,7 +647,10 @@ onMounted(() => {
             </RouterLink>
 
 
-            <article class="feature-card">
+            <RouterLink
+              class="feature-card available"
+              to="/rights-guides"
+            >
 
               <div class="feature-icon">
 
@@ -649,9 +659,9 @@ onMounted(() => {
               </div>
 
 
-              <div class="feature-status building">
+              <div class="feature-status">
 
-                建设中
+                已上线
 
               </div>
 
@@ -674,11 +684,11 @@ onMounted(() => {
 
               <strong>
 
-                即将开放
+                查看维权流程 →
 
               </strong>
 
-            </article>
+            </RouterLink>
 
           </div>
 

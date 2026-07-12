@@ -473,23 +473,30 @@ async function submitReview() {
 
           <RouterLink to="/">
 
-            返回首页
+            首页
 
           </RouterLink>
 
 
-          <a href="#review-form">
+          <RouterLink to="/jd-review">
 
-            JD 审查
+            岗位筛查
 
-          </a>
+          </RouterLink>
 
 
-          <a href="#review-result">
+          <RouterLink to="/legal-knowledge">
 
-            审查结果
+            权益知识库
 
-          </a>
+          </RouterLink>
+
+
+          <RouterLink to="/rights-guides">
+
+            维权指引
+
+          </RouterLink>
 
         </nav>
 

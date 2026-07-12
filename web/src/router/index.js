@@ -12,6 +12,12 @@ from "../views/JdReviewView.vue";
 import LegalKnowledgeView
 from "../views/LegalKnowledgeView.vue";
 
+import RightsGuideView
+from "../views/RightsGuideView.vue";
+
+import RightsGuideDetailView
+from "../views/RightsGuideDetailView.vue";
+
 
 const routes = [
 
@@ -53,6 +59,34 @@ const routes = [
 
     component:
       LegalKnowledgeView
+
+  },
+
+
+  {
+
+    path:
+      "/rights-guides",
+
+    name:
+      "rights-guides",
+
+    component:
+      RightsGuideView
+
+  },
+
+
+  {
+
+    path:
+      "/rights-guides/:guideCode",
+
+    name:
+      "rights-guide-detail",
+
+    component:
+      RightsGuideDetailView
 
   }
 

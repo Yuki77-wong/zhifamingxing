@@ -394,6 +394,13 @@ onMounted(
 
           </RouterLink>
 
+
+          <RouterLink to="/rights-guides">
+
+            维权指引
+
+          </RouterLink>
+
         </nav>
 
       </div>
