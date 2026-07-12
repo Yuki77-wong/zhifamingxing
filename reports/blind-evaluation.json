@@ -1,0 +1,1439 @@
+{
+  "metadata": {
+    "reportName": "Review engines frozen holdout evaluation",
+    "generatedAt": "2026-07-12T12:17:38.889Z",
+    "disclaimer": "本报告基于人工编写的冻结留出样本。结果仅反映当前数据集表现，不代表真实互联网岗位或真实合同场景中的最终准确率。",
+    "serviceFilesFrozen": true,
+    "frozenFilesUnchanged": true
+  },
+  "frozenFileHashes": {
+    "before": [
+      {
+        "path": "server\\src\\services\\jdReviewService.js",
+        "sha256": "cdf98032ef62b3432c308abaf9e1670b2ad880ee5d7835a0ce6e8063b5bbeff2"
+      },
+      {
+        "path": "server\\src\\services\\contractReviewService.js",
+        "sha256": "45e9337615f1034cbf92e895ebf7a5d8c848922c6a4785ed9325d5c1bf53ef00"
+      }
+    ],
+    "after": [
+      {
+        "path": "server\\src\\services\\jdReviewService.js",
+        "sha256": "cdf98032ef62b3432c308abaf9e1670b2ad880ee5d7835a0ce6e8063b5bbeff2"
+      },
+      {
+        "path": "server\\src\\services\\contractReviewService.js",
+        "sha256": "45e9337615f1034cbf92e895ebf7a5d8c848922c6a4785ed9325d5c1bf53ef00"
+      }
+    ]
+  },
+  "jd": {
+    "datasetType": "jd-review",
+    "sampleCount": 30,
+    "metrics": {
+      "tp": 7,
+      "fp": 1,
+      "tn": 14,
+      "fn": 8,
+      "accuracy": 0.7,
+      "precision": 0.875,
+      "recall": 0.4667,
+      "f1": 0.6087
+    },
+    "ruleExactMatchRate": 0.7,
+    "falsePositiveCount": 1,
+    "falseNegativeCount": 8,
+    "ruleMismatchCount": 9,
+    "falsePositiveCases": [
+      {
+        "id": "JD-BLIND-027",
+        "text": "公司不会以保录用、保就业或内部推荐为名收费，也没有任何付费内推渠道。",
+        "expectedRisk": false,
+        "actualRisk": true,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "findingCount": 1,
+        "overallScore": 84,
+        "overallLevel": "high",
+        "ruleCodesMatch": false,
+        "notes": "明确否定收费内推"
+      }
+    ],
+    "falseNegativeCases": [
+      {
+        "id": "JD-BLIND-001",
+        "text": "运营实习生通过面试后，需先缴纳280元入岗管理费，完成报到手续后安排工位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "入岗管理费属于入职前收费变体"
+      },
+      {
+        "id": "JD-BLIND-002",
+        "text": "录用人员报到当天领取工牌和门禁卡，须预交200元工牌押金，实习结束后无损退还。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "可退还不改变前置押金风险"
+      },
+      {
+        "id": "JD-BLIND-006",
+        "text": "缴纳就业安置服务费后，由老师一对一匹配企业，并承诺安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费并承诺安排岗位"
+      },
+      {
+        "id": "JD-BLIND-007",
+        "text": "入职后身份证原件统一交由行政部门保管，离开项目时再办理领回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "身份证原件长期代管"
+      },
+      {
+        "id": "JD-BLIND-009",
+        "text": "本公司不收取报名费，但合作机构要求先缴纳名额保留费，缴费后才能进入复试。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "前半句否定，后半句第三方前置收费"
+      },
+      {
+        "id": "JD-BLIND-010",
+        "text": "实习生需要参加指定训练营，课程服务费由个人承担，并在前两个月工资中分批扣除。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "指定付费培训且从工资扣除"
+      },
+      {
+        "id": "JD-BLIND-012",
+        "text": "申请岗位前需交150元资料保证金，未通过面试可在十五个工作日内申请退回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "面试前资料保证金"
+      },
+      {
+        "id": "JD-BLIND-013",
+        "text": "缴费加入专属求职群，可获得企业内部名额并保证至少拿到一个录用通知。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费内推并保证录用"
+      }
+    ],
+    "ruleMismatchCases": [
+      {
+        "id": "JD-BLIND-001",
+        "text": "运营实习生通过面试后，需先缴纳280元入岗管理费，完成报到手续后安排工位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "入岗管理费属于入职前收费变体"
+      },
+      {
+        "id": "JD-BLIND-002",
+        "text": "录用人员报到当天领取工牌和门禁卡，须预交200元工牌押金，实习结束后无损退还。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "可退还不改变前置押金风险"
+      },
+      {
+        "id": "JD-BLIND-006",
+        "text": "缴纳就业安置服务费后，由老师一对一匹配企业，并承诺安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费并承诺安排岗位"
+      },
+      {
+        "id": "JD-BLIND-007",
+        "text": "入职后身份证原件统一交由行政部门保管，离开项目时再办理领回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "身份证原件长期代管"
+      },
+      {
+        "id": "JD-BLIND-009",
+        "text": "本公司不收取报名费，但合作机构要求先缴纳名额保留费，缴费后才能进入复试。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "前半句否定，后半句第三方前置收费"
+      },
+      {
+        "id": "JD-BLIND-010",
+        "text": "实习生需要参加指定训练营，课程服务费由个人承担，并在前两个月工资中分批扣除。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "指定付费培训且从工资扣除"
+      },
+      {
+        "id": "JD-BLIND-012",
+        "text": "申请岗位前需交150元资料保证金，未通过面试可在十五个工作日内申请退回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "面试前资料保证金"
+      },
+      {
+        "id": "JD-BLIND-013",
+        "text": "缴费加入专属求职群，可获得企业内部名额并保证至少拿到一个录用通知。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费内推并保证录用"
+      },
+      {
+        "id": "JD-BLIND-027",
+        "text": "公司不会以保录用、保就业或内部推荐为名收费，也没有任何付费内推渠道。",
+        "expectedRisk": false,
+        "actualRisk": true,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "findingCount": 1,
+        "overallScore": 84,
+        "overallLevel": "high",
+        "ruleCodesMatch": false,
+        "notes": "明确否定收费内推"
+      }
+    ],
+    "evaluatedCases": [
+      {
+        "id": "JD-BLIND-001",
+        "text": "运营实习生通过面试后，需先缴纳280元入岗管理费，完成报到手续后安排工位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "入岗管理费属于入职前收费变体"
+      },
+      {
+        "id": "JD-BLIND-002",
+        "text": "录用人员报到当天领取工牌和门禁卡，须预交200元工牌押金，实习结束后无损退还。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "可退还不改变前置押金风险"
+      },
+      {
+        "id": "JD-BLIND-003",
+        "text": "岗前课程费用共3600元，可办理课程分期，后续从每月实习补贴中扣还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "课程分期并从补贴扣还"
+      },
+      {
+        "id": "JD-BLIND-004",
+        "text": "候选人需签署培训借款协议，培训结束并通过考核后方可进入项目组。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "培训借款协议"
+      },
+      {
+        "id": "JD-BLIND-005",
+        "text": "内部推荐名额数量有限，支付399元推荐服务费后可获得优先面试机会。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "findingCount": 1,
+        "overallScore": 84,
+        "overallLevel": "high",
+        "ruleCodesMatch": true,
+        "notes": "付费获得内部推荐资格"
+      },
+      {
+        "id": "JD-BLIND-006",
+        "text": "缴纳就业安置服务费后，由老师一对一匹配企业，并承诺安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费并承诺安排岗位"
+      },
+      {
+        "id": "JD-BLIND-007",
+        "text": "入职后身份证原件统一交由行政部门保管，离开项目时再办理领回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "身份证原件长期代管"
+      },
+      {
+        "id": "JD-BLIND-008",
+        "text": "毕业证原件需暂存公司档案室，实习期满并完成离岗手续后统一归还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "actualRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "findingCount": 1,
+        "overallScore": 98,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "毕业证原件暂存"
+      },
+      {
+        "id": "JD-BLIND-009",
+        "text": "本公司不收取报名费，但合作机构要求先缴纳名额保留费，缴费后才能进入复试。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "前半句否定，后半句第三方前置收费"
+      },
+      {
+        "id": "JD-BLIND-010",
+        "text": "实习生需要参加指定训练营，课程服务费由个人承担，并在前两个月工资中分批扣除。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "指定付费培训且从工资扣除"
+      },
+      {
+        "id": "JD-BLIND-011",
+        "text": "完成助学分期申请后即可参加岗前课程，结业合格者优先安排上岗。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "actualRuleCodes": [
+          "PAID_TRAINING_OR_TRAINING_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "助学分期与上岗关联"
+      },
+      {
+        "id": "JD-BLIND-012",
+        "text": "申请岗位前需交150元资料保证金，未通过面试可在十五个工作日内申请退回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "面试前资料保证金"
+      },
+      {
+        "id": "JD-BLIND-013",
+        "text": "缴费加入专属求职群，可获得企业内部名额并保证至少拿到一个录用通知。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费内推并保证录用"
+      },
+      {
+        "id": "JD-BLIND-014",
+        "text": "身份证和学生证原件由项目老师统一代管三个月，以便集中办理入场手续。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "actualRuleCodes": [
+          "IDENTITY_DOCUMENT_RETENTION"
+        ],
+        "findingCount": 1,
+        "overallScore": 98,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "证件原件集中代管"
+      },
+      {
+        "id": "JD-BLIND-015",
+        "text": "先交600元岗位稳定金再签约，连续工作满四个月后全额返还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "actualRuleCodes": [
+          "RECRUITMENT_UPFRONT_FEE"
+        ],
+        "findingCount": 1,
+        "overallScore": 82,
+        "overallLevel": "insufficient_information",
+        "ruleCodesMatch": true,
+        "notes": "先缴后返的岗位稳定金"
+      },
+      {
+        "id": "JD-BLIND-016",
+        "text": "公司不收取报名费、介绍费、押金或保证金，面试和入职全程免费。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "明确否定多类前置收费"
+      },
+      {
+        "id": "JD-BLIND-017",
+        "text": "报到时仅现场核验身份证原件，登记完成后立即交还本人，不留存原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "现场核验后立即归还"
+      },
+      {
+        "id": "JD-BLIND-018",
+        "text": "岗前培训完全免费，培训成本由公司承担，也不需要办理任何贷款或分期。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "公司承担培训费用且无贷款"
+      },
+      {
+        "id": "JD-BLIND-019",
+        "text": "招聘人员不得以工牌、服装、设备或资料为名向应聘者收取任何费用。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "规范性禁止收费表述"
+      },
+      {
+        "id": "JD-BLIND-020",
+        "text": "电脑和门禁卡由公司免费提供，离职时按清单归还，不预收设备押金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "免费提供设备且无押金"
+      },
+      {
+        "id": "JD-BLIND-021",
+        "text": "公司依法为符合条件的员工缴纳社会保险，个人承担部分按规定从工资中代扣。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "正常社会保险代扣"
+      },
+      {
+        "id": "JD-BLIND-022",
+        "text": "培训期间的交通费和住宿费按公司制度报销，不向实习生收取培训费用。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "报销培训相关费用"
+      },
+      {
+        "id": "JD-BLIND-023",
+        "text": "合作机构提供自愿报名的职业证书课程，课程与本岗位录用无关，公司不代收费用。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "自愿第三方课程且与录用无关"
+      },
+      {
+        "id": "JD-BLIND-024",
+        "text": "原岗位押金制度已经取消，目前所有候选人均无需缴纳押金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "insufficient_information",
+        "ruleCodesMatch": true,
+        "notes": "提及旧制度但明确已取消"
+      },
+      {
+        "id": "JD-BLIND-025",
+        "text": "入职材料只需提交身份证复印件并注明用途，不收取或保管任何证件原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "复印件备案与原件扣押区分"
+      },
+      {
+        "id": "JD-BLIND-026",
+        "text": "并非所有培训都收费，本岗位的入职培训由公司免费提供。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "insufficient_information",
+        "ruleCodesMatch": true,
+        "notes": "反向否定后明确本岗位免费"
+      },
+      {
+        "id": "JD-BLIND-027",
+        "text": "公司不会以保录用、保就业或内部推荐为名收费，也没有任何付费内推渠道。",
+        "expectedRisk": false,
+        "actualRisk": true,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [
+          "PAID_INTERNAL_REFERRAL"
+        ],
+        "findingCount": 1,
+        "overallScore": 84,
+        "overallLevel": "high",
+        "ruleCodesMatch": false,
+        "notes": "明确否定收费内推"
+      },
+      {
+        "id": "JD-BLIND-028",
+        "text": "实习工资按月发放，无任何前置缴费要求，入职手续不收取服务费。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "正常薪酬且无前置收费"
+      },
+      {
+        "id": "JD-BLIND-029",
+        "text": "公司不收任何费用，但外部考证课程可能收费；是否报名完全自愿，不影响面试和录用。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "第三方自愿收费课程不与录用绑定"
+      },
+      {
+        "id": "JD-BLIND-030",
+        "text": "招聘公告明确禁止扣押身份证、毕业证等证件，并禁止要求应聘者提供财物担保。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "合规禁止性表述"
+      }
+    ]
+  },
+  "contract": {
+    "datasetType": "contract-review",
+    "sampleCount": 30,
+    "metrics": {
+      "tp": 9,
+      "fp": 1,
+      "tn": 14,
+      "fn": 6,
+      "accuracy": 0.7667,
+      "precision": 0.9,
+      "recall": 0.6,
+      "f1": 0.72
+    },
+    "ruleExactMatchRate": 0.7667,
+    "falsePositiveCount": 1,
+    "falseNegativeCount": 6,
+    "ruleMismatchCount": 7,
+    "falsePositiveCases": [
+      {
+        "id": "CR-BLIND-028",
+        "text": "甲方按月向乙方支付实习补贴，除依法应扣项目外，不得扣收培训费或招聘服务费。",
+        "expectedRisk": false,
+        "actualRisk": true,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": false,
+        "notes": "正常支付且禁止扣培训费"
+      }
+    ],
+    "falseNegativeCases": [
+      {
+        "id": "CR-BLIND-003",
+        "text": "乙方参加指定岗前课程，培训费用共4800元，由甲方在乙方前三个月报酬中分期扣回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "培训费从报酬中分期扣回"
+      },
+      {
+        "id": "CR-BLIND-006",
+        "text": "毕业证及学生证原件纳入甲方档案统一保存，乙方完成离职交接后方可领取。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "证件原件保存至离职"
+      },
+      {
+        "id": "CR-BLIND-007",
+        "text": "乙方支付600元推荐服务费后，甲方保证为乙方安排至少一次录用机会。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费并保证录用机会"
+      },
+      {
+        "id": "CR-BLIND-008",
+        "text": "乙方购买就业安置服务后，服务方承诺在三十日内安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "付费就业安置并承诺岗位"
+      },
+      {
+        "id": "CR-BLIND-012",
+        "text": "为办理项目准入，乙方身份证原件由甲方暂存九十日，期满后统一返还。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "身份证原件暂存九十日"
+      },
+      {
+        "id": "CR-BLIND-015",
+        "text": "乙方缴纳岗位安排服务费后，服务方保证在合作企业中为乙方落实实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费保证安排岗位"
+      }
+    ],
+    "ruleMismatchCases": [
+      {
+        "id": "CR-BLIND-003",
+        "text": "乙方参加指定岗前课程，培训费用共4800元，由甲方在乙方前三个月报酬中分期扣回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "培训费从报酬中分期扣回"
+      },
+      {
+        "id": "CR-BLIND-006",
+        "text": "毕业证及学生证原件纳入甲方档案统一保存，乙方完成离职交接后方可领取。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "证件原件保存至离职"
+      },
+      {
+        "id": "CR-BLIND-007",
+        "text": "乙方支付600元推荐服务费后，甲方保证为乙方安排至少一次录用机会。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费并保证录用机会"
+      },
+      {
+        "id": "CR-BLIND-008",
+        "text": "乙方购买就业安置服务后，服务方承诺在三十日内安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "付费就业安置并承诺岗位"
+      },
+      {
+        "id": "CR-BLIND-012",
+        "text": "为办理项目准入，乙方身份证原件由甲方暂存九十日，期满后统一返还。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "身份证原件暂存九十日"
+      },
+      {
+        "id": "CR-BLIND-015",
+        "text": "乙方缴纳岗位安排服务费后，服务方保证在合作企业中为乙方落实实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费保证安排岗位"
+      },
+      {
+        "id": "CR-BLIND-028",
+        "text": "甲方按月向乙方支付实习补贴，除依法应扣项目外，不得扣收培训费或招聘服务费。",
+        "expectedRisk": false,
+        "actualRisk": true,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": false,
+        "notes": "正常支付且禁止扣培训费"
+      }
+    ],
+    "evaluatedCases": [
+      {
+        "id": "CR-BLIND-001",
+        "text": "乙方应于报到前向甲方支付300元入职履约保证金，实习期届满且无违纪情形时返还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "findingCount": 1,
+        "overallScore": 86,
+        "overallLevel": "high",
+        "ruleCodesMatch": true,
+        "notes": "入职履约保证金"
+      },
+      {
+        "id": "CR-BLIND-002",
+        "text": "甲方为乙方发放设备及门禁卡，乙方须预交500元设备押金，办理离职手续后退回。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "findingCount": 1,
+        "overallScore": 86,
+        "overallLevel": "high",
+        "ruleCodesMatch": true,
+        "notes": "设备押金"
+      },
+      {
+        "id": "CR-BLIND-003",
+        "text": "乙方参加指定岗前课程，培训费用共4800元，由甲方在乙方前三个月报酬中分期扣回。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "培训费从报酬中分期扣回"
+      },
+      {
+        "id": "CR-BLIND-004",
+        "text": "乙方同意签署培训借款协议，并按月偿还课程费用后方可进入正式项目。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "培训借款协议"
+      },
+      {
+        "id": "CR-BLIND-005",
+        "text": "乙方应将身份证原件交由甲方人事部门统一保管，至实习关系终止时归还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "findingCount": 1,
+        "overallScore": 96,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "身份证原件长期保管"
+      },
+      {
+        "id": "CR-BLIND-006",
+        "text": "毕业证及学生证原件纳入甲方档案统一保存，乙方完成离职交接后方可领取。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "证件原件保存至离职"
+      },
+      {
+        "id": "CR-BLIND-007",
+        "text": "乙方支付600元推荐服务费后，甲方保证为乙方安排至少一次录用机会。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费并保证录用机会"
+      },
+      {
+        "id": "CR-BLIND-008",
+        "text": "乙方购买就业安置服务后，服务方承诺在三十日内安排实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "付费就业安置并承诺岗位"
+      },
+      {
+        "id": "CR-BLIND-009",
+        "text": "乙方需先缴纳200元名额保留费，签署实习协议并连续工作满三个月后全额返还。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+        ],
+        "findingCount": 1,
+        "overallScore": 86,
+        "overallLevel": "high",
+        "ruleCodesMatch": true,
+        "notes": "先缴后返名额保留费"
+      },
+      {
+        "id": "CR-BLIND-010",
+        "text": "本协议项下课程费用可办理助学分期，分期审核通过后乙方取得上岗培训资格。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "助学分期与上岗培训绑定"
+      },
+      {
+        "id": "CR-BLIND-011",
+        "text": "甲方不收取招聘费用，但乙方须向指定合作机构支付课程服务费，完成培训后方可报到。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "第三方指定付费培训作为报到条件"
+      },
+      {
+        "id": "CR-BLIND-012",
+        "text": "为办理项目准入，乙方身份证原件由甲方暂存九十日，期满后统一返还。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_DOCUMENT_WITHHELD"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "身份证原件暂存九十日"
+      },
+      {
+        "id": "CR-BLIND-013",
+        "text": "乙方支付内部推荐名额费后，甲方承诺直接进入终面并优先发放录用通知。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "findingCount": 1,
+        "overallScore": 88,
+        "overallLevel": "high",
+        "ruleCodesMatch": true,
+        "notes": "收费内部推荐并承诺录用"
+      },
+      {
+        "id": "CR-BLIND-014",
+        "text": "乙方自行承担岗前训练营费用，相关费用分六期支付，未结清前不得退出培训。",
+        "expectedRisk": true,
+        "actualRisk": true,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": true,
+        "notes": "强制付费训练营分期"
+      },
+      {
+        "id": "CR-BLIND-015",
+        "text": "乙方缴纳岗位安排服务费后，服务方保证在合作企业中为乙方落实实习岗位。",
+        "expectedRisk": true,
+        "actualRisk": false,
+        "expectedRuleCodes": [
+          "CONTRACT_PAID_GUARANTEED_OFFER"
+        ],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": false,
+        "notes": "收费保证安排岗位"
+      },
+      {
+        "id": "CR-BLIND-016",
+        "text": "甲方不向乙方收取任何押金、保证金、报名费或入职服务费。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "明确否定收费和押金"
+      },
+      {
+        "id": "CR-BLIND-017",
+        "text": "甲方仅在报到现场核验乙方身份证原件，核验完成后立即归还，不留存原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "核验后立即归还"
+      },
+      {
+        "id": "CR-BLIND-018",
+        "text": "岗前培训由甲方免费提供，全部培训成本由甲方承担，乙方无需贷款或分期。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "免费培训且无需贷款"
+      },
+      {
+        "id": "CR-BLIND-019",
+        "text": "本协议不承诺录用结果，乙方无需支付任何内推费、推荐费或岗位安排费。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "不承诺录用且无内推收费"
+      },
+      {
+        "id": "CR-BLIND-020",
+        "text": "项目所需电脑、工牌和门禁卡由甲方免费提供，乙方无需预交设备押金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "免费设备且无押金"
+      },
+      {
+        "id": "CR-BLIND-021",
+        "text": "甲方依法代扣乙方应承担的社会保险和个人所得税，不涉及培训费或服务费。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "正常法定代扣"
+      },
+      {
+        "id": "CR-BLIND-022",
+        "text": "乙方提交身份证复印件用于实习备案，复印件应注明用途，甲方不得收取证件原件。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "复印件备案且禁止收原件"
+      },
+      {
+        "id": "CR-BLIND-023",
+        "text": "合作机构可提供自愿参加的职业证书课程，该课程不属于录用条件，甲方不代收课程费用。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "自愿课程与录用无关"
+      },
+      {
+        "id": "CR-BLIND-024",
+        "text": "双方确认原保证金条款已废止，自本协议生效之日起乙方无需缴纳任何保证金。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "旧条款废止"
+      },
+      {
+        "id": "CR-BLIND-025",
+        "text": "甲方不得扣押乙方身份证、毕业证或其他证件原件，确需核验时应当场返还。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "规范性禁止扣押"
+      },
+      {
+        "id": "CR-BLIND-026",
+        "text": "并非所有课程均需付费，本协议约定的岗前培训为免费培训，由甲方承担成本。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "反向否定后明确本协议免费"
+      },
+      {
+        "id": "CR-BLIND-027",
+        "text": "乙方不需要购买指定课程，也无需办理培训贷款、课程分期或其他借款。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "明确否定贷款和指定课程"
+      },
+      {
+        "id": "CR-BLIND-028",
+        "text": "甲方按月向乙方支付实习补贴，除依法应扣项目外，不得扣收培训费或招聘服务费。",
+        "expectedRisk": false,
+        "actualRisk": true,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [
+          "CONTRACT_PAID_TRAINING_OR_LOAN"
+        ],
+        "findingCount": 1,
+        "overallScore": 95,
+        "overallLevel": "critical",
+        "ruleCodesMatch": false,
+        "notes": "正常支付且禁止扣培训费"
+      },
+      {
+        "id": "CR-BLIND-029",
+        "text": "甲方不收任何费用；外部考证课程由乙方自主决定是否报名，未报名不影响实习录用。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "外部自愿课程不影响录用"
+      },
+      {
+        "id": "CR-BLIND-030",
+        "text": "甲方可复印乙方证件用于备案，但不得保管证件原件，备案完成后应妥善保护相关信息。",
+        "expectedRisk": false,
+        "actualRisk": false,
+        "expectedRuleCodes": [],
+        "actualRuleCodes": [],
+        "findingCount": 0,
+        "overallScore": 0,
+        "overallLevel": "low",
+        "ruleCodesMatch": true,
+        "notes": "复印备案与原件保管区分"
+      }
+    ]
+  }
+}

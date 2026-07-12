@@ -1,0 +1,252 @@
+{
+  "metadata": {
+    "datasetName": "Contract review frozen holdout cases",
+    "sampleType": "人工编写的冻结留出测试样本",
+    "disclaimer": "这些样本不是真实合同数据，不得作为网站真实合同数据展示。该数据集在规则冻结后用于留出评测，结果仅反映当前样本表现，不代表真实合同场景中的最终准确率。",
+    "createdFor": "合同审核规则引擎上线前冻结留出评测",
+    "frozenServiceFile": "server/src/services/contractReviewService.js",
+    "sampleCount": 30
+  },
+  "cases": [
+    {
+      "id": "CR-BLIND-001",
+      "text": "乙方应于报到前向甲方支付300元入职履约保证金，实习期届满且无违纪情形时返还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "notes": "入职履约保证金"
+    },
+    {
+      "id": "CR-BLIND-002",
+      "text": "甲方为乙方发放设备及门禁卡，乙方须预交500元设备押金，办理离职手续后退回。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "notes": "设备押金"
+    },
+    {
+      "id": "CR-BLIND-003",
+      "text": "乙方参加指定岗前课程，培训费用共4800元，由甲方在乙方前三个月报酬中分期扣回。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "notes": "培训费从报酬中分期扣回"
+    },
+    {
+      "id": "CR-BLIND-004",
+      "text": "乙方同意签署培训借款协议，并按月偿还课程费用后方可进入正式项目。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "notes": "培训借款协议"
+    },
+    {
+      "id": "CR-BLIND-005",
+      "text": "乙方应将身份证原件交由甲方人事部门统一保管，至实习关系终止时归还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "notes": "身份证原件长期保管"
+    },
+    {
+      "id": "CR-BLIND-006",
+      "text": "毕业证及学生证原件纳入甲方档案统一保存，乙方完成离职交接后方可领取。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "notes": "证件原件保存至离职"
+    },
+    {
+      "id": "CR-BLIND-007",
+      "text": "乙方支付600元推荐服务费后，甲方保证为乙方安排至少一次录用机会。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "notes": "收费并保证录用机会"
+    },
+    {
+      "id": "CR-BLIND-008",
+      "text": "乙方购买就业安置服务后，服务方承诺在三十日内安排实习岗位。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "notes": "付费就业安置并承诺岗位"
+    },
+    {
+      "id": "CR-BLIND-009",
+      "text": "乙方需先缴纳200元名额保留费，签署实习协议并连续工作满三个月后全额返还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE"
+      ],
+      "notes": "先缴后返名额保留费"
+    },
+    {
+      "id": "CR-BLIND-010",
+      "text": "本协议项下课程费用可办理助学分期，分期审核通过后乙方取得上岗培训资格。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "notes": "助学分期与上岗培训绑定"
+    },
+    {
+      "id": "CR-BLIND-011",
+      "text": "甲方不收取招聘费用，但乙方须向指定合作机构支付课程服务费，完成培训后方可报到。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "notes": "第三方指定付费培训作为报到条件"
+    },
+    {
+      "id": "CR-BLIND-012",
+      "text": "为办理项目准入，乙方身份证原件由甲方暂存九十日，期满后统一返还。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_DOCUMENT_WITHHELD"
+      ],
+      "notes": "身份证原件暂存九十日"
+    },
+    {
+      "id": "CR-BLIND-013",
+      "text": "乙方支付内部推荐名额费后，甲方承诺直接进入终面并优先发放录用通知。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "notes": "收费内部推荐并承诺录用"
+    },
+    {
+      "id": "CR-BLIND-014",
+      "text": "乙方自行承担岗前训练营费用，相关费用分六期支付，未结清前不得退出培训。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_TRAINING_OR_LOAN"
+      ],
+      "notes": "强制付费训练营分期"
+    },
+    {
+      "id": "CR-BLIND-015",
+      "text": "乙方缴纳岗位安排服务费后，服务方保证在合作企业中为乙方落实实习岗位。",
+      "expectedRisk": true,
+      "expectedRuleCodes": [
+        "CONTRACT_PAID_GUARANTEED_OFFER"
+      ],
+      "notes": "收费保证安排岗位"
+    },
+    {
+      "id": "CR-BLIND-016",
+      "text": "甲方不向乙方收取任何押金、保证金、报名费或入职服务费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "明确否定收费和押金"
+    },
+    {
+      "id": "CR-BLIND-017",
+      "text": "甲方仅在报到现场核验乙方身份证原件，核验完成后立即归还，不留存原件。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "核验后立即归还"
+    },
+    {
+      "id": "CR-BLIND-018",
+      "text": "岗前培训由甲方免费提供，全部培训成本由甲方承担，乙方无需贷款或分期。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "免费培训且无需贷款"
+    },
+    {
+      "id": "CR-BLIND-019",
+      "text": "本协议不承诺录用结果，乙方无需支付任何内推费、推荐费或岗位安排费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "不承诺录用且无内推收费"
+    },
+    {
+      "id": "CR-BLIND-020",
+      "text": "项目所需电脑、工牌和门禁卡由甲方免费提供，乙方无需预交设备押金。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "免费设备且无押金"
+    },
+    {
+      "id": "CR-BLIND-021",
+      "text": "甲方依法代扣乙方应承担的社会保险和个人所得税，不涉及培训费或服务费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "正常法定代扣"
+    },
+    {
+      "id": "CR-BLIND-022",
+      "text": "乙方提交身份证复印件用于实习备案，复印件应注明用途，甲方不得收取证件原件。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "复印件备案且禁止收原件"
+    },
+    {
+      "id": "CR-BLIND-023",
+      "text": "合作机构可提供自愿参加的职业证书课程，该课程不属于录用条件，甲方不代收课程费用。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "自愿课程与录用无关"
+    },
+    {
+      "id": "CR-BLIND-024",
+      "text": "双方确认原保证金条款已废止，自本协议生效之日起乙方无需缴纳任何保证金。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "旧条款废止"
+    },
+    {
+      "id": "CR-BLIND-025",
+      "text": "甲方不得扣押乙方身份证、毕业证或其他证件原件，确需核验时应当场返还。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "规范性禁止扣押"
+    },
+    {
+      "id": "CR-BLIND-026",
+      "text": "并非所有课程均需付费，本协议约定的岗前培训为免费培训，由甲方承担成本。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "反向否定后明确本协议免费"
+    },
+    {
+      "id": "CR-BLIND-027",
+      "text": "乙方不需要购买指定课程，也无需办理培训贷款、课程分期或其他借款。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "明确否定贷款和指定课程"
+    },
+    {
+      "id": "CR-BLIND-028",
+      "text": "甲方按月向乙方支付实习补贴，除依法应扣项目外，不得扣收培训费或招聘服务费。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "正常支付且禁止扣培训费"
+    },
+    {
+      "id": "CR-BLIND-029",
+      "text": "甲方不收任何费用；外部考证课程由乙方自主决定是否报名，未报名不影响实习录用。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "外部自愿课程不影响录用"
+    },
+    {
+      "id": "CR-BLIND-030",
+      "text": "甲方可复印乙方证件用于备案，但不得保管证件原件，备案完成后应妥善保护相关信息。",
+      "expectedRisk": false,
+      "expectedRuleCodes": [],
+      "notes": "复印备案与原件保管区分"
+    }
+  ]
+}
