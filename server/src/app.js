@@ -22,6 +22,10 @@ import legalSourceRoutes
 from "./routes/legalSourceRoutes.js";
 
 
+import rightsGuideRoutes
+from "./routes/rightsGuideRoutes.js";
+
+
 dotenv.config({
   quiet: true
 });
@@ -143,6 +147,13 @@ app.use(
 
 
 app.use(
+  "/api/rights-guides",
+
+  rightsGuideRoutes
+);
+
+
+app.use(
   (
     request,
     response
@@ -234,6 +245,24 @@ async function startServer() {
           `GET http://localhost:${port}`
           +
           "/api/legal-sources"
+        );
+
+
+        console.log(
+          "维权指引列表接口："
+          +
+          `GET http://localhost:${port}`
+          +
+          "/api/rights-guides"
+        );
+
+
+        console.log(
+          "维权指引详情接口："
+          +
+          `GET http://localhost:${port}`
+          +
+          "/api/rights-guides/:guideCode"
         );
       }
     );
