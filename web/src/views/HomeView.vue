@@ -60,7 +60,7 @@ onMounted(() => {
 
     <header class="site-header">
 
-      <div class="container header-content">
+      <div class="page-container header-content">
 
         <RouterLink
           class="brand"
@@ -124,11 +124,11 @@ onMounted(() => {
           </a>
 
 
-          <a href="#features">
+          <RouterLink to="/legal-knowledge">
 
-            权益课堂
+            权益知识库
 
-          </a>
+          </RouterLink>
 
         </nav>
 
@@ -151,11 +151,11 @@ onMounted(() => {
 
       <section class="hero">
 
-        <div class="container hero-content">
+        <div class="page-container hero-content">
 
           <div class="hero-copy">
 
-            <div class="tag">
+            <div class="hero-tag">
 
               大学生实习权益智能助手
 
@@ -200,14 +200,14 @@ onMounted(() => {
               </RouterLink>
 
 
-              <a
+              <RouterLink
                 class="secondary-button"
-                href="#features"
+                to="/legal-knowledge"
               >
 
-                审核实习合同
+                查看权益知识
 
-              </a>
+              </RouterLink>
 
             </div>
 
@@ -462,11 +462,9 @@ onMounted(() => {
 
             <p class="system-note">
 
-              本卡片数据由 Vue 实时请求 Express，
+              当前卡片由 Vue 请求 Express，
 
-              再由 Express 连接 MySQL 后返回，
-
-              不是写死的演示数据。
+              再由 Express 实时连接 MySQL 后返回。
 
             </p>
 
@@ -482,13 +480,13 @@ onMounted(() => {
         class="features"
       >
 
-        <div class="container">
+        <div class="page-container">
 
-          <div class="section-title">
+          <div class="section-heading">
 
             <span>
 
-              核心功能
+              CORE FEATURES
 
             </span>
 
@@ -502,8 +500,8 @@ onMounted(() => {
 
             <p>
 
-              后续所有正式数据均保存来源名称、
-              原始链接、发布时间和采集时间。
+              正式数据保留来源名称、
+              官方链接、发布时间和采集记录。
 
             </p>
 
@@ -513,42 +511,45 @@ onMounted(() => {
           <div class="feature-grid">
 
             <RouterLink
-              class="feature-link"
+              class="feature-card available"
               to="/jd-review"
             >
 
-              <article class="feature-card">
+              <div class="feature-icon">
 
-                <div class="feature-icon">
+                查
 
-                  查
-
-                </div>
+              </div>
 
 
-                <h3>
+              <div class="feature-status">
 
-                  岗位 JD 风险审查
+                已上线
 
-                </h3>
-
-
-                <p>
-
-                  对粘贴的岗位 JD
-                  进行文本结构化、
-                  上下文判断和风险分析。
-
-                </p>
+              </div>
 
 
-                <span>
+              <h3>
 
-                  开始检测 →
+                岗位 JD 风险审查
 
-                </span>
+              </h3>
 
-              </article>
+
+              <p>
+
+                对岗位 JD
+                进行风险表达识别、
+                上下文分析和否定语境过滤。
+
+              </p>
+
+
+              <strong>
+
+                开始检测 →
+
+              </strong>
 
             </RouterLink>
 
@@ -558,6 +559,13 @@ onMounted(() => {
               <div class="feature-icon">
 
                 审
+
+              </div>
+
+
+              <div class="feature-status building">
+
+                建设中
 
               </div>
 
@@ -578,20 +586,30 @@ onMounted(() => {
               </p>
 
 
-              <span>
+              <strong>
 
-                正在建设 →
+                即将开放
 
-              </span>
+              </strong>
 
             </article>
 
 
-            <article class="feature-card">
+            <RouterLink
+              class="feature-card available"
+              to="/legal-knowledge"
+            >
 
               <div class="feature-icon">
 
                 法
+
+              </div>
+
+
+              <div class="feature-status">
+
+                已上线
 
               </div>
 
@@ -605,20 +623,21 @@ onMounted(() => {
 
               <p>
 
-                汇总真实法规、
-                政策文件和官方说明，
-                并保留来源依据。
+                展示真实法律、
+                部门规定和官方提示，
+
+                并保留原文链接与适用说明。
 
               </p>
 
 
-              <span>
+              <strong>
 
-                正在建设 →
+                查看知识库 →
 
-              </span>
+              </strong>
 
-            </article>
+            </RouterLink>
 
 
             <article class="feature-card">
@@ -626,6 +645,13 @@ onMounted(() => {
               <div class="feature-icon">
 
                 护
+
+              </div>
+
+
+              <div class="feature-status building">
+
+                建设中
 
               </div>
 
@@ -646,13 +672,131 @@ onMounted(() => {
               </p>
 
 
+              <strong>
+
+                即将开放
+
+              </strong>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section class="data-section">
+
+        <div class="page-container data-content">
+
+          <div>
+
+            <span>
+
+              REAL AND TRACEABLE
+
+            </span>
+
+
+            <h2>
+
+              真实数据，
+
+              不是为了演示而虚构的数据
+
+            </h2>
+
+
+            <p>
+
+              岗位风险规则、
+              官方依据和审查记录均保存于 MySQL。
+
+              平台继续扩充数据时，
+              每条正式内容都会保留来源信息和审核状态。
+
+            </p>
+
+          </div>
+
+
+          <div class="data-points">
+
+            <div>
+
+              <b>
+
+                01
+
+              </b>
+
+
+              <strong>
+
+                官方来源
+
+              </strong>
+
+
               <span>
 
-                正在建设 →
+                保留原始网址和发布机构
 
               </span>
 
-            </article>
+            </div>
+
+
+            <div>
+
+              <b>
+
+                02
+
+              </b>
+
+
+              <strong>
+
+                原文证据
+
+              </strong>
+
+
+              <span>
+
+                风险判断展示命中的 JD 原文
+
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+
+                03
+
+              </b>
+
+
+              <strong>
+
+                谨慎结论
+
+              </strong>
+
+
+              <span>
+
+                风险提示不直接替代法律认定
+
+              </span>
+
+            </div>
 
           </div>
 
@@ -665,7 +809,7 @@ onMounted(() => {
 
     <footer class="footer">
 
-      <div class="container footer-content">
+      <div class="page-container footer-content">
 
         <div>
 
@@ -686,9 +830,9 @@ onMounted(() => {
         </div>
 
 
-        <p class="disclaimer">
+        <p>
 
-          本平台提供岗位风险辅助识别、
+          本平台提供风险辅助识别、
           权益知识和信息指引，
 
           不替代律师提供的正式法律意见。
@@ -706,33 +850,66 @@ onMounted(() => {
 
 <style scoped>
 
+.home-page {
+
+  min-height: 100vh;
+
+  background: #ffffff;
+
+  color: #17233d;
+
+}
+
+
+.page-container {
+
+  width: min(
+    1180px,
+    calc(
+      100%
+      -
+      40px
+    )
+  );
+
+  margin: 0 auto;
+
+}
+
+
 .site-header {
 
   position: sticky;
 
-  z-index: 20;
+  z-index: 30;
 
   top: 0;
 
   border-bottom:
+
     1px solid
+
     rgba(
-      230,
-      234,
-      242,
+      226,
+      231,
+      241,
       0.9
     );
 
   background:
+
     rgba(
       255,
       255,
       255,
-      0.9
+      0.92
     );
 
   backdrop-filter:
-    blur(18px);
+
+    blur(
+      18px
+    );
 
 }
 
@@ -745,7 +922,7 @@ onMounted(() => {
 
   align-items: center;
 
-  gap: 34px;
+  gap: 32px;
 
 }
 
@@ -780,13 +957,9 @@ onMounted(() => {
   background:
 
     linear-gradient(
-
       135deg,
-
       #2457e6,
-
       #7357f6
-
     );
 
   color: white;
@@ -800,15 +973,10 @@ onMounted(() => {
     0 10px 24px
 
     rgba(
-
       36,
-
       87,
-
       230,
-
       0.22
-
     );
 
 }
@@ -857,12 +1025,15 @@ onMounted(() => {
   font-size: 14px;
 
   transition:
+
     color 0.2s;
 
 }
 
 
-.navigation a:hover {
+.navigation a:hover,
+
+.navigation a.router-link-active {
 
   color: #2457e6;
 
@@ -870,8 +1041,6 @@ onMounted(() => {
 
 
 .navigation a.router-link-active {
-
-  color: #2457e6;
 
   font-weight: 800;
 
@@ -892,24 +1061,7 @@ onMounted(() => {
 
   font-size: 14px;
 
-  font-weight: 700;
-
-  transition:
-
-    transform 0.2s,
-
-    background 0.2s;
-
-}
-
-
-.header-button:hover {
-
-  transform:
-
-    translateY(-1px);
-
-  background: #1944bd;
+  font-weight: 800;
 
 }
 
@@ -927,15 +1079,10 @@ onMounted(() => {
       circle at 88% 10%,
 
       rgba(
-
         115,
-
         87,
-
         246,
-
         0.16
-
       ),
 
       transparent 30%
@@ -972,7 +1119,7 @@ onMounted(() => {
 }
 
 
-.tag {
+.hero-tag {
 
   display: inline-flex;
 
@@ -985,15 +1132,10 @@ onMounted(() => {
     1px solid
 
     rgba(
-
       36,
-
       87,
-
       230,
-
       0.15
-
     );
 
   border-radius: 99px;
@@ -1009,7 +1151,7 @@ onMounted(() => {
 }
 
 
-h1 {
+.hero-copy h1 {
 
   margin:
 
@@ -1018,13 +1160,9 @@ h1 {
   font-size:
 
     clamp(
-
       48px,
-
       5.7vw,
-
       76px
-
     );
 
   line-height: 1.13;
@@ -1036,7 +1174,7 @@ h1 {
 }
 
 
-h1 span {
+.hero-copy h1 span {
 
   display: block;
 
@@ -1135,15 +1273,10 @@ h1 span {
     0 15px 30px
 
     rgba(
-
       36,
-
       87,
-
       230,
-
       0.22
-
     );
 
 }
@@ -1170,7 +1303,9 @@ h1 span {
 
   transform:
 
-    translateY(-2px);
+    translateY(
+      -2px
+    );
 
 }
 
@@ -1203,15 +1338,10 @@ h1 span {
     1px solid
 
     rgba(
-
       255,
-
       255,
-
       255,
-
       0.95
-
     );
 
   border-radius: 24px;
@@ -1219,15 +1349,10 @@ h1 span {
   background:
 
     rgba(
-
       255,
-
       255,
-
       255,
-
-      0.92
-
+      0.93
     );
 
   box-shadow:
@@ -1235,15 +1360,10 @@ h1 span {
     0 28px 75px
 
     rgba(
-
       49,
-
       66,
-
       118,
-
       0.14
-
     );
 
 }
@@ -1268,7 +1388,9 @@ h1 span {
 
   color: #8a94a7;
 
-  font-weight: 800;
+  font-size: 10px;
+
+  font-weight: 900;
 
   letter-spacing:
 
@@ -1300,7 +1422,7 @@ h1 span {
 
   color: #168554;
 
-  font-size: 11px;
+  font-size: 10px;
 
   font-weight: 800;
 
@@ -1448,13 +1570,6 @@ h1 span {
 }
 
 
-.error-message p {
-
-  font-size: 13px;
-
-}
-
-
 .error-message button {
 
   padding:
@@ -1493,55 +1608,53 @@ h1 span {
 
   padding:
 
-    95px 0;
+    96px 0;
+
+  background: #ffffff;
 
 }
 
 
-.section-title {
+.section-heading {
 
-  max-width: 760px;
+  max-width: 780px;
 
   margin:
 
-    0 auto 44px;
+    0 auto 45px;
 
   text-align: center;
 
 }
 
 
-.section-title > span {
+.section-heading > span {
 
   color: #2457e6;
 
-  font-size: 13px;
+  font-size: 11px;
 
-  font-weight: 800;
+  font-weight: 900;
 
   letter-spacing:
 
-    0.12em;
+    0.14em;
 
 }
 
 
-.section-title h2 {
+.section-heading h2 {
 
   margin:
 
-    14px 0;
+    15px 0;
 
   font-size:
 
     clamp(
-
-      33px,
-
+      34px,
       4vw,
-
       49px
-
     );
 
   line-height: 1.25;
@@ -1549,7 +1662,9 @@ h1 span {
 }
 
 
-.section-title p {
+.section-heading p {
+
+  margin: 0;
 
   color: #758095;
 
@@ -1563,11 +1678,8 @@ h1 span {
   grid-template-columns:
 
     repeat(
-
       4,
-
       1fr
-
     );
 
   gap: 20px;
@@ -1575,18 +1687,11 @@ h1 span {
 }
 
 
-.feature-link {
-
-  display: block;
-
-  color: inherit;
-
-}
-
-
 .feature-card {
 
-  min-height: 300px;
+  position: relative;
+
+  min-height: 320px;
 
   padding: 28px;
 
@@ -1600,6 +1705,8 @@ h1 span {
 
   background: white;
 
+  color: inherit;
+
   transition:
 
     transform 0.25s,
@@ -1611,9 +1718,9 @@ h1 span {
 }
 
 
-.feature-link .feature-card {
+.feature-card.available {
 
-  height: 100%;
+  cursor: pointer;
 
 }
 
@@ -1622,20 +1729,17 @@ h1 span {
 
   transform:
 
-    translateY(-7px);
+    translateY(
+      -7px
+    );
 
   border-color:
 
     rgba(
-
       36,
-
       87,
-
       230,
-
       0.25
-
     );
 
   box-shadow:
@@ -1643,15 +1747,10 @@ h1 span {
     0 22px 55px
 
     rgba(
-
       36,
-
       87,
-
       230,
-
       0.11
-
     );
 
 }
@@ -1690,11 +1789,45 @@ h1 span {
 }
 
 
+.feature-status {
+
+  position: absolute;
+
+  top: 28px;
+
+  right: 25px;
+
+  padding:
+
+    6px 9px;
+
+  border-radius: 99px;
+
+  background: #e7f8ef;
+
+  color: #168554;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+}
+
+
+.feature-status.building {
+
+  background: #f0f2f6;
+
+  color: #7b8699;
+
+}
+
+
 .feature-card h3 {
 
   margin:
 
-    23px 0 13px;
+    24px 0 13px;
 
   font-size: 19px;
 
@@ -1703,7 +1836,7 @@ h1 span {
 
 .feature-card p {
 
-  min-height: 94px;
+  min-height: 100px;
 
   color: #748096;
 
@@ -1714,17 +1847,161 @@ h1 span {
 }
 
 
-.feature-card > span {
+.feature-card > strong {
 
   display: inline-block;
 
-  margin-top: 18px;
+  margin-top: 17px;
 
   color: #2457e6;
 
   font-size: 13px;
 
-  font-weight: 800;
+}
+
+
+.data-section {
+
+  padding:
+
+    90px 0;
+
+  background: #f5f7fb;
+
+}
+
+
+.data-content {
+
+  display: grid;
+
+  align-items: center;
+
+  grid-template-columns:
+
+    0.9fr
+
+    1.1fr;
+
+  gap: 70px;
+
+}
+
+
+.data-content > div:first-child > span {
+
+  color: #2457e6;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing:
+
+    0.13em;
+
+}
+
+
+.data-content h2 {
+
+  margin:
+
+    15px 0 20px;
+
+  font-size: 39px;
+
+  line-height: 1.35;
+
+}
+
+
+.data-content p {
+
+  margin: 0;
+
+  color: #717d92;
+
+  line-height: 1.9;
+
+}
+
+
+.data-points {
+
+  display: grid;
+
+  gap: 13px;
+
+}
+
+
+.data-points > div {
+
+  display: grid;
+
+  align-items: center;
+
+  grid-template-columns:
+
+    50px
+
+    150px
+
+    1fr;
+
+  gap: 15px;
+
+  padding:
+
+    19px;
+
+  border:
+
+    1px solid
+
+    #e3e8f1;
+
+  border-radius: 15px;
+
+  background: white;
+
+}
+
+
+.data-points b {
+
+  display: grid;
+
+  width: 42px;
+
+  height: 42px;
+
+  place-items: center;
+
+  border-radius: 12px;
+
+  background: #edf3ff;
+
+  color: #2457e6;
+
+  font-size: 11px;
+
+}
+
+
+.data-points strong {
+
+  font-size: 14px;
+
+}
+
+
+.data-points span {
+
+  color: #7c8799;
+
+  font-size: 12px;
 
 }
 
@@ -1771,14 +2048,14 @@ h1 span {
 
   color: #aeb9d1;
 
-  font-size: 13px;
+  font-size: 12px;
 
   line-height: 1.8;
 
 }
 
 
-.disclaimer {
+.footer-content > p {
 
   max-width: 520px;
 
@@ -1798,7 +2075,9 @@ h1 span {
   }
 
 
-  .hero-content {
+  .hero-content,
+
+  .data-content {
 
     grid-template-columns:
 
@@ -1812,11 +2091,8 @@ h1 span {
     grid-template-columns:
 
       repeat(
-
         2,
-
         1fr
-
       );
 
   }
@@ -1825,7 +2101,7 @@ h1 span {
 
 
 @media (
-  max-width: 640px
+  max-width: 650px
 ) {
 
   .brand-text span {
@@ -1844,19 +2120,11 @@ h1 span {
   }
 
 
-  .hero-buttons {
-
-    flex-direction:
-
-      column;
-
-  }
-
+  .hero-buttons,
 
   .principles {
 
     flex-direction:
-
       column;
 
   }
@@ -1867,6 +2135,26 @@ h1 span {
     grid-template-columns:
 
       1fr;
+
+  }
+
+
+  .data-points > div {
+
+    grid-template-columns:
+
+      50px
+
+      1fr;
+
+  }
+
+
+  .data-points span {
+
+    grid-column:
+
+      2;
 
   }
 
@@ -1882,7 +2170,7 @@ h1 span {
   }
 
 
-  .disclaimer {
+  .footer-content > p {
 
     text-align: left;
 
