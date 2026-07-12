@@ -1,9 +1,8 @@
-import {
-  createRouter,
-  createWebHistory
-} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "../views/HomeView.vue";
+
+import JdReviewView from "../views/JdReviewView.vue";
 
 
 const routes = [
@@ -13,6 +12,14 @@ const routes = [
     name: "home",
 
     component: HomeView
+  },
+
+  {
+    path: "/jd-review",
+
+    name: "jd-review",
+
+    component: JdReviewView
   }
 ];
 
@@ -20,7 +27,13 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
 
-  routes
+  routes,
+
+  scrollBehavior() {
+    return {
+      top: 0
+    };
+  }
 });
 
 
