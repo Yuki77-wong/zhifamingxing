@@ -117,11 +117,11 @@ onMounted(() => {
           </a>
 
 
-          <a href="#features">
+          <RouterLink to="/contract-review">
 
             合同审核
 
-          </a>
+          </RouterLink>
 
 
           <RouterLink to="/legal-knowledge">
@@ -561,7 +561,10 @@ onMounted(() => {
             </RouterLink>
 
 
-            <article class="feature-card">
+            <RouterLink
+              class="feature-card available"
+              to="/contract-review"
+            >
 
               <div class="feature-icon">
 
@@ -570,9 +573,9 @@ onMounted(() => {
               </div>
 
 
-              <div class="feature-status building">
+              <div class="feature-status">
 
-                建设中
+                已上线
 
               </div>
 
@@ -595,11 +598,11 @@ onMounted(() => {
 
               <strong>
 
-                即将开放
+                开始审核合同 →
 
               </strong>
 
-            </article>
+            </RouterLink>
 
 
             <RouterLink

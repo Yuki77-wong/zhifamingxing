@@ -9,6 +9,9 @@ from "../views/HomeView.vue";
 import JdReviewView
 from "../views/JdReviewView.vue";
 
+import ContractReviewView
+from "../views/ContractReviewView.vue";
+
 import LegalKnowledgeView
 from "../views/LegalKnowledgeView.vue";
 
@@ -45,6 +48,20 @@ const routes = [
 
     component:
       JdReviewView
+
+  },
+
+
+  {
+
+    path:
+      "/contract-review",
+
+    name:
+      "contract-review",
+
+    component:
+      ContractReviewView
 
   },
 

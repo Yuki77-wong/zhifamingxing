@@ -18,6 +18,10 @@ import jdReviewRoutes
 from "./routes/jdReviewRoutes.js";
 
 
+import contractReviewRoutes
+from "./routes/contractReviewRoutes.js";
+
+
 import legalSourceRoutes
 from "./routes/legalSourceRoutes.js";
 
@@ -136,6 +140,13 @@ app.use(
   "/api/jd-reviews",
 
   jdReviewRoutes
+);
+
+
+app.use(
+  "/api/contract-reviews",
+
+  contractReviewRoutes
 );
 
 

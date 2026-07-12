@@ -485,6 +485,13 @@ async function submitReview() {
           </RouterLink>
 
 
+          <RouterLink to="/contract-review">
+
+            合同审核
+
+          </RouterLink>
+
+
           <RouterLink to="/legal-knowledge">
 
             权益知识库
