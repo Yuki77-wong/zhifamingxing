@@ -1,4 +1,4 @@
-﻿const ENGINE_VERSION = "rule-engine-d1-0.1.0";
+const ENGINE_VERSION = "rule-ai-hybrid-d1-0.2.0";
 
 const SENTENCE_BOUNDARIES = new Set([
   "。",
@@ -787,6 +787,396 @@ async function saveJdReview({
   return reviewId;
 }
 
+
+const AI_JD_MODEL = "@cf/meta/llama-3.2-1b-instruct";
+
+const AI_SUSPICIOUS_JD_PATTERN =
+  /培训|培训费|培训费用|缴费|缴纳|交费|交钱|收费|费用|押金|保证金|贷款|分期|证件|身份证|原件|无工资|没工资|无薪|无补贴|转正|保就业|包就业|内推|offer/u;
+
+const AI_SEVERITY_SCORES = {
+  critical: 92,
+  high: 82,
+  medium: 62,
+  low: 38
+};
+
+function shouldRunJdAiReview({ inputText, findings }) {
+  if (!inputText || findings.length > 0) {
+    return false;
+  }
+
+  return AI_SUSPICIOUS_JD_PATTERN.test(inputText);
+}
+
+function normalizeAiSeverity(value) {
+  const normalized = String(value || "").toLowerCase();
+
+  if (["critical", "high", "medium", "low"].includes(normalized)) {
+    return normalized;
+  }
+
+  return "medium";
+}
+
+function trimAiText(value, maximumLength, fallback) {
+  if (typeof value !== "string") {
+    return fallback;
+  }
+
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return fallback;
+  }
+
+  return trimmed.slice(0, maximumLength);
+}
+
+function parseAiJsonResponse(responseText) {
+  const text = String(responseText || "").trim();
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+
+  if (start === -1 || end === -1 || end <= start) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text.slice(start, end + 1));
+  } catch {
+    return null;
+  }
+}
+
+function findSuspiciousSentence(inputText) {
+  let sentenceStart = 0;
+
+  for (let index = 0; index < inputText.length; index += 1) {
+    if (!SENTENCE_BOUNDARIES.has(inputText[index])) {
+      continue;
+    }
+
+    const sentenceText = inputText.slice(sentenceStart, index + 1).trim();
+
+    if (AI_SUSPICIOUS_JD_PATTERN.test(sentenceText)) {
+      return {
+        start: sentenceStart,
+        end: index + 1,
+        text: sentenceText
+      };
+    }
+
+    sentenceStart = index + 1;
+  }
+
+  const tailSentence = inputText.slice(sentenceStart).trim();
+
+  if (tailSentence && AI_SUSPICIOUS_JD_PATTERN.test(tailSentence)) {
+    return {
+      start: sentenceStart,
+      end: inputText.length,
+      text: tailSentence
+    };
+  }
+
+  return {
+    start: 0,
+    end: Math.min(inputText.length, 120),
+    text: inputText.slice(0, 120).trim()
+  };
+}
+
+function locateAiEvidence(inputText, evidenceText) {
+  const normalizedEvidence = trimAiText(evidenceText, 120, "");
+
+  if (normalizedEvidence) {
+    const evidenceStart = inputText.indexOf(normalizedEvidence);
+
+    if (evidenceStart !== -1) {
+      const evidenceEnd = evidenceStart + normalizedEvidence.length;
+      return findSentenceRange(inputText, evidenceStart, evidenceEnd);
+    }
+  }
+
+  return findSuspiciousSentence(inputText);
+}
+
+
+function createAiMatchedPattern({
+  rawEvidenceText,
+  fallbackText
+}) {
+  const rawText = trimAiText(rawEvidenceText, 120, "");
+
+  if (
+    !rawText
+    || rawText.includes("原文中的证据短句")
+    || rawText.includes("证据短句")
+    || rawText.includes("具体证据")
+    || rawText.includes("占位词")
+  ) {
+    return fallbackText;
+  }
+
+  return rawText;
+}
+
+function normalizeAiFindings({ inputText, aiResult }) {
+  if (
+    !aiResult
+    || aiResult.hasRisk !== true
+    || !Array.isArray(aiResult.findings)
+  ) {
+    return [];
+  }
+
+  const findings = [];
+  const findingKeys = new Set();
+
+  for (const item of aiResult.findings) {
+    const severity = normalizeAiSeverity(item.severity);
+    const evidenceRange = locateAiEvidence(inputText, item.evidenceText);
+    const riskCategory = trimAiText(
+      item.riskCategory,
+      80,
+      "AI 语义识别风险"
+    );
+
+    const findingKey = [
+      riskCategory,
+      evidenceRange.start,
+      evidenceRange.end
+    ].join(":");
+
+    if (findingKeys.has(findingKey)) {
+      continue;
+    }
+
+    findingKeys.add(findingKey);
+
+    findings.push({
+      ruleId: null,
+      ruleCode: "AI_SEMANTIC_JD_REVIEW",
+      ruleName: "AI 语义复核风险",
+      riskCategory,
+      severity,
+      riskScore: AI_SEVERITY_SCORES[severity] || 62,
+      matchedPattern: createAiMatchedPattern({
+        rawEvidenceText: item.evidenceText,
+        fallbackText: evidenceRange.text
+      }),
+      matchType: "ai-semantic",
+      evidenceText: evidenceRange.text,
+      evidenceStart: evidenceRange.start,
+      evidenceEnd: evidenceRange.end,
+      reason: trimAiText(
+        item.reason,
+        300,
+        "AI 语义复核认为该表达存在实习求职风险，需要进一步核实。"
+      ),
+      verificationAdvice: trimAiText(
+        item.verificationAdvice,
+        300,
+        "请核实招聘主体、收费依据、合同约定、薪酬标准和实际履行方式，并保留岗位页面和沟通记录。"
+      ),
+      confidence: 0.76,
+      legalSource: null,
+      source: "ai"
+    });
+
+    if (findings.length >= 3) {
+      break;
+    }
+  }
+
+  return findings;
+}
+
+
+const JD_SEMANTIC_RISK_DETECTORS = [
+  {
+    ruleCode: "SEMANTIC_PAID_TRAINING_FEE",
+    ruleName: "语义识别：付费培训与入职绑定",
+    riskCategory: "付费培训与入职绑定",
+    severity: "critical",
+    riskScore: 92,
+    pattern: /(?:入职前|上岗前|岗前|报到前|录用前|转正前)?[^。！？!?；;\n]{0,24}(?:培训|课程|训练营)[^。！？!?；;\n]{0,32}(?:缴纳|交纳|支付|交费|缴费|收费|自费|承担|培训费|费用)[^。！？!?；;\n]{0,20}(?:\d+\s*元)?|(?:缴纳|交纳|支付|交费|缴费|收费)[^。！？!?；;\n]{0,24}(?:培训费|培训费用|课程费)/u,
+    negativePattern: /(?:免费培训|培训免费|不收取培训费|无需缴纳培训费|无需支付培训费|公司承担培训费|培训费由公司承担)/u,
+    reason: "岗位信息将入职、转正或岗位机会与个人支付培训费用绑定，存在招聘收费、招转培或付费培训风险。",
+    verificationAdvice: "请核实招聘主体和培训主体是否一致、收费依据、退款规则、是否承诺录用，以及是否要求签署培训贷款或分期协议。"
+  },
+  {
+    ruleCode: "SEMANTIC_UNPAID_INTERNSHIP",
+    ruleName: "语义识别：实习期间无工资或报酬缺失",
+    riskCategory: "实习报酬缺失",
+    severity: "medium",
+    riskScore: 68,
+    pattern: /(?:实习期间|实习期|实习阶段|试用期|培训期)[^。！？!?；;\n]{0,18}(?:无工资|没有工资|不发工资|无薪|无报酬|没有报酬|无补贴|没有补贴|不发补贴)|(?:无薪实习|实习无工资|实习无补贴|不发实习工资|不发实习补贴)/u,
+    negativePattern: /(?:不是无工资|并非无工资|不接受无薪实习|不提供无薪实习|有实习补贴|发放实习补贴|实习补贴按月发放)/u,
+    reason: "岗位信息明确表示实习期间无工资、无报酬或无补贴，存在报酬约定异常风险，需要结合实习性质和实际工作安排进一步核实。",
+    verificationAdvice: "请核实实习性质、学校是否组织、工作时长、工作内容、补贴标准、转正条件和书面协议，并保留岗位页面及沟通记录。"
+  }
+];
+
+function hasSimilarFinding(existingFindings, detector) {
+  return existingFindings.some((finding) => {
+    const combinedText = [
+      finding.ruleCode,
+      finding.ruleName,
+      finding.riskCategory,
+      finding.reason
+    ].join(" ");
+
+    if (combinedText.includes(detector.riskCategory)) {
+      return true;
+    }
+
+    if (
+      detector.ruleCode === "SEMANTIC_PAID_TRAINING_FEE"
+      && /培训|培训费|课程费|付费培训/u.test(combinedText)
+    ) {
+      return true;
+    }
+
+    if (
+      detector.ruleCode === "SEMANTIC_UNPAID_INTERNSHIP"
+      && /无工资|无薪|无补贴|报酬缺失|实习报酬/u.test(combinedText)
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+}
+
+function createJdSemanticFallbackFindings({
+  inputText,
+  existingFindings
+}) {
+  const findings = [];
+
+  for (const detector of JD_SEMANTIC_RISK_DETECTORS) {
+    if (hasSimilarFinding(existingFindings, detector)) {
+      continue;
+    }
+
+    const match = detector.pattern.exec(inputText);
+
+    if (!match) {
+      continue;
+    }
+
+    const matchedText = match[0].trim();
+    const leadingTrimLength = match[0].length - match[0].trimStart().length;
+    const evidenceStart = match.index + leadingTrimLength;
+    const evidenceEnd = evidenceStart + matchedText.length;
+
+    const evidenceRange = {
+      start: evidenceStart,
+      end: evidenceEnd,
+      text: matchedText
+    };
+
+    if (detector.negativePattern.test(evidenceRange.text)) {
+      continue;
+    }
+
+    findings.push({
+      ruleId: null,
+      ruleCode: detector.ruleCode,
+      ruleName: detector.ruleName,
+      riskCategory: detector.riskCategory,
+      severity: detector.severity,
+      riskScore: detector.riskScore,
+      matchedPattern: matchedText,
+      matchType: "semantic-fallback",
+      evidenceText: evidenceRange.text,
+      evidenceStart: evidenceRange.start,
+      evidenceEnd: evidenceRange.end,
+      reason: detector.reason,
+      verificationAdvice: detector.verificationAdvice,
+      confidence: 0.82,
+      legalSource: null,
+      source: "semantic"
+    });
+  }
+
+  return findings;
+}
+
+async function analyzeJdWithAI({
+  env,
+  inputText,
+  jobTitle,
+  companyName
+}) {
+  if (!env.AI) {
+    return [];
+  }
+
+  const prompt = [
+    "你是大学生实习求职风险审查助手。",
+    "任务：判断下面岗位 JD 是否存在实习求职风险。",
+    "重点识别：入职前收费、付费培训、培训贷款、押金保证金、扣押证件、收费内推、实习无工资、转正承诺绑定收费。",
+    "如果同一段文本里同时出现多个风险，例如付费培训和实习无工资，必须拆成多条 findings。",
+    "要求：只返回 JSON，不要输出 Markdown，不要输出解释性段落。",
+    "JSON 格式如下：",
+    "{",
+    "  \"hasRisk\": true,",
+    "  \"overallLevel\": \"critical\",",
+    "  \"findings\": [",
+    "    {",
+    "      \"riskCategory\": \"付费培训与入职绑定\",",
+    "      \"severity\": \"critical\",",
+    "      \"evidenceText\": \"必须逐字摘录 JD 原文中的具体证据，不得写占位词\",",
+    "      \"reason\": \"为什么有风险\",",
+    "      \"verificationAdvice\": \"用户应该如何核实\"",
+    "    }",
+    "  ]",
+    "}",
+    "没有风险时返回：{\"hasRisk\":false,\"overallLevel\":\"low\",\"findings\":[]}",
+    "",
+    `岗位名称：${jobTitle || "未填写"}`,
+    `公司名称：${companyName || "未填写"}`,
+    `JD 原文：${inputText.slice(0, 3000)}`
+  ].join("\n");
+
+  try {
+    const aiResponse = await env.AI.run(
+      AI_JD_MODEL,
+      {
+        messages: [
+          {
+            role: "system",
+            content: "你只做风险识别和结构化输出，不提供最终法律结论。"
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.1,
+        max_tokens: 700
+      }
+    );
+
+    const responseText =
+      typeof aiResponse === "string"
+        ? aiResponse
+        : aiResponse?.response || aiResponse?.result?.response || "";
+
+    const aiResult = parseAiJsonResponse(responseText);
+
+    return normalizeAiFindings({
+      inputText,
+      aiResult
+    });
+  } catch (error) {
+    console.error("JD AI semantic review failed:", error);
+    return [];
+  }
+}
+
 async function reviewJobDescription({
   env,
   jobTitle,
@@ -798,7 +1188,7 @@ async function reviewJobDescription({
   const inputHash = await createInputHash(inputText);
   const rules = await loadEnabledRules(env);
 
-  const findings = normalizeReviewFindings(
+  const ruleFindings = normalizeReviewFindings(
     rules.flatMap((rule) => {
       return analyzeRule({
         inputText,
@@ -806,6 +1196,33 @@ async function reviewJobDescription({
       });
     })
   );
+
+  const semanticFindings = createJdSemanticFallbackFindings({
+    inputText,
+    existingFindings: ruleFindings
+  });
+
+  const deterministicFindings = normalizeReviewFindings([
+    ...ruleFindings,
+    ...semanticFindings
+  ]);
+
+  const aiFindings = shouldRunJdAiReview({
+    inputText,
+    findings: deterministicFindings
+  })
+    ? await analyzeJdWithAI({
+        env,
+        inputText,
+        jobTitle,
+        companyName
+      })
+    : [];
+
+  const findings = normalizeReviewFindings([
+    ...deterministicFindings,
+    ...aiFindings
+  ]);
 
   const overallScore = combineRiskScores(findings);
 
@@ -844,6 +1261,8 @@ async function reviewJobDescription({
       findingCount: findings.length
     }),
     findings,
+    aiReviewUsed: aiFindings.length > 0,
+    semanticReviewUsed: semanticFindings.length > 0,
     processingTimeMs
   };
 }
