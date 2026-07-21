@@ -29,3 +29,6 @@ temp/
 Thumbs.db
 # Cloudflare Wrangler local state
 web/.wrangler/
+
+# Cloudflare Wrangler local state
+web/.wrangler/
