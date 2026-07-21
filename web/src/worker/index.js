@@ -918,6 +918,521 @@ async function createJdReview(request, env) {
   );
 }
 
+const CONTRACT_ENGINE_VERSION = "contract-rule-engine-d1-0.1.0";
+
+const CONTRACT_FLEXIBLE_RULE_PATTERNS = {
+  CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE: [
+    "(?:入职|上岗|实习|报到|签约)?[^。！？；;\\n]{0,12}(?:须|需|需要|要求|应当)?[^。！？；;\\n]{0,8}(?:缴纳|交纳|支付|交付|付清)[^。！？；;\\n]{0,20}(?:押金|保证金|岗位保证金|岗位押金|财物|服装费|资料费|工牌费|设备押金)",
+    "(?:押金|保证金|岗位保证金|岗位押金|设备押金)[^。！？；;\\n]{0,18}(?:不退|暂扣|扣除|作为担保)"
+  ],
+
+  CONTRACT_DOCUMENT_WITHHELD: [
+    "(?:扣押|扣留|上交|留存|统一保管|长期保管)[^。！？；;\\n]{0,18}(?:身份证|身份证原件|毕业证|毕业证原件|学生证|学生证原件|证件原件)",
+    "(?:身份证|身份证原件|毕业证|毕业证原件|学生证|学生证原件|证件原件)[^。！？；;\\n]{0,24}(?:由公司保管|统一保管|长期保管|扣押|扣留|留存|上交|暂存公司|交由公司保管|离职后归还)"
+  ],
+
+  CONTRACT_PAID_TRAINING_OR_LOAN: [
+    "(?:培训|课程)[^。！？；;\\n]{0,20}(?:贷款|借款|分期|分期贷款|分期付款|分期支付)",
+    "(?:贷款|借款|分期|分期贷款|分期付款|分期支付)[^。！？；;\\n]{0,20}(?:培训|课程)",
+    "(?:付费|缴费|交费|支付|自费|自行承担)[^。！？；;\\n]{0,18}(?:培训|课程|培训费|课程费)",
+    "(?:签署|办理|申请)[^。！？；;\\n]{0,18}(?:培训借款协议|课程分期|助学分期|培训分期|培训贷款|培训贷)"
+  ],
+
+  CONTRACT_PAID_GUARANTEED_OFFER: [
+    "(?:付费|收费|缴费|交费|支付)[^。！？；;\\n]{0,18}(?:保录用|保证录用|保证安排岗位|保就业|内推|内部推荐|保证拿到offer|保证拿到 offer)",
+    "(?:保录用|保证录用|保证安排岗位|保就业|内推|内部推荐|保证拿到offer|保证拿到 offer)[^。！？；;\\n]{0,18}(?:收费|付费|服务费|费用|缴费|交费|支付)"
+  ]
+};
+
+const CONTRACT_GENERIC_NEGATIVE_PATTERNS = [
+  "(?:不|无须|无需|不用|不得|禁止|不会|不需要)[^。！？；;\\n]{0,16}(?:收取|缴纳|交纳|支付|交付|扣押|扣留|上交|保管|办理)[^。！？；;\\n]{0,28}(?:押金|保证金|培训费|培训贷款|贷款|分期|证件|身份证|毕业证|学生证|原件|内推费|费用|财物)",
+  "(?:仅|只)[^。！？；;\\n]{0,8}(?:核验|查验|查看)[^。！？；;\\n]{0,18}(?:身份证|证件|原件)",
+  "(?:免费|完全免费)[^。！？；;\\n]{0,12}(?:培训|内推|推荐)",
+  "(?:培训|岗前培训|课程)[^。！？；;\\n]{0,12}(?:免费|完全免费)",
+  "(?:无|没有|不涉及|不包含|不含)[^。！？；;\\n]{0,12}(?:保证金|押金|培训贷款|贷款|收费|费用|证件扣押|扣押证件)"
+];
+
+function normalizeContractText(text) {
+  return normalizeInputText(text);
+}
+
+function hasContractNegativeExpression({
+  inputText,
+  candidate,
+  negativePatterns
+}) {
+  const contextRange = createContextRange(
+    inputText,
+    candidate.start,
+    candidate.end,
+    55
+  );
+
+  const contextText = inputText.slice(
+    contextRange.start,
+    contextRange.end
+  );
+
+  for (const negativePattern of negativePatterns) {
+    if (
+      negativePattern
+      &&
+      contextText.includes(negativePattern)
+    ) {
+      return true;
+    }
+  }
+
+  for (const regexSource of CONTRACT_GENERIC_NEGATIVE_PATTERNS) {
+    const regularExpression = new RegExp(regexSource, "u");
+
+    if (regularExpression.test(contextText)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function calculateContractFindingConfidence({
+  matchedText,
+  matchType,
+  hasLegalSource
+}) {
+  const baseConfidence = matchType === "exact" ? 0.86 : 0.82;
+  const lengthBonus = Math.min(matchedText.length * 0.008, 0.1);
+  const sourceBonus = hasLegalSource ? 0.03 : 0;
+
+  return Number(
+    Math.min(baseConfidence + lengthBonus + sourceBonus, 0.98).toFixed(4)
+  );
+}
+
+function calculateContractOverallConfidence(findings) {
+  if (findings.length === 0) {
+    return 0.68;
+  }
+
+  const total = findings.reduce((sum, finding) => {
+    return sum + finding.confidence;
+  }, 0);
+
+  return Number((total / findings.length).toFixed(4));
+}
+
+function determineContractOverallLevel({
+  overallScore,
+  findings
+}) {
+  const hasCriticalFinding = findings.some((finding) => {
+    return finding.riskLevel === "critical";
+  });
+
+  if (hasCriticalFinding) {
+    return "critical";
+  }
+
+  if (overallScore >= 75) {
+    return "high";
+  }
+
+  if (overallScore >= 40) {
+    return "medium";
+  }
+
+  return "low";
+}
+
+function createContractSummary({
+  findingCount
+}) {
+  if (findingCount === 0) {
+    return "暂未发现当前合同规则库覆盖的明显高风险条款。该结果不代表合同绝对安全，仍需结合完整文本、实际履行和法律关系进一步核实。";
+  }
+
+  return `共发现 ${findingCount} 项需要关注的合同风险线索。`;
+}
+
+function createContractRuleCandidates({
+  inputText,
+  rule,
+  patterns
+}) {
+  const candidates = [];
+
+  for (const pattern of patterns) {
+    candidates.push(
+      ...findAllTextOccurrences(inputText, pattern)
+    );
+  }
+
+  const flexiblePatterns =
+    CONTRACT_FLEXIBLE_RULE_PATTERNS[rule.rule_code] || [];
+
+  for (const regexSource of flexiblePatterns) {
+    candidates.push(
+      ...findAllRegexOccurrences(inputText, regexSource)
+    );
+  }
+
+  return deduplicateCandidates(candidates)
+    .sort((firstCandidate, secondCandidate) => {
+      if (firstCandidate.start !== secondCandidate.start) {
+        return firstCandidate.start - secondCandidate.start;
+      }
+
+      return secondCandidate.matchedText.length - firstCandidate.matchedText.length;
+    });
+}
+
+function analyzeContractRule({
+  inputText,
+  rule
+}) {
+  const patterns = parseJsonArray(rule.patterns);
+  const negativePatterns = parseJsonArray(rule.negative_patterns);
+
+  const candidates = createContractRuleCandidates({
+    inputText,
+    rule,
+    patterns
+  });
+
+  const findings = [];
+  const findingKeys = new Set();
+
+  for (const candidate of candidates) {
+    if (
+      hasContractNegativeExpression({
+        inputText,
+        candidate,
+        negativePatterns
+      })
+    ) {
+      continue;
+    }
+
+    const sentenceRange = findSentenceRange(
+      inputText,
+      candidate.start,
+      candidate.end
+    );
+
+    const findingKey = [
+      rule.id,
+      sentenceRange.start,
+      sentenceRange.end
+    ].join(":");
+
+    if (findingKeys.has(findingKey)) {
+      continue;
+    }
+
+    findingKeys.add(findingKey);
+
+    const legalSource = {
+      id: rule.legal_source_id,
+      title: rule.legal_title,
+      issuingAuthority: rule.legal_issuing_authority,
+      documentNumber: rule.legal_document_number,
+      articleNumber: rule.legal_article_number,
+      sourceType: rule.legal_source_type,
+      sourceUrl: rule.legal_source_url,
+      citationText: rule.legal_citation_text
+    };
+
+    findings.push({
+      ruleId: rule.id,
+      ruleCode: rule.rule_code,
+      ruleName: rule.rule_name,
+      riskCategory: rule.risk_category,
+      riskLevel: rule.risk_level,
+      riskScore: Number(rule.risk_score),
+      matchedText: candidate.matchedText,
+      matchType: candidate.matchType,
+      evidenceText: sentenceRange.text,
+      reason: rule.reason,
+      advice: rule.advice,
+      applicabilityNote: rule.applicability_note,
+      confidence: calculateContractFindingConfidence({
+        matchedText: candidate.matchedText,
+        matchType: candidate.matchType,
+        hasLegalSource: true
+      }),
+      legalSource
+    });
+
+    if (findings.length >= 2) {
+      break;
+    }
+  }
+
+  return findings;
+}
+
+async function loadEnabledContractRules(env) {
+  const result = await env.zhifamingxing_db
+    .prepare(
+      `
+        SELECT
+          contract_rules.id,
+          contract_rules.rule_code,
+          contract_rules.rule_name,
+          contract_rules.risk_category,
+          contract_rules.risk_level,
+          contract_rules.risk_score,
+          contract_rules.match_type,
+          contract_rules.patterns,
+          contract_rules.negative_patterns,
+          contract_rules.reason,
+          contract_rules.advice,
+          contract_rules.legal_source_id,
+          contract_rules.applicability_note,
+          legal_sources.title AS legal_title,
+          legal_sources.issuing_authority AS legal_issuing_authority,
+          legal_sources.document_number AS legal_document_number,
+          legal_sources.article_number AS legal_article_number,
+          legal_sources.source_type AS legal_source_type,
+          legal_sources.source_url AS legal_source_url,
+          legal_sources.citation_text AS legal_citation_text
+        FROM contract_rules
+        INNER JOIN legal_sources
+          ON legal_sources.id = contract_rules.legal_source_id
+        WHERE
+          contract_rules.review_status = 'reviewed'
+          AND contract_rules.is_enabled = 1
+          AND legal_sources.source_status = 'current'
+        ORDER BY
+          CASE contract_rules.risk_level
+            WHEN 'critical' THEN 1
+            WHEN 'high' THEN 2
+            WHEN 'medium' THEN 3
+            WHEN 'low' THEN 4
+            ELSE 5
+          END,
+          contract_rules.id ASC
+      `
+    )
+    .all();
+
+  return result.results;
+}
+
+async function saveContractReview({
+  env,
+  contractTitle,
+  contractText,
+  overallScore,
+  overallLevel,
+  overallConfidence,
+  findings,
+  processingTimeMs
+}) {
+  const reviewResult = await env.zhifamingxing_db
+    .prepare(
+      `
+        INSERT INTO contract_reviews
+        (
+          contract_title,
+          contract_text,
+          overall_score,
+          overall_level,
+          confidence,
+          engine_version,
+          finding_count,
+          processing_time_ms
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `
+    )
+    .bind(
+      contractTitle || null,
+      contractText,
+      overallScore,
+      overallLevel,
+      overallConfidence,
+      CONTRACT_ENGINE_VERSION,
+      findings.length,
+      processingTimeMs
+    )
+    .run();
+
+  const reviewId = reviewResult.meta.last_row_id;
+
+  for (const finding of findings) {
+    await env.zhifamingxing_db
+      .prepare(
+        `
+          INSERT INTO contract_review_findings
+          (
+            review_id,
+            rule_id,
+            risk_category,
+            risk_level,
+            risk_score,
+            matched_text,
+            evidence_text,
+            reason,
+            advice,
+            legal_source_id
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `
+      )
+      .bind(
+        reviewId,
+        finding.ruleId,
+        finding.riskCategory,
+        finding.riskLevel,
+        finding.riskScore,
+        finding.matchedText,
+        finding.evidenceText,
+        finding.reason,
+        finding.advice,
+        finding.legalSource.id
+      )
+      .run();
+  }
+
+  return reviewId;
+}
+
+async function reviewContract({
+  env,
+  contractTitle,
+  contractText
+}) {
+  const startedAt = Date.now();
+  const normalizedContractText = normalizeContractText(contractText);
+  const rules = await loadEnabledContractRules(env);
+
+  const findings = rules.flatMap((rule) => {
+    return analyzeContractRule({
+      inputText: normalizedContractText,
+      rule
+    });
+  });
+
+  const overallScore = combineRiskScores(findings);
+
+  const overallLevel = determineContractOverallLevel({
+    overallScore,
+    findings
+  });
+
+  const overallConfidence = calculateContractOverallConfidence(findings);
+  const processingTimeMs = Date.now() - startedAt;
+
+  const reviewId = await saveContractReview({
+    env,
+    contractTitle,
+    contractText: normalizedContractText,
+    overallScore,
+    overallLevel,
+    overallConfidence,
+    findings,
+    processingTimeMs
+  });
+
+  return {
+    reviewId,
+    engineVersion: CONTRACT_ENGINE_VERSION,
+    overallScore,
+    overallLevel,
+    confidence: overallConfidence,
+    confidenceNote: "confidence 仅代表当前规则匹配的置信提示，不代表经过人工标注测试得到的真实准确率。",
+    findingCount: findings.length,
+    summary: createContractSummary({
+      findingCount: findings.length
+    }),
+    processingTimeMs,
+    findings: findings.map((finding) => {
+      return {
+        ruleCode: finding.ruleCode,
+        ruleName: finding.ruleName,
+        riskCategory: finding.riskCategory,
+        riskLevel: finding.riskLevel,
+        riskScore: finding.riskScore,
+        matchedText: finding.matchedText,
+        evidenceText: finding.evidenceText,
+        reason: finding.reason,
+        advice: finding.advice,
+        applicabilityNote: finding.applicabilityNote,
+        confidence: finding.confidence,
+        legalSource: finding.legalSource
+      };
+    })
+  };
+}
+
+async function createContractReview(request, env) {
+  let body;
+
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse(
+      {
+        success: false,
+        message: "请求体格式错误，请提交 JSON 数据。"
+      },
+      400
+    );
+  }
+
+  const {
+    contractTitle,
+    contractText
+  } = body || {};
+
+  if (typeof contractText !== "string") {
+    return jsonResponse(
+      {
+        success: false,
+        message: "请提交合同文本。"
+      },
+      400
+    );
+  }
+
+  const normalizedContractText = contractText.trim();
+
+  if (normalizedContractText.length < 20) {
+    return jsonResponse(
+      {
+        success: false,
+        message: "合同文本内容过少，请至少输入 20 个字符。"
+      },
+      400
+    );
+  }
+
+  if (normalizedContractText.length > 50000) {
+    return jsonResponse(
+      {
+        success: false,
+        message: "合同文本内容过长，当前最多支持 50000 个字符。"
+      },
+      400
+    );
+  }
+
+  const result = await reviewContract({
+    env,
+    contractTitle: normalizeOptionalText(contractTitle, 300),
+    contractText: normalizedContractText
+  });
+
+  return jsonResponse(
+    {
+      success: true,
+      message: "合同审核完成。",
+      data: result
+    },
+    201
+  );
+}
+
 function normalizeLegalSource(row) {
   return {
     id: row.id,
@@ -964,7 +1479,9 @@ async function databaseHealth(env) {
           (SELECT COUNT(*) FROM legal_sources) AS legalSourceCount,
           (SELECT COUNT(*) FROM rights_guides) AS rightsGuideCount,
           (SELECT COUNT(*) FROM risk_rules) AS riskRuleCount,
-          (SELECT COUNT(*) FROM jd_reviews) AS jdReviewCount
+          (SELECT COUNT(*) FROM jd_reviews) AS jdReviewCount,
+          (SELECT COUNT(*) FROM contract_rules) AS contractRuleCount,
+          (SELECT COUNT(*) FROM contract_reviews) AS contractReviewCount
       `
     )
     .first();
@@ -979,7 +1496,9 @@ async function databaseHealth(env) {
       legalSourceCount: result.legalSourceCount,
       rightsGuideCount: result.rightsGuideCount,
       riskRuleCount: result.riskRuleCount,
-      jdReviewCount: result.jdReviewCount
+      jdReviewCount: result.jdReviewCount,
+      contractRuleCount: result.contractRuleCount,
+      contractReviewCount: result.contractReviewCount
     }
   });
 }
@@ -1137,6 +1656,20 @@ async function getRightsGuideByCode(env, guideCode) {
 
 async function handleApiRequest(request, env) {
   const url = new URL(request.url);
+
+  if (url.pathname === "/api/contract-reviews") {
+    if (request.method !== "POST") {
+      return jsonResponse(
+        {
+          success: false,
+          message: "合同审核接口仅支持 POST 请求。"
+        },
+        405
+      );
+    }
+
+    return createContractReview(request, env);
+  }
 
   if (url.pathname === "/api/jd-reviews") {
     if (request.method !== "POST") {
