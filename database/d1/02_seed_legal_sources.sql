@@ -1,0 +1,60 @@
+﻿DELETE FROM legal_sources;
+
+INSERT INTO legal_sources
+(
+  title,
+  issuing_authority,
+  document_number,
+  article_number,
+  source_type,
+  source_url,
+  published_date,
+  effective_date,
+  retrieved_at,
+  citation_text,
+  content_hash,
+  source_status
+)
+VALUES
+(
+  '中华人民共和国劳动合同法',
+  '全国人民代表大会常务委员会',
+  NULL,
+  '第九条',
+  'law',
+  'https://fgk.chinatax.gov.cn/zcfgk/c100009/c5193025/content.html',
+  '2012-12-28',
+  NULL,
+  CURRENT_TIMESTAMP,
+  '第九条涉及招用劳动者时扣押居民身份证及其他证件、要求提供担保或者以其他名义收取财物等情形。平台仅在适用劳动关系可能成立时提供风险提示，不直接代替法律关系认定。',
+  NULL,
+  'current'
+),
+(
+  '教育部等八部门关于印发《职业学校学生实习管理规定》的通知',
+  '教育部等八部门',
+  '教职成〔2021〕4号',
+  NULL,
+  'regulation',
+  'https://www.moe.gov.cn/srcsite/A07/moe_737/s3876_qt/202201/t20220121_595529.html',
+  '2022-01-21',
+  NULL,
+  CURRENT_TIMESTAMP,
+  '该规定直接适用于职业学校学生实习。平台在普通高校学生或其他实习场景中仅将相关内容作为风险核实参考，不直接据此作出违法结论。',
+  NULL,
+  'current'
+),
+(
+  '三部门发布求职招聘十个典型陷阱防范提示',
+  '人力资源社会保障部、中央网信办、公安部',
+  NULL,
+  NULL,
+  'official_guidance',
+  'https://chrm.mohrss.gov.cn/%E4%B8%89%E9%83%A8%E9%97%A8%E5%8F%91%E5%B8%83%E6%B1%82%E8%81%8C%E6%8B%9B%E8%81%98%E5%8D%81%E4%B8%AA%E5%85%B8%E5%9E%8B%E9%99%B7%E9%98%B1%E9%98%B2%E8%8C%83%E6%8F%90%E7%A4%BA/',
+  '2023-06-16',
+  NULL,
+  CURRENT_TIMESTAMP,
+  '官方提示总结了招聘黑中介、入职前收费、招聘套路贷、付费培训及收费内推等典型求职风险。平台将其用于风险识别和核实建议，不将风险提示直接等同于违法认定。',
+  NULL,
+  'current'
+);

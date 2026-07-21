@@ -1,9 +1,19 @@
 ﻿{
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "zhifamingxing-web",
-  "compatibility_date": "2026-07-12",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "single-page-application"
-  }
+        "$schema": "./node_modules/wrangler/config-schema.json",
+        "name": "zhifamingxing",
+        "main": "src/worker/index.js",
+        "compatibility_date": "2026-07-12",
+        "assets": {
+                "directory": "./dist",
+                "binding": "ASSETS",
+                "not_found_handling": "single-page-application"
+        },
+        "d1_databases": [
+                {
+                        "binding": "zhifamingxing_db",
+                        "database_name": "zhifamingxing-db",
+                        "database_id": "4429f7f6-b29c-4178-9f6c-8c56cee10874",
+                        "remote": true
+                }
+        ]
 }
