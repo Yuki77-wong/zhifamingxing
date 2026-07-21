@@ -791,7 +791,21 @@ async function saveJdReview({
 const AI_JD_MODEL = "@cf/meta/llama-3.2-1b-instruct";
 
 const AI_SUSPICIOUS_JD_PATTERN =
-  /培训|培训费|培训费用|缴费|缴纳|交费|交钱|收费|费用|押金|保证金|贷款|分期|证件|身份证|原件|无工资|没工资|无薪|无补贴|转正|保就业|包就业|内推|offer/u;
+  /培训费|培训费用|缴费|缴纳|交费|交钱|收费|费用|押金|保证金|贷款|分期|证件|身份证|原件|无工资|没工资|无薪|无补贴|保就业|包就业|内推|offer/u;
+
+const JD_CLEAR_SAFE_PATTERNS = [
+  /(?:无需|无须|不需|不须|不用|不需要|不必|不收取|不会收取|免收|不得收取|禁止收取)[^。！？!?；;\n]{0,24}(?:培训费|培训费用|课程费|费用|押金|保证金|贷款|分期|内推费|服务费)/u,
+  /(?:培训费|培训费用|课程费|费用|押金|保证金|贷款|分期|内推费|服务费)[^。！？!?；;\n]{0,24}(?:无需|无须|不需|不须|不用|不需要|不必|不收取|不会收取|免收|不得收取|禁止收取)/u,
+  /(?:免费培训|培训免费|岗前培训免费|免收培训费|培训费用由公司承担|公司承担培训费|公司承担培训费用)/u,
+  /(?:实习期间|实习期|实习阶段)[^。！？!?；;\n]{0,20}(?:有工资|发工资|有薪|有补贴|发放补贴|提供补贴|\d+\s*元\s*\/\s*月|\d+\s*\/\s*月)/u,
+  /(?:转正后|转正薪资|转正工资)[^。！？!?；;\n]{0,20}(?:\d+\s*元\s*\/\s*月|\d+\s*\/\s*月|有五险一金|缴纳五险一金)/u
+];
+
+function removeClearlySafeJdExpressions(inputText) {
+  return JD_CLEAR_SAFE_PATTERNS.reduce((text, pattern) => {
+    return text.replace(pattern, "");
+  }, inputText);
+}
 
 const AI_SEVERITY_SCORES = {
   critical: 92,
@@ -921,6 +935,80 @@ function createAiMatchedPattern({
   return rawText;
 }
 
+
+function hasClearSafeJdExpression(text) {
+  if (!text) {
+    return false;
+  }
+
+  return JD_CLEAR_SAFE_PATTERNS.some((pattern) => {
+    return pattern.test(text);
+  });
+}
+
+function hasPositiveSalaryExpression(text) {
+  return /(?:实习期间|实习期|实习阶段)?[^。！？!?；;\n]{0,16}(?:\d+\s*元\s*\/\s*月|\d+\s*\/\s*月|月薪\s*\d+|薪资\s*\d+|补贴\s*\d+|有工资|有薪|有补贴|发放工资|发放补贴)/u.test(text);
+}
+
+function isPlaceholderAiText(text) {
+  return /必须逐字摘录|不得写占位词|用户应该如何核实|为什么有风险|证据短句|具体证据/u.test(String(text || ""));
+}
+
+function isUnsupportedAiJdFinding({
+  inputText,
+  item,
+  evidenceText
+}) {
+  const combinedText = [
+    item.riskCategory,
+    item.severity,
+    item.evidenceText,
+    item.reason,
+    item.verificationAdvice,
+    evidenceText
+  ].join(" ");
+
+  const evidenceContext = evidenceText || "";
+
+  if (
+    isPlaceholderAiText(item.reason)
+    || isPlaceholderAiText(item.verificationAdvice)
+  ) {
+    return true;
+  }
+
+  if (
+    hasClearSafeJdExpression(evidenceContext)
+    || hasClearSafeJdExpression(inputText)
+  ) {
+    const hasHardRisk =
+      /(?:需要|需|须|必须|要求|应当|请|先|入职前|上岗前|报到前|录用前)[^。！？!?；;\n]{0,24}(?:缴纳|交纳|支付|交费|缴费|自费|自行承担|办理|申请)[^。！？!?；;\n]{0,28}(?:培训费|培训费用|课程费|押金|保证金|贷款|分期|内推费|服务费)/u.test(inputText)
+      || /(?:无工资|没有工资|不发工资|无薪|无报酬|没有报酬|无补贴|没有补贴|不发补贴)/u.test(inputText)
+      || /(?:扣押|扣留|上交|长期保管|统一保管)[^。！？!?；;\n]{0,20}(?:身份证|证件原件|学生证|毕业证|原件)/u.test(inputText);
+
+    if (!hasHardRisk) {
+      return true;
+    }
+  }
+
+  if (
+    /无工资|无薪|无报酬|无补贴|实习报酬缺失/u.test(combinedText)
+    && hasPositiveSalaryExpression(evidenceContext)
+    && !/(?:无工资|没有工资|不发工资|无薪|无报酬|没有报酬|无补贴|没有补贴|不发补贴)/u.test(evidenceContext)
+  ) {
+    return true;
+  }
+
+  if (
+    /付费培训|培训费|培训费用|课程费|培训贷款|培训贷|培训分期/u.test(combinedText)
+    && /(?:无需|无须|不需|不须|不用|不需要|不必|不收取|不会收取|免收|不得收取|禁止收取)[^。！？!?；;\n]{0,24}(?:培训费|培训费用|课程费|费用|贷款|分期)/u.test(evidenceContext)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 function normalizeAiFindings({ inputText, aiResult }) {
   if (
     !aiResult
@@ -949,6 +1037,16 @@ function normalizeAiFindings({ inputText, aiResult }) {
     ].join(":");
 
     if (findingKeys.has(findingKey)) {
+      continue;
+    }
+
+    if (
+      isUnsupportedAiJdFinding({
+        inputText,
+        item,
+        evidenceText: evidenceRange.text
+      })
+    ) {
       continue;
     }
 
@@ -1001,7 +1099,7 @@ const JD_SEMANTIC_RISK_DETECTORS = [
     severity: "critical",
     riskScore: 92,
     pattern: /(?:入职前|上岗前|岗前|报到前|录用前|转正前)?[^。！？!?；;\n]{0,24}(?:培训|课程|训练营)[^。！？!?；;\n]{0,32}(?:缴纳|交纳|支付|交费|缴费|收费|自费|承担|培训费|费用)[^。！？!?；;\n]{0,20}(?:\d+\s*元)?|(?:缴纳|交纳|支付|交费|缴费|收费)[^。！？!?；;\n]{0,24}(?:培训费|培训费用|课程费)/u,
-    negativePattern: /(?:免费培训|培训免费|不收取培训费|无需缴纳培训费|无需支付培训费|公司承担培训费|培训费由公司承担)/u,
+    negativePattern: /(?:免费培训|培训免费|不收取培训费|不需缴纳培训费|不需支付培训费|不需要缴纳培训费|不需要支付培训费|不用缴纳培训费|不用支付培训费|免收培训费|无需缴纳培训费|无需支付培训费|公司承担培训费|培训费由公司承担)/u,
     reason: "岗位信息将入职、转正或岗位机会与个人支付培训费用绑定，存在招聘收费、招转培或付费培训风险。",
     verificationAdvice: "请核实招聘主体和培训主体是否一致、收费依据、退款规则、是否承诺录用，以及是否要求签署培训贷款或分期协议。"
   },
@@ -1077,7 +1175,31 @@ function createJdSemanticFallbackFindings({
       text: matchedText
     };
 
-    if (detector.negativePattern.test(evidenceRange.text)) {
+    const sentenceRange = findSentenceRange(
+      inputText,
+      evidenceStart,
+      evidenceEnd
+    );
+
+    const contextRange = createContextRange(
+      inputText,
+      evidenceStart,
+      evidenceEnd,
+      40
+    );
+
+    const contextText = inputText.slice(
+      contextRange.start,
+      contextRange.end
+    );
+
+    if (
+      detector.negativePattern.test(evidenceRange.text)
+      || detector.negativePattern.test(sentenceRange.text)
+      || detector.negativePattern.test(contextText)
+      || JD_CLEAR_SAFE_PATTERNS.some((pattern) => pattern.test(sentenceRange.text))
+      || JD_CLEAR_SAFE_PATTERNS.some((pattern) => pattern.test(contextText))
+    ) {
       continue;
     }
 
@@ -1337,7 +1459,7 @@ async function createJdReview(request, env) {
   );
 }
 
-const CONTRACT_ENGINE_VERSION = "contract-rule-engine-d1-0.1.0";
+const CONTRACT_ENGINE_VERSION = "contract-ai-hybrid-d1-0.2.0";
 
 const CONTRACT_FLEXIBLE_RULE_PATTERNS = {
   CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE: [
@@ -1716,6 +1838,384 @@ async function saveContractReview({
   return reviewId;
 }
 
+
+const CONTRACT_AI_SUSPICIOUS_PATTERN =
+  /押金|保证金|岗位保证金|实习押金|服装费|资料费|工牌费|设备押金|扣押|扣留|上交|统一保管|身份证|证件原件|毕业证|学生证|培训费|培训贷款|培训贷|分期|课程费|保录用|保就业|内推|服务费|违约金|赔偿/u;
+
+const CONTRACT_SEMANTIC_RISK_DETECTORS = [
+  {
+    baseRuleCode: "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE",
+    riskCategory: "入职前押金或财物担保",
+    pattern: /(?:甲方|公司|用人单位)?[^。！？!?；;\n]{0,12}(?:要求|需|须|应当|必须)?[^。！？!?；;\n]{0,8}(?:乙方|实习生|学生)?[^。！？!?；;\n]{0,8}(?:缴纳|交纳|支付|交付|付清)[^。！？!?；;\n]{0,20}(?:押金|保证金|岗位保证金|岗位押金|实习押金|服装费|资料费|工牌费|设备押金)|(?:押金|保证金|岗位保证金|岗位押金|实习押金)[^。！？!?；;\n]{0,24}(?:不退|暂扣|扣除|作为担保)/u,
+    negativePattern: /(?:不收取|无需缴纳|不需要缴纳|不得收取|禁止收取|不涉及|不包含)[^。！？!?；;\n]{0,20}(?:押金|保证金|费用|财物)/u,
+    reason: "合同条款将入职、实习或履约与押金、保证金、服装费、资料费等个人付费或财物担保绑定，存在收费或担保风险。",
+    advice: "请核实收费主体、收费依据、退款条件和是否为入职前必要条件；不要轻易支付押金、保证金或所谓工装资料费用。"
+  },
+  {
+    baseRuleCode: "CONTRACT_DOCUMENT_WITHHELD",
+    riskCategory: "证件原件扣押或长期保管",
+    pattern: /(?:身份证|身份证原件|毕业证|毕业证原件|学生证|学生证原件|证件原件)[^。！？!?；;\n]{0,24}(?:由甲方保管|由公司保管|统一保管|长期保管|暂存公司|交由公司保管|上交|扣押|扣留|离职后归还)|(?:扣押|扣留|上交|留存|统一保管|长期保管|暂存|代管)[^。！？!?；;\n]{0,20}(?:身份证|身份证原件|毕业证|毕业证原件|学生证|学生证原件|证件原件)/u,
+    negativePattern: /(?:仅|只)[^。！？!?；;\n]{0,8}(?:核验|查验|查看)[^。！？!?；;\n]{0,18}(?:身份证|证件|原件)|(?:核验|查验|查看)[^。！？!?；;\n]{0,18}(?:后|完毕后)?(?:立即|当场)?(?:归还|退还)/u,
+    reason: "合同条款涉及证件原件上交、扣押或长期保管，可能影响学生人身和求职自由，应作为重点风险核实。",
+    advice: "证件原件通常只应现场核验，不宜交由对方长期保管；请保留合同条款、沟通记录并要求对方说明依据。"
+  },
+  {
+    baseRuleCode: "CONTRACT_PAID_TRAINING_OR_LOAN",
+    riskCategory: "付费培训或培训贷款",
+    pattern: /(?:培训|课程|岗前培训)[^。！？!?；;\n]{0,24}(?:贷款|培训贷|分期|分期贷款|分期付款|分期支付|自费|自行承担|缴纳|交纳|支付|培训费|课程费)|(?:贷款|培训贷|分期|分期贷款|分期付款|分期支付)[^。！？!?；;\n]{0,24}(?:培训|课程|岗前培训)|(?:签署|办理|申请)[^。！？!?；;\n]{0,18}(?:培训借款协议|课程分期|助学分期|培训分期|培训贷款|培训贷)/u,
+    negativePattern: /(?:免费培训|培训免费|培训费用由公司承担|公司承担培训费用|不收取培训费|无需缴纳培训费|不办理培训贷款)/u,
+    reason: "合同条款将培训、课程、上岗或转正与个人付费、分期或贷款绑定，存在付费培训或培训贷风险。",
+    advice: "请核实培训是否为入职必要条件、是否承诺录用、是否存在贷款或分期协议、退款规则和违约责任。"
+  },
+  {
+    baseRuleCode: "CONTRACT_PAID_GUARANTEED_OFFER",
+    riskCategory: "付费保录用或收费内推",
+    pattern: /(?:付费|收费|缴费|交费|支付)[^。！？!?；;\n]{0,20}(?:保录用|保证录用|保证安排岗位|保就业|内推|内部推荐|保证拿到offer|保证拿到 offer)|(?:保录用|保证录用|保证安排岗位|保就业|内推|内部推荐|保证拿到offer|保证拿到 offer)[^。！？!?；;\n]{0,20}(?:收费|付费|服务费|费用|缴费|交费|支付)/u,
+    negativePattern: /(?:不收取|无需支付|免费|不提供)[^。！？!?；;\n]{0,18}(?:内推费|服务费|保录用费用|费用)/u,
+    reason: "合同条款将岗位、内推、录用或 offer 与服务费、内推费等个人付费绑定，存在收费保录用风险。",
+    advice: "请核实服务主体、收费依据、退款条件和承诺录用的真实性；不要轻信付费保 offer 或付费内推。"
+  }
+];
+
+function createContractLegalSourceFromRule(rule) {
+  return {
+    id: rule.legal_source_id,
+    title: rule.legal_title,
+    issuingAuthority: rule.legal_issuing_authority,
+    documentNumber: rule.legal_document_number,
+    articleNumber: rule.legal_article_number,
+    sourceType: rule.legal_source_type,
+    sourceUrl: rule.legal_source_url,
+    citationText: rule.legal_citation_text
+  };
+}
+
+function findContractRuleByCode(rules, ruleCode) {
+  return rules.find((rule) => rule.rule_code === ruleCode) || rules[0] || null;
+}
+
+function hasSimilarContractFinding(existingFindings, detector) {
+  return existingFindings.some((finding) => {
+    const combinedText = [
+      finding.ruleCode,
+      finding.ruleName,
+      finding.riskCategory,
+      finding.reason,
+      finding.advice
+    ].join(" ");
+
+    if (finding.ruleCode === detector.baseRuleCode) {
+      return true;
+    }
+
+    if (combinedText.includes(detector.riskCategory)) {
+      return true;
+    }
+
+    return false;
+  });
+}
+
+function createContractSemanticFallbackFindings({
+  inputText,
+  rules,
+  existingFindings
+}) {
+  const findings = [];
+
+  for (const detector of CONTRACT_SEMANTIC_RISK_DETECTORS) {
+    if (hasSimilarContractFinding(existingFindings, detector)) {
+      continue;
+    }
+
+    const match = detector.pattern.exec(inputText);
+
+    if (!match) {
+      continue;
+    }
+
+    const matchedText = match[0].trim();
+    const leadingTrimLength = match[0].length - match[0].trimStart().length;
+    const evidenceStart = match.index + leadingTrimLength;
+    const evidenceEnd = evidenceStart + matchedText.length;
+
+    const sentenceRange = findSentenceRange(
+      inputText,
+      evidenceStart,
+      evidenceEnd
+    );
+
+    if (detector.negativePattern.test(sentenceRange.text)) {
+      continue;
+    }
+
+    const sourceRule = findContractRuleByCode(
+      rules,
+      detector.baseRuleCode
+    );
+
+    if (!sourceRule) {
+      continue;
+    }
+
+    findings.push({
+      ruleId: sourceRule.id,
+      ruleCode: sourceRule.rule_code,
+      ruleName: sourceRule.rule_name,
+      riskCategory: detector.riskCategory || sourceRule.risk_category,
+      riskLevel: sourceRule.risk_level,
+      riskScore: Number(sourceRule.risk_score),
+      matchedText,
+      matchType: "semantic-fallback",
+      evidenceText: sentenceRange.text,
+      reason: detector.reason || sourceRule.reason,
+      advice: detector.advice || sourceRule.advice,
+      applicabilityNote: sourceRule.applicability_note,
+      confidence: 0.82,
+      legalSource: createContractLegalSourceFromRule(sourceRule),
+      source: "semantic"
+    });
+  }
+
+  return findings;
+}
+
+function shouldRunContractAiReview({
+  inputText,
+  findings
+}) {
+  if (!inputText || findings.length > 0) {
+    return false;
+  }
+
+  return CONTRACT_AI_SUSPICIOUS_PATTERN.test(inputText);
+}
+
+function normalizeContractAiRiskLevel(value) {
+  const normalized = String(value || "").toLowerCase();
+
+  if (["critical", "high", "medium", "low"].includes(normalized)) {
+    return normalized;
+  }
+
+  return "medium";
+}
+
+function findContractAiBaseRule({
+  rules,
+  item
+}) {
+  const text = [
+    item.riskCategory,
+    item.evidenceText,
+    item.reason,
+    item.advice,
+    item.verificationAdvice
+  ].join(" ");
+
+  if (/身份证|证件|原件|扣押|扣留|保管|上交/u.test(text)) {
+    return findContractRuleByCode(rules, "CONTRACT_DOCUMENT_WITHHELD");
+  }
+
+  if (/培训|课程|贷款|培训贷|分期|培训费|课程费/u.test(text)) {
+    return findContractRuleByCode(rules, "CONTRACT_PAID_TRAINING_OR_LOAN");
+  }
+
+  if (/保录用|保就业|offer|内推|内部推荐|服务费/u.test(text)) {
+    return findContractRuleByCode(rules, "CONTRACT_PAID_GUARANTEED_OFFER");
+  }
+
+  if (/押金|保证金|服装费|资料费|工牌费|设备押金|财物|担保/u.test(text)) {
+    return findContractRuleByCode(rules, "CONTRACT_UPFRONT_DEPOSIT_OR_GUARANTEE");
+  }
+
+  return rules[0] || null;
+}
+
+function locateContractAiEvidence(inputText, evidenceText) {
+  const rawEvidence = trimAiText(evidenceText, 140, "");
+
+  if (
+    rawEvidence
+    && !rawEvidence.includes("原文中的证据")
+    && !rawEvidence.includes("证据短句")
+    && !rawEvidence.includes("具体证据")
+  ) {
+    const start = inputText.indexOf(rawEvidence);
+
+    if (start !== -1) {
+      return findSentenceRange(
+        inputText,
+        start,
+        start + rawEvidence.length
+      );
+    }
+  }
+
+  return findSuspiciousSentence(inputText);
+}
+
+function normalizeContractAiFindings({
+  inputText,
+  aiResult,
+  rules
+}) {
+  if (
+    !aiResult
+    || aiResult.hasRisk !== true
+    || !Array.isArray(aiResult.findings)
+  ) {
+    return [];
+  }
+
+  const findings = [];
+  const findingKeys = new Set();
+
+  for (const item of aiResult.findings) {
+    const sourceRule = findContractAiBaseRule({
+      rules,
+      item
+    });
+
+    if (!sourceRule) {
+      continue;
+    }
+
+    const riskLevel = normalizeContractAiRiskLevel(item.riskLevel || item.severity);
+    const evidenceRange = locateContractAiEvidence(
+      inputText,
+      item.evidenceText
+    );
+
+    const riskCategory = trimAiText(
+      item.riskCategory,
+      80,
+      sourceRule.risk_category
+    );
+
+    const findingKey = [
+      sourceRule.rule_code,
+      riskCategory,
+      evidenceRange.start,
+      evidenceRange.end
+    ].join(":");
+
+    if (findingKeys.has(findingKey)) {
+      continue;
+    }
+
+    findingKeys.add(findingKey);
+
+    findings.push({
+      ruleId: sourceRule.id,
+      ruleCode: sourceRule.rule_code,
+      ruleName: sourceRule.rule_name,
+      riskCategory,
+      riskLevel,
+      riskScore: Number(sourceRule.risk_score),
+      matchedText: createAiMatchedPattern({
+        rawEvidenceText: item.evidenceText,
+        fallbackText: evidenceRange.text
+      }),
+      matchType: "contract-ai-semantic",
+      evidenceText: evidenceRange.text,
+      reason: trimAiText(
+        item.reason,
+        300,
+        sourceRule.reason
+      ),
+      advice: trimAiText(
+        item.advice || item.verificationAdvice,
+        300,
+        sourceRule.advice
+      ),
+      applicabilityNote: sourceRule.applicability_note,
+      confidence: 0.76,
+      legalSource: createContractLegalSourceFromRule(sourceRule),
+      source: "ai"
+    });
+
+    if (findings.length >= 3) {
+      break;
+    }
+  }
+
+  return findings;
+}
+
+async function analyzeContractWithAI({
+  env,
+  inputText,
+  contractTitle,
+  rules
+}) {
+  if (!env.AI) {
+    return [];
+  }
+
+  const prompt = [
+    "你是大学生实习合同风险审查助手。",
+    "任务：判断下面实习/兼职合同条款是否存在风险。",
+    "重点识别：押金保证金、入职前收费、扣押证件原件、付费培训、培训贷款、分期课程、付费保录用、收费内推、异常违约金。",
+    "如果同一段文本里同时出现多个风险，必须拆成多条 findings。",
+    "要求：只返回 JSON，不要输出 Markdown，不要输出解释性段落。",
+    "JSON 格式如下：",
+    "{",
+    "  \"hasRisk\": true,",
+    "  \"overallLevel\": \"critical\",",
+    "  \"findings\": [",
+    "    {",
+    "      \"riskCategory\": \"押金或保证金风险\",",
+    "      \"riskLevel\": \"critical\",",
+    "      \"evidenceText\": \"必须逐字摘录合同原文中的具体证据，不得写占位词\",",
+    "      \"reason\": \"为什么有风险\",",
+    "      \"advice\": \"用户应该如何核实或处理\"",
+    "    }",
+    "  ]",
+    "}",
+    "没有风险时返回：{\"hasRisk\":false,\"overallLevel\":\"low\",\"findings\":[]}",
+    "",
+    `合同标题：${contractTitle || "未填写"}`,
+    `合同原文：${inputText.slice(0, 3500)}`
+  ].join("\n");
+
+  try {
+    const aiResponse = await env.AI.run(
+      AI_JD_MODEL,
+      {
+        messages: [
+          {
+            role: "system",
+            content: "你只做合同风险识别和结构化输出，不提供最终法律结论。"
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.1,
+        max_tokens: 800
+      }
+    );
+
+    const responseText =
+      typeof aiResponse === "string"
+        ? aiResponse
+        : aiResponse?.response || aiResponse?.result?.response || "";
+
+    const aiResult = parseAiJsonResponse(responseText);
+
+    return normalizeContractAiFindings({
+      inputText,
+      aiResult,
+      rules
+    });
+  } catch (error) {
+    console.error("Contract AI semantic review failed:", error);
+    return [];
+  }
+}
+
 async function reviewContract({
   env,
   contractTitle,
@@ -1725,12 +2225,40 @@ async function reviewContract({
   const normalizedContractText = normalizeContractText(contractText);
   const rules = await loadEnabledContractRules(env);
 
-  const findings = rules.flatMap((rule) => {
+  const ruleFindings = rules.flatMap((rule) => {
     return analyzeContractRule({
       inputText: normalizedContractText,
       rule
     });
   });
+
+  const semanticFindings = createContractSemanticFallbackFindings({
+    inputText: normalizedContractText,
+    rules,
+    existingFindings: ruleFindings
+  });
+
+  const deterministicFindings = [
+    ...ruleFindings,
+    ...semanticFindings
+  ];
+
+  const aiFindings = shouldRunContractAiReview({
+    inputText: normalizedContractText,
+    findings: deterministicFindings
+  })
+    ? await analyzeContractWithAI({
+        env,
+        inputText: normalizedContractText,
+        contractTitle,
+        rules
+      })
+    : [];
+
+  const findings = [
+    ...deterministicFindings,
+    ...aiFindings
+  ];
 
   const overallScore = combineRiskScores(findings);
 
@@ -1759,11 +2287,13 @@ async function reviewContract({
     overallScore,
     overallLevel,
     confidence: overallConfidence,
-    confidenceNote: "confidence 仅代表当前规则匹配的置信提示，不代表经过人工标注测试得到的真实准确率。",
+    confidenceNote: "confidence 仅代表当前规则、语义和 AI 复核的置信提示，不代表经过人工标注测试得到的真实准确率。",
     findingCount: findings.length,
     summary: createContractSummary({
       findingCount: findings.length
     }),
+    aiReviewUsed: aiFindings.length > 0,
+    semanticReviewUsed: semanticFindings.length > 0,
     processingTimeMs,
     findings: findings.map((finding) => {
       return {
@@ -1773,11 +2303,13 @@ async function reviewContract({
         riskLevel: finding.riskLevel,
         riskScore: finding.riskScore,
         matchedText: finding.matchedText,
+        matchType: finding.matchType,
         evidenceText: finding.evidenceText,
         reason: finding.reason,
         advice: finding.advice,
         applicabilityNote: finding.applicabilityNote,
         confidence: finding.confidence,
+        source: finding.source || "rule",
         legalSource: finding.legalSource
       };
     })
