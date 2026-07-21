@@ -27,3 +27,5 @@ temp/
 # Operating system files
 .DS_Store
 Thumbs.db
+# Cloudflare Wrangler local state
+web/.wrangler/
