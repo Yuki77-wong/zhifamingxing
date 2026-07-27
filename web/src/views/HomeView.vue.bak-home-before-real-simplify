@@ -58,7 +58,100 @@ onMounted(() => {
 
   <div class="home-page">
 
+    <header class="site-header">
 
+      <div class="page-container header-content">
+
+        <RouterLink
+          class="brand"
+          to="/"
+        >
+
+          <div class="brand-logo">
+
+            智
+
+          </div>
+
+
+          <div class="brand-text">
+
+            <strong>
+
+              智法明行
+
+            </strong>
+
+
+            <span>
+
+              大学生实习权益智能助手
+
+            </span>
+
+          </div>
+
+        </RouterLink>
+
+
+        <nav class="navigation">
+
+          <RouterLink to="/">
+
+            首页
+
+          </RouterLink>
+
+
+          <RouterLink to="/jd-review">
+
+            岗位筛查
+
+          </RouterLink>
+
+
+          <a href="#features">
+
+            公开岗位
+
+          </a>
+
+
+          <RouterLink to="/contract-review">
+
+            合同审核
+
+          </RouterLink>
+
+
+          <RouterLink to="/legal-knowledge">
+
+            权益知识库
+
+          </RouterLink>
+
+
+          <RouterLink to="/rights-guides">
+
+            维权指引
+
+          </RouterLink>
+
+        </nav>
+
+
+        <RouterLink
+          class="header-button"
+          to="/jd-review"
+        >
+
+          免费检测
+
+        </RouterLink>
+
+      </div>
+
+    </header>
 
 
     <main>
@@ -89,8 +182,20 @@ onMounted(() => {
             </h1>
 
 
+            <p>
 
-<div class="hero-buttons">
+              从岗位 JD 风险识别、
+              合同条款辅助审核，
+
+              到权益知识与维权流程，
+
+              智法明行为大学生提供
+              可追溯、有依据的实习风险提示。
+
+            </p>
+
+
+            <div class="hero-buttons">
 
               <RouterLink
                 class="primary-button"
@@ -362,8 +467,24 @@ onMounted(() => {
 
         <div class="page-container">
 
-                    <div class="section-heading compact-heading">
-            <h2>核心功能</h2>
+          <div class="section-heading">
+
+            <span>
+
+              CORE FEATURES
+
+            </span>
+
+
+            <h2>
+
+              覆盖大学生实习过程中的关键权益场景
+
+            </h2>
+
+
+
+
           </div>
 
 
@@ -395,7 +516,13 @@ onMounted(() => {
               </h3>
 
 
+              <p>
 
+                对岗位 JD
+                进行风险表达识别、
+                上下文分析和否定语境过滤。
+
+              </p>
 
 
               <strong>
@@ -433,7 +560,13 @@ onMounted(() => {
               </h3>
 
 
+              <p>
 
+                辅助识别薪酬、
+                工时、违约责任和
+                单方免责等风险条款。
+
+              </p>
 
 
               <strong>
@@ -471,7 +604,14 @@ onMounted(() => {
               </h3>
 
 
+              <p>
 
+                展示真实法律、
+                部门规定和官方提示，
+
+                并保留原文链接与适用说明。
+
+              </p>
 
 
               <strong>
@@ -509,7 +649,13 @@ onMounted(() => {
               </h3>
 
 
+              <p>
 
+                根据问题类型提供
+                证据整理、沟通处理
+                和官方渠道指引。
+
+              </p>
 
 
               <strong>
@@ -527,7 +673,122 @@ onMounted(() => {
       </section>
 
 
+      <section class="data-section">
 
+        <div class="page-container data-content">
+
+          <div>
+
+            <span>
+
+              REAL AND TRACEABLE
+
+            </span>
+
+
+            <h2>
+
+              真实数据，
+
+              不是为了演示而虚构的数据
+
+            </h2>
+
+
+            <p>
+
+              岗位风险规则、
+              官方依据和审查记录均保存于 MySQL。
+
+              平台继续扩充数据时，
+              每条正式内容都会保留来源信息和审核状态。
+
+            </p>
+
+          </div>
+
+
+          <div class="data-points">
+
+            <div>
+
+              <b>
+
+                01
+
+              </b>
+
+
+              <strong>
+
+                官方来源
+
+              </strong>
+
+
+              <span>
+
+                保留原始网址和发布机构
+
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+
+                02
+
+              </b>
+
+
+              <strong>
+
+                原文证据
+
+              </strong>
+
+
+              <span>
+
+                风险判断展示命中的 JD 原文
+
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <b>
+
+                03
+
+              </b>
+
+
+              <strong>
+
+                谨慎结论
+
+              </strong>
+
+
+              <span>
+
+                风险提示不直接替代法律认定
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
 
     </main>
 
@@ -1902,183 +2163,5 @@ onMounted(() => {
   }
 
 }
-
-
-
-/* homepage compact heading fix */
-.section-heading.compact-heading {
-  margin-bottom: 34px;
-  text-align: center;
-}
-
-.section-heading.compact-heading h2 {
-  margin: 0;
-  font-size: clamp(32px, 3.2vw, 46px);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-}
-
-.features {
-  padding-top: 72px;
-}
-
-/* core-feature-cleanup:start */
-.features {
-  padding-top: 52px !important;
-  padding-bottom: 88px !important;
-}
-
-.section-heading.compact-heading {
-  margin-bottom: 34px !important;
-  text-align: center !important;
-}
-
-.section-heading.compact-heading h2 {
-  margin: 0 !important;
-  font-size: clamp(40px, 4.2vw, 64px) !important;
-  line-height: 1.08 !important;
-  letter-spacing: -0.04em !important;
-}
-
-.features [class*="grid"] {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 26px !important;
-  align-items: stretch !important;
-}
-
-@media (max-width: 1280px) {
-  .features [class*="grid"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .features [class*="grid"] {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-.features [class*="card"] {
-  min-height: 300px !important;
-  padding: 30px 28px !important;
-  border-radius: 28px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-}
-
-.features [class*="card"] > *:last-child {
-  margin-top: auto !important;
-}
-
-.features [class*="icon"] {
-  width: 64px !important;
-  height: 64px !important;
-  font-size: 30px !important;
-  margin-bottom: 18px !important;
-}
-
-.features [class*="status"],
-.features [class*="badge"] {
-  font-size: 12px !important;
-  padding: 7px 12px !important;
-  border-radius: 999px !important;
-}
-
-.features h3,
-.features [class*="title"] {
-  font-size: 20px !important;
-  line-height: 1.35 !important;
-  margin: 12px 0 18px !important;
-  font-weight: 700 !important;
-}
-
-.features p {
-  font-size: 15px !important;
-  line-height: 1.75 !important;
-  color: #6f7c96 !important;
-}
-
-.features a {
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  line-height: 1.4 !important;
-}
-
-.features .section-heading {
-  margin-bottom: 34px !important;
-}
-/* core-feature-cleanup:end */
-
-
-/* feature-card-safe-tune:start */
-.features {
-  padding-top: 34px !important;
-  padding-bottom: 72px !important;
-}
-
-.features .section-heading,
-.features .section-heading.compact-heading {
-  margin-bottom: 32px !important;
-}
-
-.features .feature-grid {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 24px !important;
-  align-items: stretch !important;
-}
-
-.features .feature-card {
-  min-height: 260px !important;
-  padding: 34px 30px !important;
-  border-radius: 28px !important;
-  text-decoration: none !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-}
-
-.features .feature-icon {
-  width: 112px !important;
-  height: 112px !important;
-  border-radius: 28px !important;
-  font-size: 68px !important;
-  line-height: 1 !important;
-  margin-bottom: 28px !important;
-  flex-shrink: 0 !important;
-}
-
-.features .feature-card h3 {
-  margin: 0 !important;
-  font-size: 22px !important;
-  line-height: 1.35 !important;
-  font-weight: 800 !important;
-  color: #101a33 !important;
-  text-decoration: underline !important;
-  text-underline-offset: 6px !important;
-  text-decoration-thickness: 1.5px !important;
-}
-
-.features .feature-status,
-.features .feature-card p,
-.features .feature-card strong {
-  display: none !important;
-}
-
-@media (max-width: 1280px) {
-  .features .feature-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .features .feature-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-/* feature-card-safe-tune:end */
 
 </style>

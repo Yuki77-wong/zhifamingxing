@@ -251,7 +251,83 @@ onMounted(
 
   <div class="detail-page">
 
+    <header class="site-header">
 
+      <div class="header-container">
+
+        <RouterLink
+          class="brand"
+          to="/"
+        >
+
+          <span class="brand-logo">
+
+            智
+
+          </span>
+
+
+          <span class="brand-text">
+
+            <strong>
+
+              智法明行
+
+            </strong>
+
+
+            <small>
+
+              大学生实习权益智能助手
+
+            </small>
+
+          </span>
+
+        </RouterLink>
+
+
+        <nav class="navigation">
+
+          <RouterLink to="/">
+
+            首页
+
+          </RouterLink>
+
+
+          <RouterLink to="/jd-review">
+
+            岗位筛查
+
+          </RouterLink>
+
+
+          <RouterLink to="/contract-review">
+
+            合同审核
+
+          </RouterLink>
+
+
+          <RouterLink to="/legal-knowledge">
+
+            权益知识库
+
+          </RouterLink>
+
+
+          <RouterLink to="/rights-guides">
+
+            维权指引
+
+          </RouterLink>
+
+        </nav>
+
+      </div>
+
+    </header>
 
 
     <main class="page-container">
