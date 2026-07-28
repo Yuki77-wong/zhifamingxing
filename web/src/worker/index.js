@@ -1,4 +1,4 @@
-const ENGINE_VERSION = "rule-ai-hybrid-d1-0.2.0";
+const ENGINE_VERSION = "gemini-jd-review-1.0.0";
 
 const SENTENCE_BOUNDARIES = new Set([
   "。",
@@ -498,16 +498,24 @@ function determineOverallLevel({ textLength, overallScore, findings }) {
   return "low";
 }
 
-function createSummary({ overallLevel, findingCount }) {
+function createSummary({
+  overallLevel,
+  findingCount,
+  reviewUnavailable = false
+}) {
+  if (reviewUnavailable) {
+    return "智能审查服务暂未完成有效判断，请稍后重试。请勿依据本次结果认定岗位安全。";
+  }
+
   if (overallLevel === "insufficient_information") {
-    return "当前 JD 信息较少，暂时不足以完成可靠审查。";
+    return "当前 JD 信息不足，暂时无法形成可靠判断。请补充招聘主体、岗位职责、薪资待遇、工作时间及收费说明。";
   }
 
   if (findingCount === 0) {
-    return "暂未发现当前规则库覆盖的明显高风险表达。该结果不代表岗位绝对安全，仍需核实薪资、工时、工作内容和用工主体。";
+    return "本次智能审查暂未发现明显高风险表达。该结果不代表岗位绝对安全，仍需进一步核实招聘主体、薪资待遇、工作内容和协议条款。";
   }
 
-  return `共发现 ${findingCount} 项需要关注的风险线索。`;
+  return `本次智能审查共发现 ${findingCount} 项需要关注的风险线索。`;
 }
 
 function createRuleCandidates({ inputText, rule, positivePatterns }) {
@@ -698,6 +706,35 @@ async function loadEnabledRules(env) {
     .all();
 
   return result.results;
+}
+
+
+
+function sanitizeFindingForD1(finding) {
+  return {
+    ruleId: finding?.ruleId ?? null,
+    ruleCode: finding?.ruleCode ?? "UNKNOWN_RULE",
+    ruleName: finding?.ruleName ?? "未命名风险",
+    riskCategory: finding?.riskCategory ?? "未分类风险",
+    severity: finding?.severity ?? "medium",
+    riskScore: finding?.riskScore ?? 62,
+    matchedPattern: finding?.matchedPattern ?? finding?.evidenceText ?? "",
+    matchType: finding?.matchType ?? "semantic",
+    evidenceText: finding?.evidenceText ?? "",
+    evidenceStart: finding?.evidenceStart ?? 0,
+    evidenceEnd: finding?.evidenceEnd ?? 0,
+    reason: finding?.reason ?? "系统识别到该表达可能存在实习求职风险，需要进一步核实。",
+    verificationAdvice: finding?.verificationAdvice ?? "建议核实招聘主体、收费依据、合同条款和沟通记录。",
+    confidence: finding?.confidence ?? 0.8,
+    legalSource: finding?.legalSource ?? null,
+    source: finding?.source ?? "gemini"
+  };
+}
+
+function sanitizeFindingsForD1(findings) {
+  return Array.isArray(findings)
+    ? findings.map(sanitizeFindingForD1)
+    : [];
 }
 
 async function saveJdReview({
@@ -1299,6 +1336,327 @@ async function analyzeJdWithAI({
   }
 }
 
+
+
+const GEMINI_JD_MODEL = "gemini-3.5-flash-lite";
+
+function shouldRunGeminiJdReview({ inputText }) {
+  return typeof inputText === "string" && inputText.trim().length >= 10;
+}
+
+function createGeminiJdPrompt({ inputText, jobTitle, companyName, deterministicFindings }) {
+  const candidateSummary = deterministicFindings.length > 0
+    ? deterministicFindings.slice(0, 6).map((finding, index) => {
+        return [
+          "候选风险 " + (index + 1) + "：",
+          "类别：" + (finding.riskCategory || finding.ruleName || "未分类"),
+          "等级：" + (finding.severity || "medium"),
+          "证据：" + (finding.evidenceText || ""),
+          "原因：" + (finding.reason || "")
+        ].join("\n");
+      }).join("\n\n")
+    : "无规则候选风险。";
+
+  const noRiskSchema = [
+    "{",
+    "  \"hasRisk\": false,",
+    "  \"overallLevel\": \"low\",",
+    "  \"findings\": [],",
+    "  \"safeSignals\": [",
+    "    {",
+    "      \"type\": \"NO_FEE\",",
+    "      \"evidenceText\": \"必须逐字摘录 JD 原文\",",
+    "      \"reason\": \"为什么说明没有风险\"",
+    "    }",
+    "  ]",
+    "}"
+  ].join("\n");
+
+  const riskSchema = [
+    "{",
+    "  \"hasRisk\": true,",
+    "  \"overallLevel\": \"critical\",",
+    "  \"findings\": [",
+    "    {",
+    "      \"riskCategory\": \"付费培训与入职绑定\",",
+    "      \"severity\": \"critical\",",
+    "      \"evidenceText\": \"必须逐字摘录 JD 原文中的风险证据\",",
+    "      \"reason\": \"为什么有风险\",",
+    "      \"verificationAdvice\": \"用户应该如何核实\"",
+    "    }",
+    "  ],",
+    "  \"safeSignals\": []",
+    "}"
+  ].join("\n");
+
+  return [
+    "你是大学生实习岗位 JD 风险语义裁决器。",
+    "你的任务不是做开放式法律咨询，而是判断原文中是否真的存在实习求职风险行为。",
+    "重点识别：入职前收费、培训费、服务费、设备费、押金保证金、培训贷款、扣押证件、收费内推、实习无工资、转正机会与付费绑定。",
+    "特别重要：如果原文明确表达不收费、不收押金、不扣押证件、培训免费、费用由公司承担，则不能因为出现风险词就判风险。",
+    "必须区分：'不会以培训费、押金等名义收取任何费用' 是安全承诺，不是收费风险。",
+    "必须区分：'仅核验身份证，不扣押原件' 是安全承诺，不是证件扣押风险。",
+    "不得编造原文没有的信息。",
+    "evidenceText 必须逐字来自 JD 原文，不能改写，不能概括。",
+    "一个 finding 只能表示一种独立风险；收费、扣押证件和报酬缺失必须分别输出。",
+    "同一句中存在多种风险时，必须拆分成多条 findings，不得合并。",
+    "不得使用违法、违规、诈骗、涉嫌违反等确定性法律定性。",
+    "reason 应使用存在风险线索、需要进一步核实等审慎措辞。",
+    "verificationAdvice 不得直接命令用户举报或作出绝对判断。",
+    "建议应优先包括暂停付款、核实主体与协议、保留证据，必要时咨询学校就业部门、当地人力资源社会保障部门或专业人士。",
+    "如果没有风险，必须返回 hasRisk:false 且 findings 为空数组。",
+    "只返回 JSON，不要 Markdown，不要解释性段落。",
+    "",
+    "无风险 JSON 格式：",
+    noRiskSchema,
+    "",
+    "有风险 JSON 格式：",
+    riskSchema,
+    "",
+    "岗位名称：" + (jobTitle || "未填写"),
+    "公司名称：" + (companyName || "未填写"),
+    "",
+    "规则引擎候选结果：",
+    candidateSummary,
+    "",
+    "JD 原文：",
+    inputText.slice(0, 5000)
+  ].join("\n");
+}
+
+function extractGeminiResponseText(payload) {
+  const parts = payload?.candidates?.[0]?.content?.parts || [];
+
+  return parts
+    .map((part) => part?.text || "")
+    .join("")
+    .trim();
+}
+
+function findExactEvidenceRange(inputText, evidenceText) {
+  const evidence = String(evidenceText || "").trim();
+
+  if (!evidence) {
+    return null;
+  }
+
+  const start = inputText.indexOf(evidence);
+
+  if (start === -1) {
+    return null;
+  }
+
+  return {
+    text: evidence,
+    start,
+    end: start + evidence.length
+  };
+}
+
+function normalizeGeminiJdFindings({ inputText, geminiResult }) {
+  if (!geminiResult || !Array.isArray(geminiResult.findings)) {
+    return [];
+  }
+
+  return geminiResult.findings
+    .slice(0, 5)
+    .map((finding, index) => {
+      const evidenceRange = findExactEvidenceRange(inputText, finding?.evidenceText);
+
+      if (!evidenceRange) {
+        return null;
+      }
+
+      let severity = normalizeAiSeverity(
+        finding?.severity || finding?.riskLevel
+      );
+
+      const riskCategory = trimAiText(
+        finding?.riskCategory,
+        40,
+        "Gemini 语义识别风险"
+      );
+
+      const severityContext =
+        riskCategory + " " + evidenceRange.text;
+
+      const isUnpaidInternship =
+        /(无薪实习|实习报酬缺失|无工资|无报酬|无补贴)/u.test(
+          severityContext
+        );
+
+      const includesOtherCriticalBehavior =
+        /(缴纳|交纳|支付|收取|收费|培训费|贷款|押金|保证金|扣押证件)/u.test(
+          severityContext
+        );
+
+      if (isUnpaidInternship && !includesOtherCriticalBehavior) {
+        severity = "medium";
+      }
+
+      return {
+        ruleId: null,
+        ruleCode: "GEMINI_JD_SEMANTIC_" + String(index + 1).padStart(2, "0"),
+        ruleName: riskCategory,
+        riskCategory,
+        severity,
+        riskScore: AI_SEVERITY_SCORES[severity] || 62,
+        matchedPattern: evidenceRange.text,
+        matchType: "gemini-semantic",
+        evidenceText: evidenceRange.text,
+        evidenceStart: evidenceRange.start,
+        evidenceEnd: evidenceRange.end,
+        reason: trimAiText(
+          finding?.reason,
+          160,
+          "Gemini 语义裁决认为该表达可能构成实习求职风险。"
+        ),
+        verificationAdvice: trimAiText(
+          finding?.verificationAdvice || finding?.advice,
+          160,
+          "建议核实招聘主体、收费依据、合同条款和退款规则，避免先付款后入职。"
+        ),
+        confidence: 0.88,
+        legalSource: null,
+        source: "gemini"
+      };
+    })
+    .filter(Boolean);
+}
+
+async function analyzeJdWithGemini({
+  env,
+  inputText,
+  jobTitle,
+  companyName,
+  deterministicFindings
+}) {
+  const emptyResult = {
+    used: false,
+    hasDecision: false,
+    hasRisk: false,
+    findings: [],
+    error: "not_run",
+    errorDetail: null
+  };
+
+  if (!env.GEMINI_API_KEY) {
+    return {
+      ...emptyResult,
+      error: "missing_api_key"
+    };
+  }
+
+  if (!shouldRunGeminiJdReview({ inputText, deterministicFindings })) {
+    return {
+      ...emptyResult,
+      error: "skipped_by_policy"
+    };
+  }
+
+  const prompt = createGeminiJdPrompt({
+    inputText,
+    jobTitle,
+    companyName,
+    deterministicFindings
+  });
+
+  const endpoint =
+    "https://generativelanguage.googleapis.com/v1beta/models/"
+    + GEMINI_JD_MODEL
+    + ":generateContent?key="
+    + encodeURIComponent(env.GEMINI_API_KEY);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0,
+          maxOutputTokens: 900,
+          responseMimeType: "application/json"
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      console.error("Gemini JD review failed:", response.status, errorText.slice(0, 300));
+
+      return {
+        ...emptyResult,
+        used: true,
+        error: "http_" + response.status,
+        errorDetail: errorText.slice(0, 500)
+      };
+    }
+
+    const payload = await response.json();
+    const responseText = extractGeminiResponseText(payload);
+    const geminiResult = parseAiJsonResponse(responseText);
+
+    if (!geminiResult || typeof geminiResult.hasRisk !== "boolean") {
+      return {
+        ...emptyResult,
+        used: true,
+        error: "json_parse_failed"
+      };
+    }
+
+    if (geminiResult.hasRisk === false) {
+      return {
+        used: true,
+        hasDecision: true,
+        hasRisk: false,
+        findings: [],
+        error: "none"
+      };
+    }
+
+    const findings = normalizeGeminiJdFindings({
+      inputText,
+      geminiResult
+    });
+
+    if (findings.length === 0) {
+      return {
+        ...emptyResult,
+        used: true,
+        error: "no_valid_evidence_or_empty_findings"
+      };
+    }
+
+    return {
+      used: true,
+      hasDecision: true,
+      hasRisk: true,
+      findings,
+      error: "none"
+    };
+  } catch (error) {
+    console.error("Gemini JD semantic review failed:", error);
+
+    return {
+      ...emptyResult,
+      used: true,
+      error: "fetch_exception"
+    };
+  }
+}
+
 async function reviewJobDescription({
   env,
   jobTitle,
@@ -1319,42 +1677,42 @@ async function reviewJobDescription({
     })
   );
 
-  const semanticFindings = createJdSemanticFallbackFindings({
+  const semanticFindings = [];
+  const deterministicFindings = [];
+
+  const geminiReview = await analyzeJdWithGemini({
+    env,
     inputText,
-    existingFindings: ruleFindings
+    jobTitle,
+    companyName,
+    deterministicFindings
   });
 
-  const deterministicFindings = normalizeReviewFindings([
-    ...ruleFindings,
-    ...semanticFindings
-  ]);
+  const useGeminiDecision = geminiReview.hasDecision;
 
-  const aiFindings = shouldRunJdAiReview({
-    inputText,
-    findings: deterministicFindings
-  })
-    ? await analyzeJdWithAI({
-        env,
-        inputText,
-        jobTitle,
-        companyName
-      })
+  const aiFindings = [];
+
+  const findings = useGeminiDecision
+    ? normalizeReviewFindings(geminiReview.hasRisk ? geminiReview.findings : [])
     : [];
 
-  const findings = normalizeReviewFindings([
-    ...deterministicFindings,
-    ...aiFindings
-  ]);
+  const geminiReviewUnavailable = geminiReview.used && !useGeminiDecision;
 
-  const overallScore = combineRiskScores(findings);
+  const overallScore = geminiReviewUnavailable
+    ? 0
+    : combineRiskScores(findings);
 
-  const overallLevel = determineOverallLevel({
-    textLength: inputText.length,
-    overallScore,
-    findings
-  });
+  const overallLevel = geminiReviewUnavailable
+    ? "insufficient_information"
+    : determineOverallLevel({
+        textLength: inputText.length,
+        overallScore,
+        findings
+      });
 
-  const overallConfidence = calculateOverallConfidence(findings);
+  const overallConfidence = geminiReviewUnavailable
+    ? 0
+    : calculateOverallConfidence(findings);
   const processingTimeMs = Date.now() - startedAt;
 
   const reviewId = await saveJdReview({
@@ -1367,7 +1725,7 @@ async function reviewJobDescription({
     overallLevel,
     overallConfidence,
     processingTimeMs,
-    findings
+    findings: sanitizeFindingsForD1(findings)
   });
 
   return {
@@ -1380,11 +1738,15 @@ async function reviewJobDescription({
     findingCount: findings.length,
     summary: createSummary({
       overallLevel,
-      findingCount: findings.length
+      findingCount: findings.length,
+      reviewUnavailable: geminiReviewUnavailable
     }),
     findings,
-    aiReviewUsed: aiFindings.length > 0,
-    semanticReviewUsed: semanticFindings.length > 0,
+    reviewStatus: geminiReviewUnavailable
+      ? "unavailable"
+      : "completed",
+    reviewProvider: "gemini",
+    reviewModel: GEMINI_JD_MODEL,
     processingTimeMs
   };
 }
@@ -2703,3 +3065,9 @@ export default {
     }
   }
 };
+
+
+
+
+
+
