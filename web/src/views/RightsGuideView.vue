@@ -162,8 +162,6 @@ onMounted(
   <div class="rights-page">
 
 
-
-
     <main>
 
       <section class="page-hero">
@@ -191,13 +189,6 @@ onMounted(
 
             </h1>
 
-
-            <p>
-
-              当前内容来自 MySQL，只展示 reviewed 且 enabled 的指引。
-              本页面提供证据整理与渠道选择参考，不替代律师正式法律意见。
-
-            </p>
 
           </div>
 
@@ -237,12 +228,6 @@ onMounted(
 
             </p>
 
-
-            <small>
-
-              页面不会写死数据数量，列表来自 GET /api/rights-guides。
-
-            </small>
 
           </div>
 
@@ -584,7 +569,7 @@ onMounted(
 
 .page-container,
 .header-container {
-  width: min(1180px, calc(100% - 40px));
+  width: min(1440px, calc(100% - clamp(32px, 6vw, 96px)));
   margin: 0 auto;
 }
 
@@ -672,8 +657,8 @@ onMounted(
 .hero-layout {
   display: grid;
   align-items: center;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 85px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: clamp(40px, 6vw, 96px);
 }
 
 .hero-tag {
@@ -700,13 +685,6 @@ onMounted(
   background: linear-gradient(100deg, #2457e6, #7357f6);
   background-clip: text;
   color: transparent;
-}
-
-.hero-copy p {
-  max-width: 680px;
-  color: #69758b;
-  font-size: 17px;
-  line-height: 1.9;
 }
 
 .data-card {
@@ -752,12 +730,6 @@ onMounted(
   color: #536076;
   font-size: 15px;
   font-weight: 700;
-}
-
-.data-card small {
-  color: #8b95a7;
-  font-size: 11px;
-  line-height: 1.7;
 }
 
 .guide-section {
@@ -995,6 +967,14 @@ onMounted(
 .guide-footer b {
   margin-left: 4px;
 }
+
+/* circled-content responsive start */
+.hero-copy,
+.data-card,
+.guide-card {
+  min-width: 0;
+}
+/* circled-content responsive end */
 
 @media (max-width: 1000px) {
   .hero-layout,

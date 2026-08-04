@@ -213,8 +213,6 @@ async function submitReview() {
   <div class="contract-page">
 
 
-
-
     <main>
 
       <section class="page-hero">
@@ -250,30 +248,6 @@ async function submitReview() {
 
             </p>
 
-
-            <div class="hero-principles">
-
-              <span>
-
-                使用已审核官方依据
-
-              </span>
-
-
-              <span>
-
-                不伪造法律来源
-
-              </span>
-
-
-              <span>
-
-                置信提示不等于真实准确率
-
-              </span>
-
-            </div>
 
           </div>
 
@@ -344,37 +318,6 @@ async function submitReview() {
               </button>
 
             </div>
-
-
-            <div class="example-buttons">
-
-              <button
-                type="button"
-                @click="fillHighRiskExample"
-              >
-
-                填入高风险测试示例
-
-              </button>
-
-
-              <button
-                type="button"
-                @click="fillSafeExample"
-              >
-
-                填入安全测试示例
-
-              </button>
-
-            </div>
-
-
-            <p class="example-note">
-
-              测试示例，不是真实合同数据。
-
-            </p>
 
 
             <label class="title-input">
@@ -1026,7 +969,7 @@ async function submitReview() {
 
 .page-container,
 .header-container {
-  width: min(1180px, calc(100% - 40px));
+  width: min(1440px, calc(100% - clamp(32px, 6vw, 96px)));
   margin: 0 auto;
 }
 
@@ -1114,8 +1057,8 @@ async function submitReview() {
 .hero-layout {
   display: grid;
   align-items: center;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 80px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: clamp(40px, 6vw, 96px);
 }
 
 .hero-tag,
@@ -1152,21 +1095,6 @@ async function submitReview() {
   line-height: 1.9;
 }
 
-.hero-principles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 11px;
-  margin-top: 27px;
-}
-
-.hero-principles span {
-  padding: 8px 12px;
-  border-radius: 9px;
-  background: white;
-  color: #556176;
-  font-size: 12px;
-}
-
 .scope-card {
   padding: 31px;
   border: 1px solid rgba(255, 255, 255, 0.94);
@@ -1201,8 +1129,8 @@ async function submitReview() {
 .review-layout {
   display: grid;
   align-items: start;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 25px;
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 23vw, 340px);
+  gap: clamp(20px, 2.4vw, 34px);
 }
 
 .form-card,
@@ -1238,33 +1166,6 @@ async function submitReview() {
 
 .clear-button:hover {
   color: #2457e6;
-}
-
-.example-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 28px 0 10px;
-}
-
-.example-buttons button {
-  padding: 9px 13px;
-  border: 1px solid #dfe5f0;
-  border-radius: 9px;
-  background: #f9faff;
-  color: #526078;
-  font-size: 12px;
-}
-
-.example-buttons button:hover {
-  border-color: #2457e6;
-  color: #2457e6;
-}
-
-.example-note {
-  margin: 0 0 22px;
-  color: #9aa4b6;
-  font-size: 11px;
 }
 
 .title-input,
@@ -1686,6 +1587,19 @@ textarea:focus {
   font-size: 12px;
   font-weight: 900;
 }
+
+/* circled-content responsive start */
+.hero-copy,
+.scope-card,
+.form-card,
+.notice-card {
+  min-width: 0;
+}
+
+.title-input {
+  margin-top: 28px;
+}
+/* circled-content responsive end */
 
 @media (max-width: 1000px) {
   .hero-layout,

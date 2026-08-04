@@ -434,8 +434,6 @@ async function submitReview() {
   <div class="review-page">
 
 
-
-
     <main>
 
       <section class="page-hero">
@@ -475,32 +473,6 @@ async function submitReview() {
               原文证据及对应官方依据。
 
             </p>
-
-
-            <div class="hero-principles">
-
-              <span>
-
-                ✓ 保留风险原文
-
-              </span>
-
-
-              <span>
-
-                ✓ 展示判断原因
-
-              </span>
-
-
-              <span>
-
-                ✓ 关联官方来源
-
-              </span>
-
-            </div>
-
           </div>
 
 
@@ -653,29 +625,6 @@ async function submitReview() {
 
             </div>
 
-
-            <div class="example-buttons">
-
-              <button
-                type="button"
-                @click="fillHighRiskExample"
-              >
-
-                填入高风险测试示例
-
-              </button>
-
-
-              <button
-                type="button"
-                @click="fillSafeExample"
-              >
-
-                填入否定语境测试示例
-
-              </button>
-
-            </div>
 
 
             <div class="form-grid">
@@ -899,32 +848,6 @@ async function submitReview() {
               </p>
 
             </div>
-
-
-            <div class="current-engine">
-
-              <span>
-
-                当前引擎
-
-              </span>
-
-
-              <strong>
-
-                规则与上下文混合引擎
-
-              </strong>
-
-
-              <small>
-
-                目前仍处于测试与持续校准阶段
-
-              </small>
-
-            </div>
-
           </aside>
 
         </div>
@@ -1571,20 +1494,9 @@ async function submitReview() {
 
 
 .page-container,
-
 .header-container {
-
-  width: min(
-    1180px,
-    calc(
-      100%
-      -
-      40px
-    )
-  );
-
+  width: min(1440px, calc(100% - clamp(32px, 6vw, 96px)));
   margin: 0 auto;
-
 }
 
 
@@ -1775,19 +1687,10 @@ async function submitReview() {
 
 
 .hero-content {
-
   display: grid;
-
   align-items: center;
-
-  grid-template-columns:
-
-    1.05fr
-
-    0.95fr;
-
-  gap: 80px;
-
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: clamp(40px, 6vw, 96px);
 }
 
 
@@ -1891,36 +1794,6 @@ async function submitReview() {
   font-size: 17px;
 
   line-height: 1.9;
-
-}
-
-
-.hero-principles {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 14px;
-
-  margin-top: 25px;
-
-}
-
-
-.hero-principles span {
-
-  padding:
-
-    8px 12px;
-
-  border-radius: 9px;
-
-  background: white;
-
-  color: #556176;
-
-  font-size: 12px;
 
 }
 
@@ -2082,22 +1955,10 @@ async function submitReview() {
 
 
 .review-layout {
-
   display: grid;
-
   align-items: start;
-
-  grid-template-columns:
-
-    minmax(
-      0,
-      1fr
-    )
-
-    320px;
-
-  gap: 25px;
-
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 23vw, 340px);
+  gap: clamp(20px, 2.4vw, 34px);
 }
 
 
@@ -2200,56 +2061,6 @@ async function submitReview() {
 
 
 .clear-button:hover {
-
-  color: #2457e6;
-
-}
-
-
-.example-buttons {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 10px;
-
-  margin:
-
-    28px 0 22px;
-
-}
-
-
-.example-buttons button {
-
-  padding:
-
-    9px 13px;
-
-  border:
-
-    1px solid
-
-    #dfe5f0;
-
-  border-radius: 9px;
-
-  background: #f9faff;
-
-  color: #526078;
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-}
-
-
-.example-buttons button:hover {
-
-  border-color:
-    #2457e6;
 
   color: #2457e6;
 
@@ -2683,60 +2494,6 @@ textarea:focus {
   font-size: 12px;
 
   line-height: 1.7;
-
-}
-
-
-.current-engine {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 6px;
-
-  margin-top: 22px;
-
-  padding: 17px;
-
-  border-radius: 13px;
-
-  background:
-
-    linear-gradient(
-
-      135deg,
-
-      #f0f5ff,
-
-      #f5f1ff
-
-    );
-
-}
-
-
-.current-engine span {
-
-  color: #7a8599;
-
-  font-size: 10px;
-
-}
-
-
-.current-engine strong {
-
-  font-size: 13px;
-
-}
-
-
-.current-engine small {
-
-  color: #8b95a8;
-
-  font-size: 10px;
 
 }
 
@@ -3632,6 +3389,19 @@ textarea:focus {
 
 }
 
+
+/* circled-content responsive start */
+.hero-copy,
+.hero-process,
+.form-card,
+.tips-card {
+  min-width: 0;
+}
+
+.form-grid {
+  margin-top: 28px;
+}
+/* circled-content responsive end */
 
 @media (
   max-width: 1000px

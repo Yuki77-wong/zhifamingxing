@@ -337,8 +337,6 @@ onMounted(
   <div class="knowledge-page">
 
 
-
-
     <main>
 
       <section class="page-hero">
@@ -379,37 +377,6 @@ onMounted(
             </p>
 
 
-            <div class="hero-principles">
-
-              <span>
-
-                ✓ 官方来源
-
-              </span>
-
-
-              <span>
-
-                ✓ 原文链接
-
-              </span>
-
-
-              <span>
-
-                ✓ 适用范围说明
-
-              </span>
-
-
-              <span>
-
-                ✓ 数据采集记录
-
-              </span>
-
-            </div>
-
           </div>
 
 
@@ -449,44 +416,6 @@ onMounted(
             </p>
 
 
-            <div class="data-flow">
-
-              <span>
-
-                MySQL
-
-              </span>
-
-
-              <i>
-
-                →
-
-              </i>
-
-
-              <span>
-
-                Express API
-
-              </span>
-
-
-              <i>
-
-                →
-
-              </i>
-
-
-              <span>
-
-                Vue
-
-              </span>
-
-            </div>
-
 
             <small>
 
@@ -523,13 +452,6 @@ onMounted(
 
               </h2>
 
-
-              <p>
-
-                当前内容用于岗位风险提示、
-                权益知识说明和规则依据关联。
-
-              </p>
 
             </div>
 
@@ -1063,27 +985,9 @@ onMounted(
 
 
 .page-container,
-
 .header-container {
-
-  width: min(
-
-    1180px,
-
-    calc(
-
-      100%
-
-      -
-
-      40px
-
-    )
-
-  );
-
+  width: min(1440px, calc(100% - clamp(32px, 6vw, 96px)));
   margin: 0 auto;
-
 }
 
 
@@ -1301,19 +1205,10 @@ onMounted(
 
 
 .hero-layout {
-
   display: grid;
-
   align-items: center;
-
-  grid-template-columns:
-
-    1.1fr
-
-    0.9fr;
-
-  gap: 85px;
-
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: clamp(40px, 6vw, 96px);
 }
 
 
@@ -1417,36 +1312,6 @@ onMounted(
   font-size: 17px;
 
   line-height: 1.9;
-
-}
-
-
-.hero-principles {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 11px;
-
-  margin-top: 27px;
-
-}
-
-
-.hero-principles span {
-
-  padding:
-
-    8px 12px;
-
-  border-radius: 9px;
-
-  background: white;
-
-  color: #556176;
-
-  font-size: 12px;
 
 }
 
@@ -1579,48 +1444,6 @@ onMounted(
 }
 
 
-.data-flow {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content:
-    space-between;
-
-  gap: 10px;
-
-  padding:
-
-    16px;
-
-  border-radius: 13px;
-
-  background: #f5f8ff;
-
-}
-
-
-.data-flow span {
-
-  color: #3f4c64;
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-}
-
-
-.data-flow i {
-
-  color: #9aa5b8;
-
-  font-style: normal;
-
-}
-
-
 .data-card > small {
 
   display: block;
@@ -1681,17 +1504,6 @@ onMounted(
     9px 0;
 
   font-size: 34px;
-
-}
-
-
-.section-heading p {
-
-  margin: 0;
-
-  color: #7b8699;
-
-  font-size: 13px;
 
 }
 
@@ -2470,6 +2282,14 @@ onMounted(
 
 }
 
+
+/* circled-content responsive start */
+.hero-copy,
+.data-card,
+.source-main {
+  min-width: 0;
+}
+/* circled-content responsive end */
 
 @media (
   max-width: 1000px
