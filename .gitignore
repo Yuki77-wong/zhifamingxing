@@ -32,3 +32,9 @@ web/.wrangler/
 
 # Cloudflare Wrangler local state
 web/.wrangler/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
